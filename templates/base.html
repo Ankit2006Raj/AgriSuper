@@ -20,14 +20,17 @@
     <!-- Custom CSS -->
     <style>
         :root {
-            --primary-color: #10b981;
-            --primary-color-light: #34d399;
-            --primary-color-dark: #059669;
-            --secondary-color: #3b82f6;
-            --dark-color: #1f2937;
-            --light-color: #f9fafb;
-            --gradient-primary: linear-gradient(135deg, #10b981 0%, #059669 100%);
-            --gradient-secondary: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+            --primary-color: #0e3829;
+            --primary-color-light: #1b4d3e;
+            --primary-color-dark: #072218;
+            --secondary-color: #c69c59;
+            --dark-color: #1a2b22;
+            --light-color: #f4f2eb;
+            --accent-gold: #c69c59;
+            --mint-green: #e1ede5;
+            --bg-gradient: linear-gradient(135deg, #f4f2eb 0%, #e8e6df 100%);
+            --gradient-primary: linear-gradient(135deg, #0e3829 0%, #1b4d3e 100%);
+            --gradient-secondary: linear-gradient(135deg, #c69c59 0%, #d1a86b 100%);
         }
 
         * {
@@ -36,7 +39,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 50%, #f0f9ff 100%);
+            background: var(--bg-gradient);
             background-attachment: fixed;
             color: var(--dark-color);
             line-height: 1.6;
@@ -45,39 +48,38 @@
 
         /* Navbar Styles - Modern Glassmorphism */
         .navbar {
-            background: rgba(255, 255, 255, 0.85) !important;
+            background: rgba(244, 242, 235, 0.85) !important;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            box-shadow: 0 4px 15px -3px rgba(14, 56, 41, 0.05);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.4);
             transition: all 0.3s ease;
+            padding: 1rem 0;
         }
 
         .navbar.scrolled {
-            background: rgba(255, 255, 255, 0.95) !important;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            background: rgba(244, 242, 235, 0.95) !important;
+            box-shadow: 0 10px 30px rgba(14, 56, 41, 0.08);
+            padding: 0.75rem 0;
         }
 
         .navbar-brand {
             font-weight: 800;
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--primary-color) !important;
             font-size: 1.75rem;
             letter-spacing: -0.5px;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .navbar-brand:hover {
-            transform: scale(1.05);
+            transform: scale(1.03);
         }
 
         .navbar-brand i {
-            background: var(--gradient-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            color: var(--accent-gold);
             animation: rotate 3s ease-in-out infinite;
         }
 
@@ -89,9 +91,9 @@
         .nav-link {
             color: var(--dark-color) !important;
             font-weight: 600;
-            margin: 0 0.5rem;
-            padding: 0.75rem 1rem !important;
-            border-radius: 0.75rem;
+            margin: 0 0.25rem;
+            padding: 0.6rem 1rem !important;
+            border-radius: 0.5rem;
             transition: all 0.3s ease;
             position: relative;
         }
@@ -103,15 +105,14 @@
             left: 50%;
             width: 0;
             height: 2px;
-            background: var(--gradient-primary);
+            background: var(--accent-gold);
             transform: translateX(-50%);
             transition: width 0.3s ease;
         }
 
-        .nav-link:hover {
+        .nav-link:hover, .nav-link.active {
             color: var(--primary-color) !important;
-            background: rgba(16, 185, 129, 0.05);
-            transform: translateY(-2px);
+            background: var(--mint-green);
         }
 
         .nav-link:hover::before {
@@ -119,42 +120,43 @@
         }
 
         .nav-link i {
-            margin-right: 0.5rem;
+            margin-right: 0.4rem;
             transition: transform 0.3s ease;
         }
 
         .nav-link:hover i {
-            transform: scale(1.2);
+            transform: scale(1.15);
         }
 
         .dropdown-menu {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(244, 242, 235, 0.95);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+            border: 1px solid rgba(14, 56, 41, 0.08);
             border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 25px rgba(14, 56, 41, 0.1);
             padding: 0.5rem;
         }
 
         .dropdown-item {
             border-radius: 0.5rem;
-            padding: 0.75rem 1rem;
+            padding: 0.6rem 1rem;
             font-weight: 500;
+            color: var(--dark-color);
             transition: all 0.2s ease;
         }
 
         .dropdown-item:hover {
-            background: rgba(16, 185, 129, 0.1);
+            background: var(--mint-green);
             color: var(--primary-color);
-            transform: translateX(5px);
+            transform: translateX(4px);
         }
 
-        /* Hero Section */
+        /* Hero Section Legacy */
         .hero-section {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            background: var(--gradient-primary);
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 30px rgba(14,56,41,0.15);
         }
 
         /* Feature Cards */
@@ -162,23 +164,29 @@
             transition: transform 0.3s, box-shadow 0.3s;
             border-radius: 15px;
             overflow: hidden;
+            border: 1px solid rgba(14, 56, 41, 0.05);
+            background: #ffffff;
         }
 
         .feature-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(14,56,41,0.08);
         }
 
         .feature-icon {
             width: 70px;
             height: 70px;
             font-size: 2rem;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Buttons - Modern Design */
         .btn {
-            border-radius: 0.75rem;
-            padding: 0.75rem 1.75rem;
+            border-radius: 2rem;
+            padding: 0.75rem 1.8rem;
             font-weight: 600;
             letter-spacing: 0.3px;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -195,7 +203,7 @@
             width: 0;
             height: 0;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
             transform: translate(-50%, -50%);
             transition: width 0.6s, height 0.6s;
         }
@@ -206,115 +214,61 @@
         }
 
         .btn-primary {
-            background: var(--gradient-secondary);
-            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+            background: var(--gradient-primary);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(14, 56, 41, 0.15);
         }
 
         .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(14, 56, 41, 0.25);
+            color: #ffffff;
         }
 
         .btn-success {
-            background: var(--gradient-primary);
-            box-shadow: 0 4px 6px -1px rgba(16, 185, 129, 0.3);
+            background: var(--gradient-secondary);
+            color: #ffffff;
+            box-shadow: 0 4px 15px rgba(198, 156, 89, 0.2);
         }
 
         .btn-success:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(198, 156, 89, 0.35);
+            color: #ffffff;
         }
 
-        .btn-outline-success,
-        .btn-outline-primary,
-        .btn-outline-info,
-        .btn-outline-warning,
-        .btn-outline-danger,
-        .btn-outline-secondary {
-            border-width: 2px;
-            font-weight: 600;
-        }
-
-        /* Footer - Modern Design */
-        footer {
-            background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
-            color: #f3f4f6;
-            padding: 3rem 0 1.5rem;
-            margin-top: 4rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        footer::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient-primary);
-        }
-
-        footer h5, footer h6 {
-            font-weight: 700;
-            letter-spacing: -0.3px;
-        }
-
-        footer a {
-            color: #9ca3af;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-
-        footer a:hover {
+        .btn-outline-success {
+            border: 2px solid var(--accent-gold);
+            background: transparent;
             color: var(--primary-color);
-            transform: translateX(5px);
         }
 
-        footer .social-links a {
-            width: 45px;
-            height: 45px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 50%;
-            transition: all 0.3s ease;
-        }
-
-        footer .social-links a:hover {
-            background: var(--gradient-primary);
-            transform: translateY(-5px) rotate(5deg);
+        .btn-outline-success:hover {
+            background: var(--accent-gold);
+            color: #ffffff;
         }
 
         /* Utilities */
         .bg-gradient-primary {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--gradient-primary);
         }
 
         .bg-gradient-success {
-            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
-        }
-
-        .bg-gradient-info {
-            background: linear-gradient(135deg, #0093E9 0%, #80D0C7 100%);
-        }
-
-        .bg-gradient-warning {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: var(--gradient-primary);
         }
 
         /* Alerts */
         .alert {
-            border-radius: 10px;
-            border: none;
+            border-radius: 12px;
+            border: 1px solid rgba(14, 56, 41, 0.08);
+            box-shadow: 0 4px 15px rgba(14, 56, 41, 0.05);
         }
 
         /* Cards */
         .card {
-            border-radius: 15px;
+            border-radius: 16px;
             border: none;
+            box-shadow: 0 4px 15px rgba(14, 56, 41, 0.02);
         }
 
         /* Loading Spinner */
@@ -340,60 +294,120 @@
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--secondary-color);
+            background: var(--accent-gold);
         }
     </style>
     
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+
+
     <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
-        <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg sticky-top navbar-landing">
+        <div class="container-fluid px-5">
             <a class="navbar-brand" href="/">
-                <i class="fas fa-seedling"></i> AgriSuper
+                <i class="fas fa-seedling"></i> Agri<span>Super</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav ms-auto align-items-center mb-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="/">
+                        <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">
                             <i class="fas fa-home"></i> Home
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('dashboard') }}">
-                            <i class="fas fa-th-large"></i> Dashboard
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('categorized_dashboard') }}">
-                            <i class="fas fa-layer-group"></i> Categories
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('search') }}">
-                            <i class="fas fa-search"></i> Search
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('notifications') }}">
-                            <i class="fas fa-bell"></i> Notifications
+                        <a class="nav-link {% if request.path == '/categorized-dashboard' %}active{% endif %}" href="{{ url_for('categorized_dashboard') }}">
+                            <i class="fas fa-th-large"></i> All Features
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                        <a class="nav-link dropdown-toggle {% if request.path in ['/yield-prediction', '/crop-rotation', '/pest-alerts', '/profit-analyzer', '/pricing-engine'] %}active{% endif %}" href="#" id="aiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-robot" style="color: var(--accent-gold);"></i> AI Advisors
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-3" style="min-width: 340px;">
+                            <li class="dropdown-header text-uppercase fw-bold mb-2 text-start" style="font-size: 0.75rem; letter-spacing: 0.5px; color: var(--primary-color); padding-left: 0.5rem;"><i class="fas fa-brain me-1" style="color: var(--accent-gold);"></i> AI & Machine Learning</li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start" href="{{ url_for('yield_prediction_page') }}">
+                                    <i class="fas fa-seedling text-success mt-1" style="font-size: 1.1rem; width: 20px;"></i>
+                                    <div>
+                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">Yield Prediction</div>
+                                        <div class="text-muted" style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Predict harvest quantities based on soil & weather parameters.</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start" href="{{ url_for('crop_rotation_page') }}">
+                                    <i class="fas fa-sync text-primary mt-1" style="font-size: 1.1rem; width: 20px;"></i>
+                                    <div>
+                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">Crop Rotation Advisor</div>
+                                        <div class="text-muted" style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Optimize soil health and nitrogen fixation sequences.</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start" href="{{ url_for('pest_alerts_page') }}">
+                                    <i class="fas fa-bug text-danger mt-1" style="font-size: 1.1rem; width: 20px;"></i>
+                                    <div>
+                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">Leaf-Disease Diagnosis</div>
+                                        <div class="text-muted" style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Identify leaf diseases & check local pest outbreaks early.</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start" href="{{ url_for('profit_analyzer_page') }}">
+                                    <i class="fas fa-calculator text-warning mt-1" style="font-size: 1.1rem; width: 20px;"></i>
+                                    <div>
+                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">Profit Analyzer</div>
+                                        <div class="text-muted" style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Calculate ROI, seed, fertilizer, and operational costs.</div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start" href="{{ url_for('pricing_engine_page') }}">
+                                    <i class="fas fa-chart-line text-success mt-1" style="font-size: 1.1rem; width: 20px;"></i>
+                                    <div>
+                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">Price Trend Classifier</div>
+                                        <div class="text-muted" style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Analyze price forecasting & bullish/bearish mandi trends.</div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/market-prices' %}active{% endif %}" href="{{ url_for('market_prices') }}">
+                            <i class="fas fa-chart-line"></i> Mandi Prices
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/weather-alerts' %}active{% endif %}" href="{{ url_for('weather_alerts') }}">
+                            <i class="fas fa-cloud-sun"></i> Weather
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.path == '/community-forum' %}active{% endif %}" href="{{ url_for('community_forum') }}">
+                            <i class="fas fa-users"></i> Forum
+                        </a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-user-circle"></i> Account
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt"></i> Login</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('login') }}"><i class="fas fa-user-plus"></i> Register</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt me-2 text-forest"></i> Login</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('login') }}"><i class="fas fa-user-plus me-2 text-forest"></i> Register</a></li>
                             <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog"></i> Settings</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2 text-forest"></i> Settings</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2 text-forest"></i> Logout</a></li>
                         </ul>
+                    </li>
+                    <li class="nav-item ms-lg-3">
+                        <a class="nav-link btn-nav-cta text-white" href="{{ url_for('workspace') }}">
+                            Launch Ecosystem
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -420,58 +434,78 @@
     </main>
 
     <!-- Footer -->
-    <footer>
-        <div class="container">
+    <footer class="premium-footer">
+        <div class="container-fluid px-5">
             <div class="row">
-                <div class="col-md-4 mb-4">
-                    <h5 class="text-success mb-3">
-                        <i class="fas fa-seedling"></i> AgriSuper
-                    </h5>
-                    <p class="text-light">
-                        Advanced Agriculture Platform empowering farmers with 41 powerful features including AI-driven insights, market intelligence, and comprehensive agricultural solutions.
+                <div class="col-md-4 mb-5 mb-lg-0 text-start">
+                    <h4 class="mb-4"><i class="fas fa-seedling text-gold"></i> Agri<span>Super</span></h4>
+                    <p class="pe-md-4 mb-4" style="color: rgba(255, 255, 255, 0.7); font-size: 0.95rem;">
+                        Indian Agriculture's Revolutionary Digital Platform. Empowering 1 million+ farmers with AI-driven yield predictions, real-time mandi prices, logistics, and cashless financial services.
                     </p>
-                </div>
-                <div class="col-md-2 mb-4">
-                    <h6 class="text-success mb-3">Quick Links</h6>
-                    <ul class="list-unstyled">
-                        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
-                        <li><a href="{{ url_for('categorized_dashboard') }}">Categories</a></li>
-                        <li><a href="{{ url_for('search') }}">Search</a></li>
-                        <li><a href="{{ url_for('community_forum') }}">Community</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <h6 class="text-success mb-3">Top Features</h6>
-                    <ul class="list-unstyled">
-                        <li><a href="{{ url_for('pricing_engine_page') }}">Dynamic Pricing</a></li>
-                        <li><a href="{{ url_for('digital_wallet_page') }}">Digital Wallet</a></li>
-                        <li><a href="{{ url_for('voice_assistant_page') }}">Voice Assistant</a></li>
-                        <li><a href="{{ url_for('micro_loans_page') }}">Micro Loans</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-3 mb-4">
-                    <h6 class="text-success mb-3">Connect With Us</h6>
-                    <div class="social-links">
-                        <a href="#" class="text-light me-3"><i class="fab fa-facebook fa-2x"></i></a>
-                        <a href="#" class="text-light me-3"><i class="fab fa-twitter fa-2x"></i></a>
-                        <a href="#" class="text-light me-3"><i class="fab fa-instagram fa-2x"></i></a>
-                        <a href="#" class="text-light"><i class="fab fa-youtube fa-2x"></i></a>
+                    <div class="footer-social-links">
+                        <a href="#" class="footer-social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="footer-social-btn" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="footer-social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="footer-social-btn" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
-                    <p class="mt-3 text-light">
-                        <i class="fas fa-phone"></i> 1800-XXX-XXXX<br>
-                        <i class="fas fa-envelope"></i> support@agrisuper.com
-                    </p>
+                </div>
+                <div class="col-md-2 mb-4 mb-lg-0 text-start">
+                    <h5 class="mb-4 text-white">Our Services</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="{{ url_for('pricing_engine_page') }}">Dynamic Pricing</a></li>
+                        <li class="mb-2"><a href="{{ url_for('yield_prediction_page') }}">Yield Predictor</a></li>
+                        <li class="mb-2"><a href="{{ url_for('sowing_calendar_page') }}">Sowing Calendar</a></li>
+                        <li class="mb-2"><a href="{{ url_for('crop_insurance_page') }}">Crop Insurance</a></li>
+                        <li class="mb-2"><a href="{{ url_for('shared_logistics_page') }}">Shared Logistics</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4 mb-lg-0 text-start">
+                    <h5 class="mb-4 text-white">Quick Links</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="/">Home</a></li>
+                        <li class="mb-2"><a href="{{ url_for('categorized_dashboard') }}">All Features</a></li>
+                        <li class="mb-2"><a href="{{ url_for('community_forum') }}">Community Forum</a></li>
+                        <li class="mb-2"><a href="{{ url_for('login') }}">Member Portal</a></li>
+                        <li class="mb-2"><a href="#">Help Support</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 text-start">
+                    <h5 class="mb-4 text-white">Need Support?</h5>
+                    <div class="footer-contact-item">
+                        <div class="footer-contact-icon"><i class="fas fa-phone-alt"></i></div>
+                        <div>
+                            <p class="mb-0" style="color: rgba(255, 255, 255, 0.5); font-size: 0.85rem;">Toll-Free Farmer Helpline (24/7)</p>
+                            <strong>1800-180-1551</strong>
+                        </div>
+                    </div>
+                    <div class="footer-contact-item mt-3">
+                        <div class="footer-contact-icon"><i class="fas fa-envelope"></i></div>
+                        <div>
+                            <p class="mb-0" style="color: rgba(255, 255, 255, 0.5); font-size: 0.85rem;">Email Address</p>
+                            <strong>support@agrisuper.com</strong>
+                        </div>
+                    </div>
+                    <div class="footer-contact-item mt-3">
+                        <div class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+                        <div>
+                            <p class="mb-0" style="color: rgba(255, 255, 255, 0.5); font-size: 0.85rem;">Headquarters</p>
+                            <strong>Krishi Bhawan, Rajpath, New Delhi, India</strong>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <hr class="bg-light">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <p class="mb-0 text-light">
-                        &copy; 2024 AgriSuper. All rights reserved. | 
-                        <a href="#">Privacy Policy</a> | 
-                        <a href="#">Terms of Service</a> | 
-                        <a href="#">Help</a>
-                    </p>
+            <div class="premium-footer-bottom">
+                <div class="row align-items-center">
+                    <div class="col-md-8 text-center text-md-start mb-3 mb-md-0">
+                        <p class="mb-0">&copy; 2026 AgriSuper Ecosystem. All rights reserved. Powered by AI-ML Analytics.</p>
+                    </div>
+                    <div class="col-md-4 text-center text-md-end">
+                        <div class="d-inline-flex gap-3">
+                            <a href="#">Privacy Policy</a>
+                            <a href="#">Terms of Service</a>
+                            <a href="#">Sitemap</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

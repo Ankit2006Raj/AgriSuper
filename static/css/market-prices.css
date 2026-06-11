@@ -1,69 +1,503 @@
-/* Market Price Dashboard styles */
-.market-selector-group {
-    width: 150px;
+/* ----------------------------------------------------
+   AgriSuper Market Prices Premium Stylesheet
+   Matches Premium Forest Green & Creamy Beige Layout
+   ---------------------------------------------------- */
+
+:root {
+    --forest-green: #0e3829;
+    --forest-green-rgb: 14, 56, 41;
+    --leaf-green: #1b4d3e;
+    --accent-gold: #c69c59;
+    --soft-cream: #f4f2eb;
+    --mint-green: #e1ede5;
+    --bright-green: #10b981;
+    --dark-text: #1a2b22;
+    --muted-text: #5c6c64;
+    --card-shadow: 0 15px 35px rgba(0, 0, 0, 0.04);
+    --border-radius-lg: 24px;
+    --border-radius-md: 16px;
+    --border-radius-sm: 10px;
 }
 
-/* Form switch styles */
-.form-check-input {
-    cursor: pointer;
+/* --- Premium Buttons --- */
+.btn-gold {
+    background-color: var(--accent-gold) !important;
+    color: #ffffff !important;
+    font-weight: 700;
+    border-radius: 30px;
+    padding: 0.75rem 1.8rem;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 15px rgba(198, 156, 89, 0.3);
+    border: none;
 }
 
-.form-check-label {
-    cursor: pointer;
-    -webkit-user-select: none;
-    user-select: none;
+.btn-gold:hover {
+    background-color: #ffffff !important;
+    color: var(--forest-green) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(255, 255, 255, 0.2);
 }
 
-/* Price alerts */
-.price-alert-item {
+/* --- Market Hero Banner (Split Layout) --- */
+.market-hero-banner {
+    background: linear-gradient(135deg, var(--forest-green) 0%, var(--leaf-green) 100%);
+    position: relative;
+    overflow: hidden;
+    color: #ffffff;
+    box-shadow: 0 15px 40px rgba(14, 56, 41, 0.15);
+    border-radius: var(--border-radius-lg);
+}
+
+.market-hero-img-box {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    border-radius: var(--border-radius-md);
+    overflow: hidden;
+    border: 4px solid var(--accent-gold);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.market-hero-img-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.live-feed-badge {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: rgba(14, 56, 41, 0.85);
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--accent-gold);
+    color: #ffffff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 6px 12px;
+    border-radius: 20px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    gap: 6px;
+    z-index: 10;
 }
 
-.price-alert-info {
+.live-feed-dot {
+    width: 8px;
+    height: 8px;
+    background-color: var(--bright-green);
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse-dot 1.5s infinite;
+}
+
+@keyframes pulse-dot {
+    0% { transform: scale(0.9); opacity: 1; }
+    50% { transform: scale(1.3); opacity: 0.5; }
+    100% { transform: scale(0.9); opacity: 1; }
+}
+
+/* --- Legible Header Selectors --- */
+.premium-select {
+    background-color: rgba(255, 255, 255, 0.15) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    border-radius: var(--border-radius-sm);
+    padding: 4px 24px 4px 10px !important;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e") !important;
+    background-position: right 8px center !important;
+    background-repeat: no-repeat !important;
+    background-size: 10px 10px !important;
+}
+
+.premium-select option {
+    background-color: #ffffff !important;
+    color: var(--dark-text) !important;
+}
+
+.premium-select:focus {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2) !important;
+    border-color: #ffffff !important;
+    outline: none !important;
+}
+
+/* --- Crop Grid Card Section --- */
+.crop-card {
+    background: #ffffff;
+    border-radius: var(--border-radius-md);
+    border: 1px solid rgba(14, 56, 41, 0.04);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.crop-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 40px rgba(14, 56, 41, 0.08);
+}
+
+.crop-card-img-wrapper {
+    height: 150px;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+
+.crop-card-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+}
+
+.crop-card:hover .crop-card-img-wrapper img {
+    transform: scale(1.08);
+}
+
+.crop-card-tag {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background-color: rgba(14, 56, 41, 0.85);
+    backdrop-filter: blur(5px);
+    border: 1px solid var(--accent-gold);
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.crop-card-body {
+    padding: 20px;
     flex-grow: 1;
-}
-
-.price-alert-status {
-    text-align: right;
-}
-
-/* Search and filters */
-.search-filters {
-    margin-bottom: 1.5rem;
-}
-
-/* Market selector container */
-.market-controls {
     display: flex;
-    align-items: center;
-    gap: 0.5rem;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
-/* Price trend indicators */
-.price-trend {
-    display: flex;
-    align-items: center;
-    gap: 0.25rem;
+.crop-card-price {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--forest-green);
+    margin: 8px 0;
 }
 
-.price-trend.up {
-    color: #28a745;
+/* --- Search & Filter Row --- */
+.search-card {
+    background-color: #ffffff;
+    border-radius: var(--border-radius-md);
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(14, 56, 41, 0.05);
 }
 
-.price-trend.down {
-    color: #dc3545;
+.search-bar-wrapper {
+    border-radius: var(--border-radius-sm);
+    overflow: hidden;
+    border: 1px solid rgba(14, 56, 41, 0.08);
+    background-color: #fcfbfa;
+    transition: all 0.3s ease;
 }
 
-/* Market comparison table */
-.market-price-table th,
-.market-price-table td {
+.search-bar-wrapper:focus-within {
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 4px rgba(198, 156, 89, 0.15);
+}
+
+.search-bar-wrapper input {
+    box-shadow: none !important;
+}
+
+.filter-select {
+    border: 1px solid rgba(14, 56, 41, 0.08);
+    background-color: #fcfbfa;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.filter-select:focus {
+    border-color: var(--accent-gold);
+    box-shadow: 0 0 0 4px rgba(198, 156, 89, 0.15);
+}
+
+/* --- Dashboard Panels & Cards --- */
+.premium-card {
+    background: #ffffff;
+    border-radius: var(--border-radius-md);
+    border: 1px solid rgba(14, 56, 41, 0.04);
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    margin-bottom: 25px;
+}
+
+.premium-card-header {
+    background: linear-gradient(135deg, var(--forest-green) 0%, var(--leaf-green) 100%);
+    color: #ffffff;
+    padding: 18px 24px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    border: none;
+}
+
+/* --- Mandi Pricing Table --- */
+.table-premium {
     vertical-align: middle;
 }
 
-/* Chart containers */
-.price-chart-container {
-    min-height: 300px;
-    margin-bottom: 1.5rem;
+.table-premium thead th {
+    background-color: #fcfbfa;
+    color: var(--forest-green);
+    font-weight: 700;
+    border-bottom: 2px solid rgba(14, 56, 41, 0.05);
+    padding: 14px;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table-premium tbody td {
+    padding: 16px 14px;
+    border-bottom: 1px solid rgba(14, 56, 41, 0.04);
+    color: var(--dark-text);
+    font-size: 0.95rem;
+}
+
+.crop-thumbnail-frame {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid var(--accent-gold);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    background-color: #ffffff;
+    flex-shrink: 0;
+}
+
+.crop-thumbnail-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* --- Price Change Badges --- */
+.price-badge {
+    padding: 6px 12px;
+    font-weight: 700;
+    font-size: 0.82rem;
+    border-radius: 30px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.price-badge-up {
+    background-color: rgba(16, 185, 129, 0.12);
+    color: var(--bright-green);
+}
+
+.price-badge-down {
+    background-color: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+}
+
+/* --- Premium Insights Alerts --- */
+.insight-alert-premium {
+    background-color: #ffffff;
+    border-radius: var(--border-radius-md);
+    border: 1px solid rgba(14, 56, 41, 0.04);
+    box-shadow: var(--card-shadow);
+    padding: 24px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.insight-alert-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 5px;
+}
+
+.insight-alert-opportunity::before {
+    background-color: var(--bright-green);
+}
+
+.insight-alert-warning::before {
+    background-color: var(--accent-gold);
+}
+
+.insight-alert-info::before {
+    background-color: var(--forest-green);
+}
+
+.insight-icon-box {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    flex-shrink: 0;
+}
+
+.insight-icon-opportunity {
+    background-color: rgba(16, 185, 129, 0.1);
+    color: var(--bright-green);
+}
+
+.insight-icon-warning {
+    background-color: rgba(198, 156, 89, 0.1);
+    color: var(--accent-gold);
+}
+
+.insight-icon-info {
+    background-color: rgba(14, 56, 41, 0.1);
+    color: var(--forest-green);
+}
+
+/* --- Sidebar Components --- */
+.alert-list-item {
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(14, 56, 41, 0.05);
+    background-color: #ffffff;
+    transition: background-color 0.2s ease;
+}
+
+.alert-list-item:hover {
+    background-color: var(--mint-green);
+}
+
+.alert-list-item:last-child {
+    border-bottom: none;
+}
+
+.custom-switch-premium .form-check-input {
+    width: 2.8em;
+    height: 1.5em;
+    cursor: pointer;
+    background-color: #e2e8f0;
+    border-color: transparent;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='3' fill='%23fff'/%3e%3c/svg%3e");
+    transition: background-position .15s ease-in-out, background-color .15s ease-in-out;
+}
+
+.custom-switch-premium .form-check-input:checked {
+    background-color: var(--bright-green);
+}
+
+.comparison-highlight {
+    background-color: rgba(16, 185, 129, 0.08) !important;
+    font-weight: 700;
+}
+
+.comparison-highlight td {
+    color: var(--forest-green) !important;
+}
+
+/* --- Forecast Indicators --- */
+.forecast-val-box {
+    background-color: #fcfbfa;
+    border: 1px solid rgba(14, 56, 41, 0.05);
+    border-radius: var(--border-radius-sm);
+    padding: 12px;
+    text-align: center;
+    flex: 1;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+}
+
+.forecast-val-box h5 {
+    color: var(--bright-green);
+    font-weight: 800;
+    font-size: 1.15rem;
+    margin-bottom: 4px;
+}
+
+.forecast-val-box.down h5 {
+    color: #ef4444;
+}
+
+/* --- Market News Sidebar --- */
+.news-link-item {
+    padding: 18px 24px;
+    border-bottom: 1px solid rgba(14, 56, 41, 0.05);
+    text-decoration: none;
+    color: var(--dark-text);
+    display: block;
+    transition: all 0.2s ease;
+}
+
+.news-link-item:hover {
+    background-color: var(--mint-green);
+}
+
+.news-link-item:last-child {
+    border-bottom: none;
+}
+
+.news-link-item h6 {
+    font-weight: 700;
+    color: var(--forest-green);
+    margin-bottom: 6px;
+    transition: color 0.2s ease;
+}
+
+.news-link-item:hover h6 {
+    color: var(--accent-gold);
+}
+
+/* --- Chart Canvas Containers --- */
+.chart-card-wrapper {
+    background-color: #fcfbfa;
+    border-radius: var(--border-radius-sm);
+    border: 1px solid rgba(14, 56, 41, 0.05);
+    padding: 16px;
+    position: relative;
+}
+
+/* --- Modal overrides --- */
+.modal-content-premium {
+    border-radius: var(--border-radius-lg);
+    border: none;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(14, 56, 41, 0.25);
+}
+
+.modal-header-premium {
+    background: linear-gradient(135deg, var(--forest-green) 0%, var(--leaf-green) 100%);
+    color: #ffffff;
+    border: none;
+    padding: 20px 30px;
+}
+
+.modal-footer-premium {
+    border: none;
+    padding: 15px 30px 25px 30px;
+    background-color: #fcfbfa;
+}
+
+.premium-input {
+    border: 1px solid rgba(14, 56, 41, 0.1);
+    background-color: #fcfbfa;
+    padding: 12px 18px;
+    border-radius: var(--border-radius-sm);
+    transition: all 0.3s ease;
+}
+
+.premium-input:focus {
+    border-color: var(--accent-gold);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(198, 156, 89, 0.15);
 }

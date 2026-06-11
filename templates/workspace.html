@@ -1,0 +1,1106 @@
+{% extends "base.html" %}
+
+{% block title %}AgriSuper Workspace - Farmer Control Panel{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/dashboard-modern.css') }}" rel="stylesheet">
+<style>
+    /* Custom CSS adjustments to integrate with existing base.html layout */
+    main {
+        max-width: 100% !important;
+        padding: 0 !important;
+    }
+    .navbar-landing {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.08) !important;
+        box-shadow: 0 4px 20px rgba(4, 20, 14, 0.15) !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Mobile scrollable tabs navigator -->
+<div class="mobile-tabs-container">
+    <button class="mobile-tab-btn active" onclick="switchCategory('market', this)">
+        <i class="fas fa-chart-line me-1 text-success"></i> Market Intelligence
+    </button>
+    <button class="mobile-tab-btn" onclick="switchCategory('farming', this)">
+        <i class="fas fa-brain me-1 text-primary"></i> Farming & AI
+    </button>
+    <button class="mobile-tab-btn" onclick="switchCategory('weather', this)">
+        <i class="fas fa-cloud-sun me-1 text-warning"></i> Weather & Alerts
+    </button>
+    <button class="mobile-tab-btn" onclick="switchCategory('logistics', this)">
+        <i class="fas fa-shipping-fast me-1 text-info"></i> Logistics & Chain
+    </button>
+    <button class="mobile-tab-btn" onclick="switchCategory('financial', this)">
+        <i class="fas fa-wallet me-1 text-success"></i> Financial Services
+    </button>
+    <button class="mobile-tab-btn" onclick="switchCategory('community', this)">
+        <i class="fas fa-users me-1 text-danger"></i> Community & Learning
+    </button>
+    <button class="mobile-tab-btn" onclick="switchCategory('accessibility', this)">
+        <i class="fas fa-microphone me-1 text-secondary"></i> Accessibility
+    </button>
+    <button class="mobile-tab-btn" onclick="switchCategory('security', this)">
+        <i class="fas fa-shield-alt me-1 text-danger"></i> Security & Trust
+    </button>
+</div>
+
+<div class="workspace-layout">
+    <!-- Desktop Sidebar (Notion/Salesforce layout) -->
+    <aside class="workspace-sidebar">
+        <div class="workspace-sidebar-brand">
+            <i class="fas fa-cubes text-lime"></i>
+            <span>Farmer Workspace</span>
+        </div>
+        
+        <nav class="workspace-nav">
+            <a class="workspace-nav-link active" onclick="switchCategory('market', this)">
+                <i class="fas fa-chart-bar" style="width: 20px;"></i> Market Intelligence
+            </a>
+            <a class="workspace-nav-link" onclick="switchCategory('farming', this)">
+                <i class="fas fa-seedling" style="width: 20px;"></i> Farming & AI Analytics
+            </a>
+            <a class="workspace-nav-link" onclick="switchCategory('weather', this)">
+                <i class="fas fa-cloud-showers-heavy" style="width: 20px;"></i> Weather & Safety
+            </a>
+            <a class="workspace-nav-link" onclick="switchCategory('logistics', this)">
+                <i class="fas fa-truck-loading" style="width: 20px;"></i> Logistics & Supply Chain
+            </a>
+            <a class="workspace-nav-link" onclick="switchCategory('financial', this)">
+                <i class="fas fa-hand-holding-usd" style="width: 20px;"></i> Financial Services
+            </a>
+            <a class="workspace-nav-link" onclick="switchCategory('community', this)">
+                <i class="fas fa-graduation-cap" style="width: 20px;"></i> Community & Learning
+            </a>
+            <a class="workspace-nav-link" onclick="switchCategory('accessibility', this)">
+                <i class="fas fa-universal-access" style="width: 20px;"></i> Accessibility & Voice
+            </a>
+            <a class="workspace-nav-link" onclick="switchCategory('security', this)">
+                <i class="fas fa-user-shield" style="width: 20px;"></i> Security & Trust
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Workspace Main Panel -->
+    <div class="workspace-content">
+        <!-- Compact Workspace Header -->
+        <header class="workspace-header">
+            <div class="workspace-header-overlay">
+                <div class="workspace-welcome">
+                    <h2>Namaste, <span>Rajesh</span></h2>
+                    <p>AgriSuper Enterprise Portal • Ludhiana District, Punjab</p>
+                </div>
+                
+                <!-- Center: Global Search -->
+                <div class="workspace-search-container">
+                    <i class="fas fa-search workspace-search-icon"></i>
+                    <input type="text" id="globalSearchInput" class="form-control workspace-search-input" placeholder="Search all 41 services instantly...">
+                </div>
+
+                <!-- Right: Notifications & Quick Access -->
+                <div class="workspace-header-actions">
+                    <div class="workspace-notif-btn" id="notifButton" onclick="toggleNotifModal()">
+                        <i class="fas fa-bell"></i>
+                        <span class="workspace-notif-badge"></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Metric Summary Banner (Above Fold) -->
+        <section class="workspace-metrics">
+            <div class="metric-card-glass">
+                <div class="metric-icon-box bg-light-warning">
+                    <i class="fas fa-sun text-warning"></i>
+                </div>
+                <div class="metric-details">
+                    <h5>Ludhiana Weather</h5>
+                    <p class="metric-value">32°C</p>
+                    <p class="metric-subtitle">Sunny • Humidity: 42%</p>
+                </div>
+            </div>
+
+            <div class="metric-card-glass">
+                <div class="metric-icon-box bg-light-success">
+                    <i class="fas fa-chart-line text-success"></i>
+                </div>
+                <div class="metric-details">
+                    <h5>Mandi Index</h5>
+                    <p class="metric-value">+2.4%</p>
+                    <p class="metric-subtitle">Wheat Bullish trend</p>
+                </div>
+            </div>
+
+            <div class="metric-card-glass">
+                <div class="metric-icon-box bg-light-primary">
+                    <i class="fas fa-wallet text-primary"></i>
+                </div>
+                <div class="metric-details">
+                    <h5>Escrow Balance</h5>
+                    <p class="metric-value">₹24,580</p>
+                    <p class="metric-subtitle">Digital wallet active</p>
+                </div>
+            </div>
+
+            <div class="metric-card-glass">
+                <div class="metric-icon-box bg-light-info">
+                    <i class="fas fa-truck text-info"></i>
+                </div>
+                <div class="metric-details">
+                    <h5>Active Logistics</h5>
+                    <p class="metric-value">1 Active</p>
+                    <p class="metric-subtitle">In-transit to Ludhiana</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Feature Grid Area -->
+        <main>
+            <div class="services-section-title">
+                <h3 id="activeCategoryTitle"><i class="fas fa-chart-bar text-lime me-2"></i>Market Intelligence</h3>
+                <span class="badge bg-lime text-dark px-3 py-2 font-monospace" id="categoryCount">7 Services Available</span>
+            </div>
+
+            <div class="services-grid" id="servicesGrid">
+                <!-- ============================================
+                     MODULE 1: MARKET INTELLIGENCE (market)
+                     ============================================ -->
+                <div class="workspace-feature-card" data-category="market">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-success">
+                            <i class="fas fa-tags text-success"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Dynamic Pricing Engine</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">AI-driven real-time price updates for regional crops, accounting for supply metrics.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Pricing</span>
+                        <a href="{{ url_for('pricing_engine_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card" data-category="market">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-success">
+                            <i class="fas fa-sync-alt text-success"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Subscription Delivery Model</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Set up recurring crop supplies and delivery channels directly to urban bulk buyers.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Contracts</span>
+                        <a href="{{ url_for('subscription_model_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card" data-category="market">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-success">
+                            <i class="fas fa-handshake text-success"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Contract Farming Portal</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Establish and track legally binding pre-harvest production contracts with local corporates.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">B2B</span>
+                        <a href="{{ url_for('contract_farming_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card" data-category="market">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-success">
+                            <i class="fas fa-boxes text-success"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Bulk Deal Aggregator</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Pool together produce listings with regional farmers to secure bulk export-grade prices.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Cooperative</span>
+                        <a href="{{ url_for('bulk_deals_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card" data-category="market">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-success">
+                            <i class="fas fa-random text-success"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Mandi Price Comparison</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Compare real-time rates of your target crop across neighboring states and mandis.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Market Info</span>
+                        <a href="{{ url_for('market_comparison_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card" data-category="market">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-success">
+                            <i class="fas fa-chart-line text-success"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Mandi Prices Tracker</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Live price updates from 600+ active markets in India to optimize crop sales.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Live Mandi</span>
+                        <a href="{{ url_for('market_prices') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card" data-category="market">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-success">
+                            <i class="fas fa-funnel-dollar text-success"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Fertilizer Cost Comparison</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Compare fertilizer prices across local suppliers and set dynamic price alert thresholds.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Inputs</span>
+                        <a href="{{ url_for('fertilizer_price_comparison_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     MODULE 2: FARMING & AI ANALYTICS (farming)
+                     ============================================ -->
+                <div class="workspace-feature-card d-none" data-category="farming">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-primary">
+                            <i class="fas fa-hourglass-half text-primary"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Crop Yield Predictor</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">AI yields forecasts matching historical rainfall and soil chemistry dynamics.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">AI Prediction</span>
+                        <a href="{{ url_for('yield_prediction_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="farming">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-primary">
+                            <i class="fas fa-recycle text-primary"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Crop Rotation Advisor</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Optimize nutrient cycling with sequence guides tailored to nitrogen fixation levels.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Agronomy</span>
+                        <a href="{{ url_for('crop_rotation_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="farming">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-primary">
+                            <i class="fas fa-seedling text-primary"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Agricultural Consulting</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Manage crops, track farming inputs, and obtain customized cultivation advisories.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Crop Advisory</span>
+                        <a href="{{ url_for('crop_management') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="farming">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-primary">
+                            <i class="fas fa-flask text-primary"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Soil Fertilization</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Generate localization tables matching mineral compositions with dynamic N-P-K levels.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Soil</span>
+                        <a href="{{ url_for('soil_health') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="farming">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-primary">
+                            <i class="fas fa-book-open text-primary"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Soil Knowledge Center</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Access digital maps, upload Soil Health Cards, and review soil conservation strategies.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Education</span>
+                        <a href="{{ url_for('soil_knowledge_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="farming">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-primary">
+                            <i class="fas fa-calculator text-primary"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Profit Analyzer</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Simulate seed, fertilizer, and operational costs against expected market pricing.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Finance Tools</span>
+                        <a href="{{ url_for('profit_analyzer_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="farming">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-primary">
+                            <i class="fas fa-leaf text-primary"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Organic Farming Advisory</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Transition rules, organic fertilizer recipes, and bio-pest management protocols.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Eco-Farming</span>
+                        <a href="{{ url_for('organic_farming_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     MODULE 3: WEATHER & SAFETY (weather)
+                     ============================================ -->
+                <div class="workspace-feature-card d-none" data-category="weather">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-warning">
+                            <i class="fas fa-cloud-showers-heavy text-warning"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Weather Alerts Engine</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Live weather indicators, microclimate forecasts, and IMD-connected emergency warnings.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Safety</span>
+                        <a href="{{ url_for('weather_alerts') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="weather">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-warning">
+                            <i class="fas fa-exclamation-triangle text-warning"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Disaster Alerts</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Alerts for extreme rainfall, hail, flood risks, and temperature abnormalities.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Risk Control</span>
+                        <a href="{{ url_for('disaster_alerts_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="weather">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-warning">
+                            <i class="fas fa-calendar-alt text-warning"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Sowing Calendar</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Identify optimal crop sowing dates mapping regional soil moisture models.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Agronomy</span>
+                        <a href="{{ url_for('sowing_calendar_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="weather">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-warning">
+                            <i class="fas fa-bug text-warning"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Leaf-Disease Diagnosis</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Scan crop leaves, diagnose plant diseases, and track local pest outbreaks.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Pest Control</span>
+                        <a href="{{ url_for('pest_alerts_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="weather">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-warning">
+                            <i class="fas fa-tint text-warning"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Water Conservation</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Drip irrigation scheduling algorithms and local rainwater harvesting calculators.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Eco-Farming</span>
+                        <a href="{{ url_for('water_conservation_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     MODULE 4: LOGISTICS & SUPPLY CHAIN (logistics)
+                     ============================================ -->
+                <div class="workspace-feature-card d-none" data-category="logistics">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-info">
+                            <i class="fas fa-shipping-fast text-info"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Shared Logistics Hub</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Co-book commercial freight vehicles with neighbors to drop shipping rates.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Transport</span>
+                        <a href="{{ url_for('shared_logistics_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="logistics">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-info">
+                            <i class="fas fa-warehouse text-info"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Storage & Warehouse Booking</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Locate cold storages and book state-run warehousing deposits.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Storage</span>
+                        <a href="{{ url_for('storage_booking_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="logistics">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-info">
+                            <i class="fas fa-route text-info"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Route Optimization</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Route mapping tools for multi-stop transport and cost comparison formulas.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Tech Tools</span>
+                        <a href="{{ url_for('route_optimization_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="logistics">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-info">
+                            <i class="fas fa-globe-americas text-info"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Export Gateway</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Examine international custom laws, phytosanitary specs, and generate documentation.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Export</span>
+                        <a href="{{ url_for('export_gateway_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="logistics">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-info">
+                            <i class="fas fa-certificate text-info"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Quality Certification</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Schedule crop quality inspects to certify chemical-free produce classifications.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Standards</span>
+                        <a href="{{ url_for('quality_certification') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="logistics">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-info">
+                            <i class="fas fa-tools text-info"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Equipment Management</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Monitor active agricultural machinery logs, diagnostics tables, and schedule servicing updates.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Machinery</span>
+                        <a href="{{ url_for('equipment_management') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="logistics">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-info">
+                            <i class="fas fa-truck-loading text-info"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Equipment Rental Hub</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Rent heavy tractors, laser levelers, or harvesters from neighbor farming pools.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Sharing</span>
+                        <a href="{{ url_for('equipment_rental_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     MODULE 5: FINANCIAL SERVICES (financial)
+                     ============================================ -->
+                <div class="workspace-feature-card d-none" data-category="financial">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-success">
+                            <i class="fas fa-hand-holding-usd text-success"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Micro-Loan Marketplace</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Access seed-capital options with instant eligibility calculators matching crop parameters.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Capital</span>
+                        <a href="{{ url_for('micro_loans_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="financial">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-success">
+                            <i class="fas fa-shield-alt text-success"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Crop Insurance Hub</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Enroll in PMFBY programs and initiate claim payouts via weather index indicators.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Insurance</span>
+                        <a href="{{ url_for('crop_insurance_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="financial">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-success">
+                            <i class="fas fa-wallet text-success"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Digital Escrow Wallet</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Deposit, transfer, and receive buyer crop payouts securely with transaction ledgers.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Wallet</span>
+                        <a href="{{ url_for('digital_wallet_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="financial">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-success">
+                            <i class="fas fa-credit-card text-success"></i>
+                        </div>
+                        <h4 class="workspace-card-title">EMI Purchase Planner</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Check amortization calendars to purchase fertilizers or seeds via installment plans.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Financing</span>
+                        <a href="{{ url_for('emi_purchase_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="financial">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-success">
+                            <i class="fas fa-cloud-sun text-success"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Carbon Credits Portal</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Monitor carbon savings generated by sustainable tillage protocols and trade credits.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Eco Trading</span>
+                        <a href="{{ url_for('carbon_credits_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="financial">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-success">
+                            <i class="fas fa-coins text-success"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Financial Management</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Comprehensive dashboard detailing crop revenues, input investments, and loan histories.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Accounts</span>
+                        <a href="{{ url_for('financial_management') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     MODULE 6: COMMUNITY & LEARNING (community)
+                     ============================================ -->
+                <div class="workspace-feature-card d-none" data-category="community">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-danger">
+                            <i class="fas fa-graduation-cap text-danger"></i>
+                        </div>
+                        <h4 class="workspace-card-title">E-Learning Courses</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Free digital agronomy courses detailing fertilizer schedules, drip systems, and exports.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Learning</span>
+                        <a href="{{ url_for('elearning_courses_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="community">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-danger">
+                            <i class="fas fa-trophy text-danger"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Success Stories</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Case studies of regional crop yields, smart farming, and innovative trading strategies.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Community</span>
+                        <a href="{{ url_for('success_stories_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="community">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-danger">
+                            <i class="fas fa-users-cog text-danger"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Farmer Cooperatives</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Register farming groups to purchase raw input wholesale and share storage fees.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Groups</span>
+                        <a href="{{ url_for('farmer_groups_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="community">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-danger">
+                            <i class="fas fa-comments text-danger"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Expert Q&A Forum</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Connect with certified agronomists and coordinate remedy protocols for disease warnings.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Discussion</span>
+                        <a href="{{ url_for('community_forum') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="community">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-danger">
+                            <i class="fas fa-chalkboard-teacher text-danger"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Mentorship Program</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Arrange consultation sessions with veteran organic farmers and farming leaders.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Mentors</span>
+                        <a href="{{ url_for('mentorship_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     MODULE 7: ACCESSIBILITY & VOICE (accessibility)
+                     ============================================ -->
+                <div class="workspace-feature-card d-none" data-category="accessibility">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-secondary">
+                            <i class="fas fa-microphone text-secondary"></i>
+                        </div>
+                        <h4 class="workspace-card-title">AI Voice Assistant</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Voice query support to quickly inquire mandi pricing metrics or local pest advisories.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Voice AI</span>
+                        <a href="{{ url_for('voice_assistant_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="accessibility">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-secondary">
+                            <i class="fas fa-language text-secondary"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Multi-Language Portal</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Instantly translate the workspace dashboards into Punjabi, Hindi, Marathi, and 12 other tongues.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Languages</span>
+                        <a href="{{ url_for('multilanguage_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="accessibility">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-secondary">
+                            <i class="fas fa-sms text-secondary"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Offline SMS Command Desk</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Query pricing engine lists or weather indicators using basic SMS text codes offline.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Offline SMS</span>
+                        <a href="{{ url_for('offline_sms_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <!-- ============================================
+                     MODULE 8: SECURITY & TRUST (security)
+                     ============================================ -->
+                <div class="workspace-feature-card d-none" data-category="security">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-danger">
+                            <i class="fas fa-id-card text-danger"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Farmer ID Verification</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Verify identity using Aadhaar and DigiLocker integrations to secure cooperative trades.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">KYC</span>
+                        <a href="{{ url_for('id_verification_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="security">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-danger">
+                            <i class="fas fa-file-signature text-danger"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Smart Contracts Payments</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Deploy transparent escrow-mediated payment terms verified upon quality checks.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Contracts</span>
+                        <a href="{{ url_for('smart_contracts_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="security">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-danger">
+                            <i class="fas fa-star text-danger"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Buyer Rating System</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Check credit ratings, payment speed scores, and reviews of corporate bulk buyers.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Trust</span>
+                        <a href="{{ url_for('buyer_ratings_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="security">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-danger">
+                            <i class="fas fa-user-shield text-danger"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Fraud Detection System</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">AI scan of payment anomalies to secure cooperative funds from identity frauds.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Security AI</span>
+                        <a href="{{ url_for('fraud_detection_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="security">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-danger">
+                            <i class="fas fa-store-alt text-danger"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Secondhand Market</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Trade machinery or equipment with regional farmers using escrow protection.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Marketplace</span>
+                        <a href="{{ url_for('secondhand_marketplace_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="security">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-danger">
+                            <i class="fas fa-store text-danger"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Organic Marketplace</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Buy and sell verified chemical-free grains and vegetables directly to urban bulk consumers.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">Organic Trade</span>
+                        <a href="{{ url_for('organic_marketplace_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+
+                <div class="workspace-feature-card d-none" data-category="security">
+                    <div class="workspace-card-header">
+                        <div class="workspace-card-icon bg-light-danger">
+                            <i class="fas fa-hands-helping text-danger"></i>
+                        </div>
+                        <h4 class="workspace-card-title">Farmer-to-Farmer Trade</h4>
+                    </div>
+                    <div class="workspace-card-body">
+                        <p class="workspace-card-text">Secure seed swaps, fertilizer trades, and animal feeds exchanges directly among neighbors.</p>
+                    </div>
+                    <div class="workspace-card-footer">
+                        <span class="badge bg-light text-dark">P2P Trade</span>
+                        <a href="{{ url_for('farmer_to_farmer_trade_page') }}" class="workspace-card-btn">Open <i class="fas fa-chevron-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Notification Tray Overlay Panel -->
+<div class="modal fade" id="notifModal" tabindex="-1" aria-hidden="true" style="backdrop-filter: blur(10px);">
+    <div class="modal-dialog modal-dialog-centered modal-md">
+        <div class="modal-content border-0 shadow-lg" style="background: rgba(4, 20, 14, 0.95); border: 1px solid rgba(255, 255, 255, 0.1) !important; color: white; border-radius: 20px;">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold text-lime"><i class="fas fa-bell me-2"></i>Farmer Alerts & Notifications</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close" onclick="toggleNotifModal()"></button>
+            </div>
+            <div class="modal-body py-4">
+                <div class="d-flex flex-column gap-3">
+                    <div class="d-flex gap-3 p-3 rounded-4" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
+                        <i class="fas fa-cloud-showers-heavy text-warning fa-lg mt-1"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">Heavy Rain Alert</h6>
+                            <p class="text-muted mb-0" style="font-size: 0.82rem;">IMD predicts heavy rain in Ludhiana district on June 13. Secure storage areas.</p>
+                            <span class="badge bg-warning text-dark mt-2 font-monospace" style="font-size: 0.7rem;">Weather Alert</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 p-3 rounded-4" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
+                        <i class="fas fa-wallet text-success fa-lg mt-1"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">Payment Received</h6>
+                            <p class="text-muted mb-0" style="font-size: 0.82rem;">₹18,200 deposited to your escrow account from exporter B2B Wheat purchase.</p>
+                            <span class="badge bg-success text-white mt-2 font-monospace" style="font-size: 0.7rem;">Wallet update</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex gap-3 p-3 rounded-4" style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05);">
+                        <i class="fas fa-bug text-danger fa-lg mt-1"></i>
+                        <div>
+                            <h6 class="fw-bold mb-1">Mildew Pest outbreak</h6>
+                            <p class="text-muted mb-0" style="font-size: 0.82rem;">White mildew reports rising in cotton crops 5km around your coordinate.</p>
+                            <span class="badge bg-danger text-white mt-2 font-monospace" style="font-size: 0.7rem;">Pest warning</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-lime text-uppercase fw-bold w-100" style="border-radius: 12px; font-size: 0.85rem;" onclick="toggleNotifModal()">Close Panel</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Categories display helper mappings
+    const categoryInfo = {
+        'market': { title: 'Market Intelligence', countText: '7 Services Available', icon: 'fa-chart-bar' },
+        'farming': { title: 'Farming & AI Analytics', countText: '7 Services Available', icon: 'fa-seedling' },
+        'weather': { title: 'Weather & Safety', countText: '5 Services Available', icon: 'fa-cloud-showers-heavy' },
+        'logistics': { title: 'Logistics & Supply Chain', countText: '7 Services Available', icon: 'fa-truck-loading' },
+        'financial': { title: 'Financial Services', countText: '6 Services Available', icon: 'fa-hand-holding-usd' },
+        'community': { title: 'Community & Learning', countText: '5 Services Available', icon: 'fa-graduation-cap' },
+        'accessibility': { title: 'Accessibility & Voice', countText: '3 Services Available', icon: 'fa-universal-access' },
+        'security': { title: 'Security & Trust', countText: '7 Services Available', icon: 'fa-user-shield' }
+    };
+
+    let activeCategory = 'market';
+
+    // Switch Category Tab (both Sidebar and Mobile tab bar)
+    function switchCategory(cat, element) {
+        activeCategory = cat;
+        
+        // Remove active class from all desktop nav items
+        document.querySelectorAll('.workspace-nav-link').forEach(link => {
+            link.classList.remove('active');
+        });
+        // Remove active class from all mobile tab items
+        document.querySelectorAll('.mobile-tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Add active classes based on category string
+        document.querySelectorAll('.workspace-nav-link').forEach(link => {
+            if (link.getAttribute('onclick').includes(`'${cat}'`)) {
+                link.classList.add('active');
+            }
+        });
+        document.querySelectorAll('.mobile-tab-btn').forEach(btn => {
+            if (btn.getAttribute('onclick').includes(`'${cat}'`)) {
+                btn.classList.add('active');
+            }
+        });
+
+        // Set Headers
+        const info = categoryInfo[cat];
+        document.getElementById('activeCategoryTitle').innerHTML = `<i class="fas ${info.icon} text-lime me-2"></i>${info.title}`;
+        document.getElementById('categoryCount').innerText = info.countText;
+
+        // Filter Grid Cards
+        filterCards();
+    }
+
+    // Filter Cards in active category + applying global search if any
+    function filterCards() {
+        const query = document.getElementById('globalSearchInput').value.toLowerCase().trim();
+        let visibleCount = 0;
+
+        document.querySelectorAll('.workspace-feature-card').forEach(card => {
+            const cardCategory = card.getAttribute('data-category');
+            const cardTitle = card.querySelector('.workspace-card-title').innerText.toLowerCase();
+            const cardText = card.querySelector('.workspace-card-text').innerText.toLowerCase();
+            
+            const categoryMatch = (cardCategory === activeCategory);
+            const queryMatch = !query || cardTitle.includes(query) || cardText.includes(query);
+
+            if (query) {
+                // When searching globally, ignore the active category tab constraint so that user can search all 41 features
+                if (queryMatch) {
+                    card.classList.remove('d-none');
+                    visibleCount++;
+                } else {
+                    card.classList.add('d-none');
+                }
+            } else {
+                // When not searching, apply category tab filters
+                if (categoryMatch) {
+                    card.classList.remove('d-none');
+                    visibleCount++;
+                } else {
+                    card.classList.add('d-none');
+                }
+            }
+        });
+
+        // Update active service count dynamically
+        if (query) {
+            document.getElementById('activeCategoryTitle').innerHTML = `<i class="fas fa-search text-lime me-2"></i>Search Results`;
+            document.getElementById('categoryCount').innerText = `${visibleCount} Services Found`;
+        } else {
+            const info = categoryInfo[activeCategory];
+            document.getElementById('activeCategoryTitle').innerHTML = `<i class="fas ${info.icon} text-lime me-2"></i>${info.title}`;
+            document.getElementById('categoryCount').innerText = `${visibleCount} Services Available`;
+        }
+    }
+
+    // Toggle Notification modal panel
+    function toggleNotifModal() {
+        const myModal = new bootstrap.Modal(document.getElementById('notifModal'));
+        myModal.toggle();
+        
+        // Hide badge notification icon upon inspection
+        document.querySelector('.workspace-notif-badge').style.display = 'none';
+    }
+
+    // Bind real-time search action
+    document.getElementById('globalSearchInput').addEventListener('input', filterCards);
+
+    // Document ready initialization
+    $(document).ready(function() {
+        // Automatically hide navbar scroll animation to ensure clean fixed interface
+        $('.navbar').addClass('scrolled');
+        
+        // Clear active class helper on home page nav logic to highlight Workspace
+        $('.nav-link').removeClass('active');
+    });
+</script>
+{% endblock %}

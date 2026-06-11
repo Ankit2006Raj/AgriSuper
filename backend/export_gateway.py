@@ -257,12 +257,12 @@ class ExportGateway:
         }
         return validity.get(document, 30)
 
-def get_export_gateway():
-    return ExportGateway()
-
     def test_connection(self):
         """Test if the module is working"""
         try:
             return {'status': 'success', 'message': 'Export Gateway is operational'}
         except Exception as e:
             return {'status': 'error', 'message': str(e)}
+
+def get_export_gateway():
+    return ExportGateway()

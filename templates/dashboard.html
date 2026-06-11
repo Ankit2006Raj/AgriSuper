@@ -1,190 +1,593 @@
 {% extends "base.html" %}
 
+{% block title %}AgriSuper - The Revolution Of Agriculture Sector{% endblock %}
+
+{% block extra_css %}
+<link href="{{ url_for('static', filename='css/landing.css') }}" rel="stylesheet">
+{% endblock %}
+
 {% block content %}
-<div class="container-fluid py-5">
-    <div class="row">
-        <div class="col-12">
-            <div class="hero-section bg-gradient-success text-white p-5 rounded mb-5">
-                <div class="row align-items-center">
-                    <div class="col-md-8">
-                        <h1 class="display-4 fw-bold mb-3">Welcome to AgriSuper</h1>
-                        <p class="lead mb-4">Advanced Agriculture Platform with 41 Powerful Features</p>
-                        <p class="mb-0">Empowering farmers with AI-driven insights, market intelligence, and comprehensive agricultural solutions.</p>
-                        <div class="mt-4">
-                            <a href="{{ url_for('categorized_dashboard') }}" class="btn btn-light btn-lg">View Categorized Dashboard</a>
+<!-- Activate Landing Page Layout on Body -->
+<script>
+    document.body.classList.add('landing-page');
+</script>
+
+<!-- --- HERO SECTION --- -->
+<section class="hero-wrapper">
+    <div class="container-fluid px-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 position-relative mb-5 mb-lg-0 text-start" style="min-height: 580px;">
+                <!-- Welcome text left of the farmer pic -->
+                <div class="hero-welcome-text mb-4">
+                    <h2 class="text-forest text-uppercase mb-1" style="font-size: 1.8rem; font-weight: 900; letter-spacing: 0.5px; line-height: 1.25;">
+                        India's Leading Digital Agriculture Ecosystem
+                    </h2>
+                    <p class="text-gold fw-bold text-uppercase" style="font-size: 0.95rem; letter-spacing: 1.5px; margin-bottom: 0;">
+                        Empowering Farmers with AI-Driven Diagnostics & Mandi Prices
+                    </p>
+                </div>
+                <div class="hero-overlay-circle" style="top: 155px;">
+                    <span class="hero-badge-top"><i class="fas fa-seedling me-2"></i>AgriSuper Ecosystem</span>
+                    <h1 class="hero-title">Beautiful & Smart Farming For You</h1>
+                    <p class="mb-4" style="font-size: 1.05rem; opacity: 0.9;">
+                        Empowering Indian farmers with AI-driven yield predictions, real-time mandi prices, and smart crop diagnostics to maximize output and profit.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="{{ url_for('categorized_dashboard') }}" class="btn btn-gold">Launch Platform</a>
+                        <a href="#about" class="btn btn-outline-white">Read More</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="hero-img-container">
+                    <img src="{{ url_for('static', filename='img/hero_farmer.png') }}" class="hero-img" alt="Farmer in modern greenhouse">
+                    
+                    <!-- Floating Watch Video Button -->
+                    <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="hero-play-btn" aria-label="Watch Introduction Video">
+                        <i class="fas fa-play"></i>
+                    </a>
+
+                    <!-- Floating Stats Card -->
+                    <div class="hero-stats-card">
+                        <div class="hero-stats-avatars">
+                            <img src="https://i.pravatar.cc/100?img=12" alt="Farmer Avatar 1">
+                            <img src="https://i.pravatar.cc/100?img=59" alt="Farmer Avatar 2">
+                            <img src="https://i.pravatar.cc/100?img=33" alt="Farmer Avatar 3">
+                        </div>
+                        <div class="hero-stats-text">
+                            <h5>10,000+</h5>
+                            <p>Farmers Active Today</p>
                         </div>
                     </div>
-                    <div class="col-md-4 text-center">
-                        <i class="fas fa-tractor fa-5x opacity-75"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- --- HIGHLIGHTS SECTION (OVERLAPPING CARDS) --- -->
+<section class="highlights-section text-start">
+    <div class="container-fluid px-5">
+        <div class="row g-4">
+            <!-- Card 1 -->
+            <div class="col-md-4">
+                <div class="highlight-card h-100">
+                    <div class="highlight-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h4>AI Crop Diagnostics</h4>
+                    <p class="text-muted mb-0">
+                        Scan leaves for early disease detection, pest outbreaks, and get instant remedy advisories backed by agro-scientists.
+                    </p>
+                </div>
+            </div>
+            <!-- Card 2 (Dark themed) -->
+            <div class="col-md-4">
+                <div class="highlight-card dark-card h-100">
+                    <div class="highlight-icon">
+                        <i class="fas fa-phone-alt"></i>
+                    </div>
+                    <h4>Farmer Help Desk</h4>
+                    <p class="text-muted mb-3" style="color: rgba(255, 255, 255, 0.75) !important;">
+                        Stuck or need clarification? Talk directly with agricultural experts in 15+ regional languages.
+                    </p>
+                    <small class="d-block text-gold font-monospace">Mon - Sat: 8:00 AM - 8:00 PM</small>
+                    <small class="d-block text-white-50 mt-1">Toll-Free: 1800-180-1551</small>
+                </div>
+            </div>
+            <!-- Card 3 -->
+            <div class="col-md-4">
+                <div class="highlight-card h-100">
+                    <div class="highlight-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Live Mandi Tracker</h4>
+                    <p class="text-muted mb-0">
+                        Access real-time price feeds across 3000+ mandis. Avoid middleman commission and capture market trends before selling.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- --- ABOUT US SECTION --- -->
+<section id="about" class="about-section text-start">
+    <div class="container-fluid px-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <div class="about-img-group">
+                    <img src="{{ url_for('static', filename='img/about_farm.png') }}" class="about-img-main" alt="Smart agricultural fields">
+                    <div class="about-img-secondary-circle">
+                        <img src="{{ url_for('static', filename='img/soil_sprout.png') }}" alt="Hands holding soil sprout">
+                    </div>
+                    <div class="about-badge-experience">
+                        <span class="number">25+</span>
+                        <span class="label">Years of<br>Trust</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 ps-lg-5">
+                <span class="text-gold font-monospace fw-bold text-uppercase tracking-wider d-block mb-3">About AgriSuper</span>
+                <h2 class="text-forest fw-extrabold mb-4" style="font-size: 2.5rem; line-height: 1.2;">We Care For Your Crops & Agricultural Prosperity</h2>
+                <p class="text-muted mb-4" style="font-size: 1.05rem;">
+                    AgriSuper is a comprehensive agricultural ecosystem built from the ground up for real-world deployment. We combine AI technology with live market feeds to help Indian farmers increase margins, streamline supply chains, and build secure cooperatives.
+                </p>
+                <ul class="bullet-list-gold mb-4">
+                    <li>Smart Soil Diagnostics & Nutrient Balancer</li>
+                    <li>Pre-planting Sowing Calendars & Advisories</li>
+                    <li>Automatic Weather & Pest Risk Notifications</li>
+                    <li>Shared Logistics & Bulk Direct Selling Deals</li>
+                </ul>
+                <a href="{{ url_for('categorized_dashboard') }}" class="btn btn-primary">Explore Platform Services</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- --- AWARD / HIGHLIGHT BANNER --- -->
+<section class="container-fluid px-5">
+    <div class="award-section text-start">
+        <div class="container-fluid px-4">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0 pe-lg-5">
+                    <span class="text-gold font-monospace fw-bold text-uppercase d-block mb-3">Technology Showcase</span>
+                    <h2 class="text-white fw-bold mb-4" style="font-size: 2.2rem;">We're Pioneering Digital Agriculture</h2>
+                    
+                    <div class="award-tab-nav">
+                        <button class="award-tab-btn active" id="tab-advisory-btn" onclick="switchAwardTab('advisory')">Smart Advisory</button>
+                        <button class="award-tab-btn" id="tab-finance-btn" onclick="switchAwardTab('finance')">Financial Safety</button>
+                    </div>
+
+                    <div id="award-tab-advisory">
+                        <p class="text-white-50 mb-4">
+                            We integrate satellite imagery and machine learning models to monitor crop health. Get field advisories customized to your soil texture and weather parameters.
+                        </p>
+                        <div class="row">
+                            <div class="col-sm-6 check-item text-white">
+                                <div class="check-item-icon"><i class="fas fa-check"></i></div>
+                                <span>85%+ Yield Prediction</span>
+                            </div>
+                            <div class="col-sm-6 check-item text-white">
+                                <div class="check-item-icon"><i class="fas fa-check"></i></div>
+                                <span>Custom Sowing Timings</span>
+                            </div>
+                            <div class="col-sm-6 check-item text-white">
+                                <div class="check-item-icon"><i class="fas fa-check"></i></div>
+                                <span>Pest Alert Bulletins</span>
+                            </div>
+                            <div class="col-sm-6 check-item text-white">
+                                <div class="check-item-icon"><i class="fas fa-check"></i></div>
+                                <span>Voice Command Support</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="award-tab-finance" class="d-none">
+                        <p class="text-white-50 mb-4">
+                            Secure your farming capital and insure against crop risks. Access micro-loans and government-backed PMFBY schemes with quick escrow-mediated payouts.
+                        </p>
+                        <div class="row">
+                            <div class="col-sm-6 check-item text-white">
+                                <div class="check-item-icon"><i class="fas fa-check"></i></div>
+                                <span>Instant Micro-Loans</span>
+                            </div>
+                            <div class="col-sm-6 check-item text-white">
+                                <div class="check-item-icon"><i class="fas fa-check"></i></div>
+                                <span>PMFBY Crop Insurance</span>
+                            </div>
+                            <div class="col-sm-6 check-item text-white">
+                                <div class="check-item-icon"><i class="fas fa-check"></i></div>
+                                <span>Wallet Escrow Payments</span>
+                            </div>
+                            <div class="col-sm-6 check-item text-white">
+                                <div class="check-item-icon"><i class="fas fa-check"></i></div>
+                                <span>Carbon Credit Rewards</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="award-img-box">
+                        <img src="{{ url_for('static', filename='img/blog_tech.png') }}" alt="Farmer using smartphone on field">
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</section>
 
-    <!-- Feature Grid -->
-    <div class="row g-4">
-        <!-- Feature 1: Dynamic Pricing Engine -->
-        <div class="col-lg-4 col-md-6">
-            <div class="feature-card card h-100 shadow-sm border-0">
-                <div class="card-body p-4">
-                    <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-                        <i class="fas fa-chart-line fa-2x"></i>
+<!-- --- WORKFLOW STEPS SECTION --- -->
+<section class="steps-section">
+    <div class="container-fluid px-5">
+        <div class="text-center mb-5">
+            <span class="text-gold font-monospace fw-bold text-uppercase d-block mb-3">Our Workflow</span>
+            <h2 class="text-forest fw-bold" style="font-size: 2.5rem;">How We Support Your Crop Cycle</h2>
+        </div>
+        <div class="row g-4 mt-4 text-start">
+            <!-- Step 1 -->
+            <div class="col-lg-3 col-md-6">
+                <div class="step-item">
+                    <div class="step-circle">
+                        <i class="fas fa-flask"></i>
+                        <span class="step-number">01</span>
                     </div>
-                    <h5 class="card-title fw-bold">Dynamic Pricing Engine</h5>
-                    <p class="card-text text-muted">AI-driven crop price recommendations with Fair Price Index, trend analysis, and volatility scoring.</p>
-                    <a href="{{ url_for('pricing_engine_page') }}" class="btn btn-primary">Explore Feature</a>
+                    <h5 class="fw-bold mb-2">Soil & Land Diagnostics</h5>
+                    <p class="text-muted" style="font-size: 0.95rem;">Input your soil test readings to dynamically discover moisture retention and ideal nutrient ratios.</p>
+                    <div class="step-connector"></div>
                 </div>
             </div>
-        </div>
-
-        <!-- Feature 2: Subscription Model -->
-        <div class="col-lg-4 col-md-6">
-            <div class="feature-card card h-100 shadow-sm border-0">
-                <div class="card-body p-4">
-                    <div class="feature-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-                        <i class="fas fa-sync-alt fa-2x"></i>
+            <!-- Step 2 -->
+            <div class="col-lg-3 col-md-6">
+                <div class="step-item">
+                    <div class="step-circle">
+                        <i class="fas fa-seedling"></i>
+                        <span class="step-number">02</span>
                     </div>
-                    <h5 class="card-title fw-bold">Subscription Model</h5>
-                    <p class="card-text text-muted">Recurring buyer subscriptions with custom crop baskets, loyalty programs, and demand analytics.</p>
-                    <a href="{{ url_for('subscription_model_page') }}" class="btn btn-success">Explore Feature</a>
+                    <h5 class="fw-bold mb-2">Optimal Crop Selection</h5>
+                    <p class="text-muted" style="font-size: 0.95rem;">Select crops predicted to generate maximum profit margin based on localized seasonal Mandi prices.</p>
+                    <div class="step-connector"></div>
                 </div>
             </div>
-        </div>
-
-        <!-- Feature 3: Contract Farming -->
-        <div class="col-lg-4 col-md-6">
-            <div class="feature-card card h-100 shadow-sm border-0">
-                <div class="card-body p-4">
-                    <div class="feature-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-                        <i class="fas fa-handshake fa-2x"></i>
+            <!-- Step 3 -->
+            <div class="col-lg-3 col-md-6">
+                <div class="step-item">
+                    <div class="step-circle">
+                        <i class="fas fa-cloud-sun"></i>
+                        <span class="step-number">03</span>
                     </div>
-                    <h5 class="card-title fw-bold">Contract Farming</h5>
-                    <p class="card-text text-muted">Pre-booking orders with guaranteed buyers, escrow payments, and progress tracking.</p>
-                    <a href="{{ url_for('contract_farming_page') }}" class="btn btn-warning">Explore Feature</a>
+                    <h5 class="fw-bold mb-2">Smart Sowing & Care</h5>
+                    <p class="text-muted" style="font-size: 0.95rem;">Receive farm-specific irrigation timetables, extreme weather forecasts, and disease precautions.</p>
+                    <div class="step-connector"></div>
                 </div>
             </div>
-        </div>
-
-        <!-- Feature 4: Bulk Deals -->
-        <div class="col-lg-4 col-md-6">
-            <div class="feature-card card h-100 shadow-sm border-0">
-                <div class="card-body p-4">
-                    <div class="feature-icon bg-info text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-                        <i class="fas fa-users fa-2x"></i>
+            <!-- Step 4 -->
+            <div class="col-lg-3 col-md-6">
+                <div class="step-item">
+                    <div class="step-circle">
+                        <i class="fas fa-handshake"></i>
+                        <span class="step-number">04</span>
                     </div>
-                    <h5 class="card-title fw-bold">Bulk Deal Aggregation</h5>
-                    <p class="card-text text-muted">Collective selling for large orders with fair-split payments and shared logistics.</p>
-                    <a href="{{ url_for('bulk_deals_page') }}" class="btn btn-info">Explore Feature</a>
+                    <h5 class="fw-bold mb-2">Direct Mandi Selling</h5>
+                    <p class="text-muted" style="font-size: 0.95rem;">List harvest for direct collective selling to verified buyers with secure digital wallet payouts.</p>
                 </div>
-            </div>
-        </div>
-
-        <!-- Feature 5: Yield Prediction -->
-        <div class="col-lg-4 col-md-6">
-            <div class="feature-card card h-100 shadow-sm border-0">
-                <div class="card-body p-4">
-                    <div class="feature-icon bg-secondary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-                        <i class="fas fa-brain fa-2x"></i>
-                    </div>
-                    <h5 class="card-title fw-bold">Yield Prediction Tool</h5>
-                    <p class="card-text text-muted">AI-powered yield forecasting with best/average/worst case scenarios and simulations.</p>
-                    <a href="{{ url_for('yield_prediction_page') }}" class="btn btn-secondary">Explore Feature</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Feature 6: Crop Rotation -->
-        <div class="col-lg-4 col-md-6">
-            <div class="feature-card card h-100 shadow-sm border-0">
-                <div class="card-body p-4">
-                    <div class="feature-icon bg-dark text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-                        <i class="fas fa-recycle fa-2x"></i>
-                    </div>
-                    <h5 class="card-title fw-bold">Crop Rotation Suggestions</h5>
-                    <p class="card-text text-muted">Improve soil fertility with 3-5 year crop cycles and profit projections.</p>
-                    <a href="{{ url_for('crop_rotation_page') }}" class="btn btn-dark">Explore Feature</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Feature 7: Market Comparison -->
-        <div class="col-lg-4 col-md-6">
-            <div class="feature-card card h-100 shadow-sm border-0">
-                <div class="card-body p-4">
-                    <div class="feature-icon bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-                        <i class="fas fa-balance-scale fa-2x"></i>
-                    </div>
-                    <h5 class="card-title fw-bold">Market Comparison Tool</h5>
-                    <p class="card-text text-muted">Compare prices across mandis, private buyers, and online markets with transport cost analysis.</p>
-                    <a href="{{ url_for('market_comparison_page') }}" class="btn btn-danger">Explore Feature</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Feature 8: Profit Analyzer -->
-        <div class="col-lg-4 col-md-6">
-            <div class="feature-card card h-100 shadow-sm border-0">
-                <div class="card-body p-4">
-                    <div class="feature-icon bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-                        <i class="fas fa-calculator fa-2x"></i>
-                    </div>
-                    <h5 class="card-title fw-bold">Profit Margin Analyzer</h5>
-                    <p class="card-text text-muted">Smart profitability calculator with break-even analysis and scenario simulation.</p>
-                    <a href="{{ url_for('profit_analyzer_page') }}" class="btn btn-primary">Explore Feature</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Feature 9: Disaster Alerts -->
-        <div class="col-lg-4 col-md-6">
-            <div class="feature-card card h-100 shadow-sm border-0">
-                <div class="card-body p-4">
-                    <div class="feature-icon bg-warning text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-                        <i class="fas fa-exclamation-triangle fa-2x"></i>
-                    </div>
-                    <h5 class="card-title fw-bold">Disaster Risk Alerts</h5>
-                    <p class="card-text text-muted">Real-time climate alerts with safety advice and insurance integration.</p>
-                    <a href="{{ url_for('disaster_alerts_page') }}" class="btn btn-warning">Explore Feature</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Feature 10: Sowing Calendar -->
-        <div class="col-lg-4 col-md-6">
-            <div class="feature-card card h-100 shadow-sm border-0">
-                <div class="card-body p-4">
-                    <div class="feature-icon bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-                        <i class="fas fa-calendar-alt fa-2x"></i>
-                    </div>
-                    <h5 class="card-title fw-bold">Optimal Sowing Calendar</h5>
-                    <p class="card-text text-muted">Best sowing dates based on 10+ years of weather and crop cycle data.</p>
-                    <a href="{{ url_for('sowing_calendar_page') }}" class="btn btn-success">Explore Feature</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Feature 11: Pest Alerts -->
-        <div class="col-lg-4 col-md-6">
-            <div class="feature-card card h-100 shadow-sm border-0">
-                <div class="card-body p-4">
-                    <div class="feature-icon bg-danger text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3">
-                        <i class="fas fa-bug fa-2x"></i>
-                    </div>
-                    <h5 class="card-title fw-bold">Pest/Disease Alerts</h5>
-                    <p class="card-text text-muted">Prevent crop loss with outbreak alerts and mitigation recommendations.</p>
-                    <a href="{{ url_for('pest_alerts_page') }}" class="btn btn-danger">Explore Feature</a>
-                </div>
-            </div>
-        </div>
-
-        <!-- Placeholder for remaining 30 features -->
-        <div class="col-12">
-            <div class="alert alert-info text-center">
-                <h5><i class="fas fa-info-circle me-2"></i>More Features Coming Soon</h5>
-                <p class="mb-0">30 additional advanced features will be added in the next development phases.</p>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+<!-- --- SOLUTIONS GALLERY SECTION --- -->
+<section class="gallery-section text-start bg-mint py-5">
+    <div class="container-fluid px-5">
+        <div class="d-flex justify-content-between align-items-end mb-5">
+            <div>
+                <span class="text-gold font-monospace fw-bold text-uppercase d-block mb-3">Platform Gallery</span>
+                <h2 class="text-forest fw-bold mb-0" style="font-size: 2.3rem;">Explore Our AgriSuper Solutions</h2>
+            </div>
+            <div>
+                <a href="{{ url_for('categorized_dashboard') }}" class="btn btn-gold">View All Solutions</a>
+            </div>
+        </div>
+        <div class="row">
+            <!-- Gallery 1 -->
+            <div class="col-md-4">
+                <div class="gallery-item">
+                    <img src="{{ url_for('static', filename='img/blog_organic.png') }}" alt="Organic Marketplace">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-gold font-monospace text-uppercase" style="font-size: 0.75rem;">Marketplace</span>
+                            <h5 class="mb-0 fw-bold text-forest">Organic produce trade</h5>
+                        </div>
+                        <a href="{{ url_for('categorized_dashboard') }}" class="gallery-arrow-btn" aria-label="Open organic marketplace"><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Gallery 2 -->
+            <div class="col-md-4">
+                <div class="gallery-item">
+                    <img src="{{ url_for('static', filename='img/about_farm.png') }}" alt="Smart Drip Irrigation">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-gold font-monospace text-uppercase" style="font-size: 0.75rem;">AI Tools</span>
+                            <h5 class="mb-0 fw-bold text-forest">Irrigation Optimizer</h5>
+                        </div>
+                        <a href="{{ url_for('categorized_dashboard') }}" class="gallery-arrow-btn" aria-label="Open irrigation optimizer"><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Gallery 3 -->
+            <div class="col-md-4">
+                <div class="gallery-item">
+                    <img src="{{ url_for('static', filename='img/soil_sprout.png') }}" alt="Sustainable Soil Care">
+                    <div class="gallery-overlay">
+                        <div>
+                            <span class="text-gold font-monospace text-uppercase" style="font-size: 0.75rem;">Advisory</span>
+                            <h5 class="mb-0 fw-bold text-forest">Soil Health Diagnostic</h5>
+                        </div>
+                        <a href="{{ url_for('categorized_dashboard') }}" class="gallery-arrow-btn" aria-label="Open soil health diagnostic"><i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- --- NUMERICAL STATS BANNER --- -->
+<section class="container-fluid px-5 mt-5">
+    <div class="stats-banner">
+        <div class="row g-4">
+            <div class="col-md-3 col-6">
+                <div class="stats-item">
+                    <h2>859+</h2>
+                    <p>Communities Served</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stats-item">
+                    <h2>99%</h2>
+                    <p>Accuracy Rate</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stats-item">
+                    <h2>683+</h2>
+                    <p>Mandis Tracked</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-6">
+                <div class="stats-item">
+                    <h2>880+</h2>
+                    <p>Transactions Completed</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- --- SERVICES SHOWCASE SECTION --- -->
+<section class="about-section text-start pt-0">
+    <div class="container-fluid px-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 mb-5 mb-lg-0">
+                <div class="hero-img-container" style="height: 480px;">
+                    <img src="{{ url_for('static', filename='img/team_specialist.png') }}" class="hero-img" alt="Greenhouse diagnostics">
+                </div>
+            </div>
+            <div class="col-lg-6 ps-lg-5">
+                <span class="text-gold font-monospace fw-bold text-uppercase d-block mb-3">Platform Services</span>
+                <h2 class="text-forest fw-bold mb-4" style="font-size: 2.3rem;">We Offer Smart Cultivation & Advisory Services</h2>
+                <p class="text-muted mb-4">
+                    AgriSuper connects you with agricultural scientists and automated diagnostics. Our offline mode ensures that farmers receive alerts even in low-connectivity areas.
+                </p>
+                
+                <div class="row g-4">
+                    <div class="col-sm-6 text-start">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="highlight-icon m-0" style="width: 50px; height: 50px; flex-shrink: 0;"><i class="fas fa-flask"></i></div>
+                            <div>
+                                <h6 class="fw-bold text-forest mb-1">Soil Diagnostics</h6>
+                                <p class="text-muted mb-0" style="font-size: 0.85rem;">Upload soil logs and receive a customizable nutrient matrix dashboard.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 text-start">
+                        <div class="d-flex align-items-start gap-3">
+                            <div class="highlight-icon m-0" style="width: 50px; height: 50px; flex-shrink: 0;"><i class="fas fa-sms"></i></div>
+                            <div>
+                                <h6 class="fw-bold text-forest mb-1">Offline SMS Support</h6>
+                                <p class="text-muted mb-0" style="font-size: 0.85rem;">Query live mandi rates and weather alerts using basic SMS code requests.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- --- TESTIMONIALS SECTION --- -->
+<section class="feedback-section text-start bg-mint py-5">
+    <div class="container-fluid px-5">
+        <div class="text-center mb-5">
+            <span class="text-gold font-monospace fw-bold text-uppercase d-block mb-3">Testimonials</span>
+            <h2 class="text-forest fw-bold" style="font-size: 2.5rem;">Farmers' Success Stories & Feedback</h2>
+        </div>
+        <div class="row g-4 mt-4">
+            <!-- Testimonial 1 -->
+            <div class="col-lg-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <div class="testimonial-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "The Dynamic Pricing Engine helped me sell my wheat crop at a 15% profit premium! Knowing when mandi prices would peak completely changed my crop marketing decisions."
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://i.pravatar.cc/100?img=12" class="testimonial-avatar" alt="Rajesh Kumar">
+                        <div class="testimonial-info">
+                            <h5>Rajesh Kumar</h5>
+                            <p>Wheat Farmer, Punjab</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Testimonial 2 -->
+            <div class="col-lg-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <div class="testimonial-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "I received a pest outbreak warning via SMS when white mildew started spreading in neighboring tomato farms. The recommendation saved my harvest from total destruction."
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://i.pravatar.cc/100?img=47" class="testimonial-avatar" alt="Anita Devi">
+                        <div class="testimonial-info">
+                            <h5>Anita Devi</h5>
+                            <p>Tomato Farmer, Maharashtra</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Testimonial 3 -->
+            <div class="col-lg-4">
+                <div class="testimonial-card">
+                    <div class="testimonial-quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <div class="testimonial-stars">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "I booked warehouse storage and arranged shared logistics to deliver my potatoes directly to an exporter in Mumbai. The wallet escrow gave me full payment security."
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://i.pravatar.cc/100?img=59" class="testimonial-avatar" alt="Gurpreet Singh">
+                        <div class="testimonial-info">
+                            <h5>Gurpreet Singh</h5>
+                            <p>Potato Farmer, Haryana</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- --- SPECIALIST CTA BANNER --- -->
+<section class="container-fluid px-5 mt-5">
+    <div class="cta-specialist-banner text-start">
+        <img src="{{ url_for('static', filename='img/team_specialist.png') }}" class="cta-specialist-bg" alt="Agro-scientists standing in crops">
+        <div class="cta-specialist-overlay"></div>
+        <div class="cta-specialist-content">
+            <h2 class="fw-bold text-white mb-3" style="font-size: 2.3rem;">Need Agricultural Advice?</h2>
+            <p class="mb-4" style="color: rgba(255, 255, 255, 0.85); font-size: 1.05rem;">
+                Connect with our certified agro-scientists and successful farming mentors to get recommendations for your specific soil type, crop health, and weather warnings.
+            </p>
+            <a href="{{ url_for('mentorship_page') }}" class="btn btn-gold px-4 py-2 text-uppercase fw-bold" style="letter-spacing: 1px;">Find Mentor Now</a>
+        </div>
+    </div>
+</section>
+
+<!-- --- NEWS & BLOG SECTION --- -->
+<section class="blog-section text-start pb-5">
+    <div class="container-fluid px-5">
+        <div class="text-center mb-5">
+            <span class="text-gold font-monospace fw-bold text-uppercase d-block mb-3">News & Blog</span>
+            <h2 class="text-forest fw-bold" style="font-size: 2.5rem;">Read Latest News & Blog</h2>
+        </div>
+        
+        <div class="row g-4 mt-4">
+            <!-- Blog 1 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="blog-card">
+                    <div class="blog-card-img">
+                        <img src="{{ url_for('static', filename='img/blog_harvest.png') }}" alt="Wheat field ready for harvest">
+                        <span class="blog-card-tag">Cultivation</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div class="blog-meta">
+                            <span><i class="far fa-user"></i> By Dr. A. Sharma</span>
+                            <span><i class="far fa-calendar-alt"></i> June 10, 2026</span>
+                        </div>
+                        <h4 class="blog-card-title">
+                            <a href="#">Improving Wheat Yield with Smart Nitrogen Application</a>
+                        </h4>
+                        <a href="#" class="blog-readmore-btn">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Blog 2 -->
+            <div class="col-lg-4 col-md-6">
+                <div class="blog-card">
+                    <div class="blog-card-img">
+                        <img src="{{ url_for('static', filename='img/blog_organic.png') }}" alt="Fresh organic vegetables basket">
+                        <span class="blog-card-tag">Organic Market</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div class="blog-meta">
+                            <span><i class="far fa-user"></i> By M. Kapoor</span>
+                            <span><i class="far fa-calendar-alt"></i> June 05, 2026</span>
+                        </div>
+                        <h4 class="blog-card-title">
+                            <a href="#">Organic Farming: Transition Guide and Market Demands</a>
+                        </h4>
+                        <a href="#" class="blog-readmore-btn">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+            <!-- Blog 3 -->
+            <div class="col-lg-4 col-md-6 d-md-none d-lg-block">
+                <div class="blog-card">
+                    <div class="blog-card-img">
+                        <img src="{{ url_for('static', filename='img/blog_tech.png') }}" alt="Smart farming smartphone visualization">
+                        <span class="blog-card-tag">Smart Tech</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <div class="blog-meta">
+                            <span><i class="far fa-user"></i> By S. Swaminathan</span>
+                            <span><i class="far fa-calendar-alt"></i> May 28, 2026</span>
+                        </div>
+                        <h4 class="blog-card-title">
+                            <a href="#">How Blockchain and Smart Contracts Protect Farmers</a>
+                        </h4>
+                        <a href="#" class="blog-readmore-btn">Read More <i class="fas fa-arrow-right"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- --- LANDING SCRIPTS --- -->
+<script>
+    function switchAwardTab(tabName) {
+        // Toggle Active Tabs
+        document.getElementById('tab-advisory-btn').classList.remove('active');
+        document.getElementById('tab-finance-btn').classList.remove('active');
+        
+        document.getElementById('award-tab-advisory').classList.add('d-none');
+        document.getElementById('award-tab-finance').classList.add('d-none');
+        
+        if (tabName === 'advisory') {
+            document.getElementById('tab-advisory-btn').classList.add('active');
+            document.getElementById('award-tab-advisory').classList.remove('d-none');
+        } else {
+            document.getElementById('tab-finance-btn').classList.add('active');
+            document.getElementById('award-tab-finance').classList.remove('d-none');
+        }
+    }
+</script>
 {% endblock %}

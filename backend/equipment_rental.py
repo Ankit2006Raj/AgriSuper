@@ -303,12 +303,12 @@ class EquipmentRental:
             "review": review
         }
 
-def get_equipment_rental():
-    return EquipmentRental()
-
     def test_connection(self):
         """Test if the module is working"""
         try:
             return {'status': 'success', 'message': 'Equipment Rental is operational'}
         except Exception as e:
             return {'status': 'error', 'message': str(e)}
+
+def get_equipment_rental():
+    return EquipmentRental()

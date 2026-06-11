@@ -12,8 +12,14 @@ class QAForumManager:
         try:
             with open(self.data_file, 'r') as f:
                 self.data = json.load(f)
-        except FileNotFoundError:
+        except (FileNotFoundError, json.JSONDecodeError):
             self.data = self.generate_default_data()
+            try:
+                os.makedirs(os.path.dirname(self.data_file), exist_ok=True)
+                with open(self.data_file, 'w') as f:
+                    json.dump(self.data, f, indent=4)
+            except Exception as e:
+                print(f"Error saving generated data: {e}")
     
     def generate_default_data(self):
         categories = ["Crop Diseases", "Pest Control", "Soil Health", "Irrigation", "Fertilizers", "Weather", "Market Prices", "Government Schemes"]
@@ -65,6 +71,9 @@ class QAForumManager:
             ],
             "categories": categories,
             "forum_stats": {
+                "members": 1500,
+                "questions": 500,
+                "answers": 350,
                 "total_questions": 500,
                 "answered_questions": 350,
                 "active_experts": 50,
@@ -74,12 +83,12 @@ class QAForumManager:
         }
     
     def get_all_questions(self, category=None, status=None):
-        questions = self.data["questions"]
+        questions = self.data.get("questions", [])
         if category:
-            questions = [q for q in questions if q["category"] == category]
+            questions = [q for q in questions if q.get("category") == category]
         if status:
-            questions = [q for q in questions if q["status"] == status]
-        return sorted(questions, key=lambda x: x["posted_date"], reverse=True)
+            questions = [q for q in questions if q.get("status") == status]
+        return sorted(questions, key=lambda x: x.get("posted_date", ""), reverse=True)
     
     def get_question_by_id(self, question_id):
         return next((q for q in self.data["questions"] if q["id"] == question_id), None)
@@ -100,7 +109,7 @@ class QAForumManager:
         """Add a new question to the forum"""
         try:
             # Generate a new question ID
-            last_id = max([int(q["id"].replace('Q', '')) for q in self.data["questions"] if q["id"].startswith('Q')], default=0)
+            last_id = max([int(q["id"].replace('Q', '')) for q in self.data.get("questions", []) if isinstance(q.get("id"), str) and q["id"].startswith('Q')], default=0)
             new_id = f"Q{str(last_id + 1).zfill(4)}"
             
             # Create new question object
@@ -121,10 +130,16 @@ class QAForumManager:
             }
             
             # Add to questions list
+            if "questions" not in self.data:
+                self.data["questions"] = []
             self.data["questions"].insert(0, new_question)
             
             # Update forum stats
-            self.data["forum_stats"]["total_questions"] += 1
+            if "forum_stats" not in self.data:
+                self.data["forum_stats"] = {}
+            self.data["forum_stats"]["total_questions"] = self.data["forum_stats"].get("total_questions", 0) + 1
+            self.data["forum_stats"]["questions"] = self.data["forum_stats"].get("questions", 0) + 1
+            self.data["forum_stats"]["members"] = self.data["forum_stats"].get("members", 1250) + 1
             
             # Save data to file
             with open(self.data_file, 'w') as f:
@@ -194,9 +209,9 @@ class QAForumManager:
                 
             # Generate a new answer ID
             last_id = 0
-            for q in self.data["questions"]:
+            for q in self.data.get("questions", []):
                 for a in q.get("answers", []):
-                    if a["id"].startswith(f"A{question_id.replace('Q', '')}-"):
+                    if isinstance(a.get("id"), str) and a["id"].startswith(f"A{question_id.replace('Q', '')}-"):
                         try:
                             answer_num = int(a["id"].split('-')[1])
                             last_id = max(last_id, answer_num)
@@ -224,11 +239,14 @@ class QAForumManager:
             question["answers"].append(new_answer)
             
             # Update question status if it was open
-            if question["status"] == "Open":
+            if question.get("status") == "Open":
                 question["status"] = "Answered"
             
             # Update forum stats
-            self.data["forum_stats"]["answered_questions"] += 1
+            if "forum_stats" not in self.data:
+                self.data["forum_stats"] = {}
+            self.data["forum_stats"]["answered_questions"] = self.data["forum_stats"].get("answered_questions", 0) + 1
+            self.data["forum_stats"]["answers"] = self.data["forum_stats"].get("answers", 0) + 1
             
             # Save data to file
             with open(self.data_file, 'w') as f:

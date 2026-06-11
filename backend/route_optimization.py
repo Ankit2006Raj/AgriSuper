@@ -188,12 +188,12 @@ class RouteOptimizer:
             "delays": []
         }
 
-def get_route_optimizer():
-    return RouteOptimizer()
-
     def test_connection(self):
         """Test if the module is working"""
         try:
             return {'status': 'success', 'message': 'Route Optimization is operational'}
         except Exception as e:
             return {'status': 'error', 'message': str(e)}
+
+def get_route_optimizer():
+    return RouteOptimizer()

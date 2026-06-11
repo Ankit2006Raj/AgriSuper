@@ -7,14 +7,15 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container py-5">
     <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
-    <div class="row mb-3">
+    <div class="row mb-4">
         <div class="col-12">
             {% for category, message in messages %}
-            <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show" role="alert">
+            <div class="alert alert-{{ category if category != 'error' else 'danger' }} alert-dismissible fade show border-0 shadow-sm" role="alert">
+                <i class="fas {% if category == 'success' %}fa-check-circle text-success{% else %}fa-exclamation-circle text-danger{% endif %} me-2"></i>
                 {{ message }}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
@@ -23,346 +24,349 @@
     </div>
     {% endif %}
     {% endwith %}
-    <div class="row">
-        <!-- Main Content -->
-        <div class="col-lg-8">
-            <!-- Forum Header -->
-            <div class="card mb-4">
-                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0"><i class="fas fa-users me-2"></i>Community Forum</h5>
-                    <div class="d-flex">
-                        <div class="input-group input-group-sm me-2 sort-selector-container">
-                            <span class="input-group-text">Sort By</span>
-                            <select class="form-select form-select-sm" id="sortSelector" name="sortBy" aria-label="Sort discussions by">
-                                <option selected>Recent</option>
-                                <option>Popular</option>
-                                <option>Trending</option>
-                                <option>Unanswered</option>
-                            </select>
-                        </div>
-                        <button class="btn btn-light btn-sm" data-bs-toggle="modal" data-bs-target="#newPostModal">
-                            <i class="fas fa-plus-circle me-1"></i>New Post
-                        </button>
+
+    <!-- Forum Hero Banner (Split Layout) -->
+    <div class="forum-hero-banner p-5 mb-5 text-start">
+        <div class="row align-items-center">
+            <div class="col-lg-7 position-relative z-index-2 mb-4 mb-lg-0">
+                <span class="text-gold font-monospace fw-bold text-uppercase d-block mb-2"><i class="fas fa-users me-2"></i>AgriSuper Community</span>
+                <h1 class="fw-bold mb-3" style="font-size: 2.8rem; letter-spacing: -0.5px; line-height: 1.15;">Farmer Discussion Forum</h1>
+                <p class="mb-4 text-white-50" style="max-width: 550px; font-size: 1.05rem;">Share knowledge, ask questions, and get custom solutions from certified agricultural experts and fellow farmers across India.</p>
+                <button class="btn btn-gold px-4 py-2.5 text-uppercase fw-bold shadow-sm" style="letter-spacing: 0.5px;" data-bs-toggle="modal" data-bs-target="#newPostModal">
+                    <i class="fas fa-plus-circle me-2"></i>Ask a Question
+                </button>
+            </div>
+            <div class="col-lg-5">
+                <div class="forum-hero-img-box">
+                    <img src="{{ url_for('static', filename='img/team_specialist.png') }}" alt="AgriSuper Specialists">
+                    <div class="live-feed-badge">
+                        <span class="live-feed-dot"></span>Consult Experts
                     </div>
                 </div>
-                <div class="card-body">
-                    <!-- Search and Filter -->
-                    <div class="row mb-4">
-                        <div class="col-md-8">
-                            <div class="input-group forum-search">
-                                <input type="text" class="form-control" placeholder="Search discussions..." aria-label="Search discussions">
-                                <button class="btn btn-success" type="button" aria-label="Search"><i class="fas fa-search" aria-hidden="true"></i></button>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <select class="form-select" id="categoryFilter" name="category" aria-label="Filter by category">
-                                <option selected>All Categories</option>
-                                <option>Crop Management</option>
-                                <option>Soil Health</option>
-                                <option>Equipment</option>
-                                <option>Market Prices</option>
-                                <option>Weather</option>
-                                <option>General Discussion</option>
-                                <option>Questions & Answers</option>
-                            </select>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pinned Pinned Featured Discussion -->
+    <div class="row mb-5">
+        <div class="col-12 text-start">
+            <h4 class="fw-bold text-forest mb-3"><i class="fas fa-thumbtack text-gold me-2"></i>Pinned Featured Guide</h4>
+            
+            <div class="featured-discussion-card">
+                <div class="row g-0 align-items-stretch">
+                    <div class="col-md-4">
+                        <div class="featured-discussion-img-wrapper h-100">
+                            <img src="{{ url_for('static', filename='img/blog_organic.png') }}" alt="Organic Farming Guide">
                         </div>
                     </div>
-                    
-                    <!-- Discussion Threads -->
-                    <div class="list-group mb-4">
-                        {% for question in questions[:10] %}
-                        <div class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between align-items-center">
-                                <h5 class="mb-1">
-                                    <span class="badge bg-success me-2">{{ question.category }}</span>
-                                    <a href="{{ url_for('view_question', question_id=question.id) }}" class="text-decoration-none text-dark">{{ question.title }}</a>
-                                </h5>
-                                <small class="text-muted">{{ question.posted_date }}</small>
+                    <div class="col-md-8">
+                        <div class="card-body p-4 text-start h-100 d-flex flex-column justify-content-between">
+                            <div>
+                                <div class="mb-2">
+                                    <span class="badge bg-category-fertilizers">Organic Farming</span>
+                                    <span class="badge bg-success-subtle text-success ms-2"><i class="fas fa-award me-1"></i>Scientist Recommendation</span>
+                                </div>
+                                <h4 class="fw-bold text-forest mb-2">Organic Farming Certification Process: A Step-by-Step Guide</h4>
+                                <p class="text-muted" style="font-size: 0.95rem; line-height: 1.6;">Many farmers are interested in transitioning to organic farming but find the certification process daunting. In this comprehensive guide, we'll walk you through each step of getting certified, from documentation to soil tests and inspections...</p>
                             </div>
-                            <p class="mb-1">{{ question.question|truncate(150) }}</p>
-                            <div class="d-flex justify-content-between align-items-center mt-2">
+                            <div class="d-flex justify-content-between align-items-center mt-3 pt-3 border-top border-light">
+                                <div class="d-flex gap-3 text-muted" style="font-size: 0.82rem;">
+                                    <span><i class="far fa-user text-gold me-1"></i>Dr. Priya Sharma</span>
+                                    <span><i class="far fa-calendar-alt me-1"></i>2 weeks ago</span>
+                                    <span><i class="far fa-comment me-1"></i>47 replies</span>
+                                </div>
+                                <button class="btn btn-sm btn-gold px-3 py-1.5" style="font-size: 0.85rem;">Read Guide</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content (Discussion Cards & Bottom CTA) -->
+        <div class="col-lg-8">
+            <!-- Search & Filter Card -->
+            <div class="card search-card mb-4">
+                <div class="card-body p-4">
+                    <div class="row g-3">
+                        <div class="col-md-7">
+                            <div class="input-group search-bar-wrapper">
+                                <span class="input-group-text bg-transparent border-0 ps-3"><i class="fas fa-search text-muted"></i></span>
+                                <input type="text" id="forumSearch" class="form-control bg-transparent border-0 py-3" placeholder="Search discussions by keyword, tag...">
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="d-flex gap-2">
+                                <select class="form-select filter-select py-3" id="categoryFilter" aria-label="Filter by category">
+                                    <option selected>All Categories</option>
+                                    {% for category in categories %}
+                                    <option>{{ category }}</option>
+                                    {% endfor %}
+                                </select>
+                                <select class="form-select filter-select py-3" id="sortSelector" aria-label="Sort discussions">
+                                    <option selected>Recent</option>
+                                    <option>Popular</option>
+                                    <option>Unanswered</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Discussion Threads -->
+            <div id="discussionsContainer" class="mb-4">
+                {% if questions %}
+                    {% for question in questions %}
+                        {% set badge_class = 'bg-category-default' %}
+                        {% if question.category == 'Crop Diseases' %}{% set badge_class = 'bg-category-crop-diseases' %}
+                        {% elif question.category == 'Pest Control' or question.category == 'Pest Management' %}{% set badge_class = 'bg-category-pest-control' %}
+                        {% elif question.category == 'Soil Health' %}{% set badge_class = 'bg-category-soil-health' %}
+                        {% elif question.category == 'Irrigation' %}{% set badge_class = 'bg-category-irrigation' %}
+                        {% elif question.category == 'Fertilizers' %}{% set badge_class = 'bg-category-fertilizers' %}
+                        {% elif question.category == 'Weather' or question.category == 'Weather & Climate' %}{% set badge_class = 'bg-category-weather' %}
+                        {% elif question.category == 'Market Prices' %}{% set badge_class = 'bg-category-market-prices' %}
+                        {% elif question.category == 'Government Schemes' %}{% set badge_class = 'bg-category-government-schemes' %}
+                        {% endif %}
+                        <div class="discussion-card text-start">
+                            <div class="d-flex w-100 justify-content-between align-items-center mb-3">
                                 <div>
-                                    <small class="text-muted me-3">
-                                        <i class="fas fa-user me-1"></i>{{ question.farmer_name }}
+                                    <span class="badge-category {{ badge_class }} me-2">{{ question.category }}</span>
+                                    {% if question.status == 'Answered' %}
+                                    <span class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1 rounded" style="font-size: 0.75rem;"><i class="fas fa-check-circle me-1"></i>Answered</span>
+                                    {% elif question.status == 'Resolved' %}
+                                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle px-2 py-1 rounded" style="font-size: 0.75rem;"><i class="fas fa-check-double me-1"></i>Resolved</span>
+                                    {% else %}
+                                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2 py-1 rounded" style="font-size: 0.75rem;"><i class="fas fa-circle-notch fa-spin me-1"></i>Open</span>
+                                    {% endif %}
+                                </div>
+                                <small class="text-muted"><i class="far fa-calendar-alt me-1"></i>{{ question.posted_date }}</small>
+                            </div>
+                            <h4 class="discussion-title mb-3">
+                                <a href="{{ url_for('view_question', question_id=question.id) }}" class="text-decoration-none">{{ question.title }}</a>
+                            </h4>
+                            <p class="discussion-body mb-4">{{ question.question|truncate(160) }}</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="d-flex gap-3 align-items-center">
+                                    <small class="text-muted">
+                                        <i class="fas fa-user me-1 text-gold"></i>{{ question.farmer_name }}
+                                        {% if question.farmer_location %}
+                                        <span class="text-muted-50">({{ question.farmer_location }})</span>
+                                        {% endif %}
                                     </small>
-                                    <small class="text-muted me-3">
+                                    <small class="text-muted">
                                         <i class="fas fa-comment me-1"></i>{{ question.answers|length }} replies
                                     </small>
                                     <small class="text-muted">
                                         <i class="fas fa-eye me-1"></i>{{ question.views }} views
                                     </small>
                                 </div>
-                                <div>
-                                    <button class="btn btn-sm btn-outline-success me-1">
-                                        <i class="fas fa-thumbs-up me-1"></i>{{ question.likes }}
-                                    </button>
-                                    <a href="{{ url_for('view_question', question_id=question.id) }}" class="btn btn-sm btn-outline-primary">
+                                <div class="d-flex gap-2">
+                                    <form action="{{ url_for('upvote_question', question_id=question.id) }}" method="post" class="d-inline">
+                                        <button type="submit" class="btn btn-sm btn-outline-success px-3 py-1.5" style="border-radius: 30px;">
+                                            <i class="fas fa-thumbs-up me-1"></i>{{ question.likes }}
+                                        </button>
+                                    </form>
+                                    <a href="{{ url_for('view_question', question_id=question.id) }}" class="btn btn-sm btn-outline-primary px-3 py-1.5" style="border-radius: 30px; border-color: var(--forest-green); color: var(--forest-green);">
                                         <i class="fas fa-reply me-1"></i>Reply
                                     </a>
                                 </div>
                             </div>
                         </div>
-                        {% endfor %}
+                    {% endfor %}
+                {% else %}
+                    <div class="card border-0 shadow-sm p-5 text-center rounded-4 bg-white">
+                        <i class="fas fa-comments fa-4x text-muted mb-3"></i>
+                        <h4>No discussions found</h4>
+                        <p class="text-muted">Be the first to start a conversation in this category!</p>
+                        <button class="btn btn-gold mt-2" data-bs-toggle="modal" data-bs-target="#newPostModal">
+                            <i class="fas fa-plus-circle me-2"></i>Ask a Question
+                        </button>
                     </div>
-                        
-                        <!-- Thread 3 -->
-                        <div class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between align-items-center">
-                                <h5 class="mb-1">
-                                    <span class="badge bg-warning text-dark me-2">Equipment</span>
-                                    Recommendations for small-scale irrigation systems
-                                </h5>
-                                <small class="text-muted">5 hours ago</small>
-                            </div>
-                            <p class="mb-1">I have a 2-acre vegetable farm and looking to install an efficient irrigation system. Budget is around ₹50,000. What options should I consider for water conservation and ease of use?</p>
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <div>
-                                    <small class="text-muted me-3">
-                                        <i class="fas fa-user me-1"></i>Mohan Singh
-                                    </small>
-                                    <small class="text-muted me-3">
-                                        <i class="fas fa-comment me-1"></i>4 replies
-                                    </small>
-                                    <small class="text-muted">
-                                        <i class="fas fa-eye me-1"></i>42 views
-                                    </small>
-                                </div>
-                                <div>
-                                    <button class="btn btn-sm btn-outline-success me-1">
-                                        <i class="fas fa-thumbs-up me-1"></i>7
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-reply me-1"></i>Reply
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Thread 4 -->
-                        <div class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between align-items-center">
-                                <h5 class="mb-1">
-                                    <span class="badge bg-danger text-white me-2">Soil Health</span>
-                                    Dealing with soil salinity in coastal farming areas
-                                </h5>
-                                <small class="text-muted">1 week ago</small>
-                            </div>
-                            <p class="mb-1">My farm is located near the coast and I'm struggling with increasing soil salinity. Crop yields have decreased by almost 30% in the last two seasons. Has anyone successfully managed this issue?</p>
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <div>
-                                    <small class="text-muted me-3">
-                                        <i class="fas fa-user me-1"></i>Priya Patel
-                                    </small>
-                                    <small class="text-muted me-3">
-                                        <i class="fas fa-comment me-1"></i>21 replies
-                                    </small>
-                                    <small class="text-muted">
-                                        <i class="fas fa-eye me-1"></i>203 views
-                                    </small>
-                                </div>
-                                <div>
-                                    <button class="btn btn-sm btn-outline-success me-1">
-                                        <i class="fas fa-thumbs-up me-1"></i>32
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-reply me-1"></i>Reply
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Thread 5 -->
-                        <div class="list-group-item list-group-item-action">
-                            <div class="d-flex w-100 justify-content-between align-items-center">
-                                <h5 class="mb-1">
-                                    <span class="badge bg-primary me-2">Weather</span>
-                                    Preparing for the upcoming monsoon season
-                                </h5>
-                                <small class="text-muted">2 days ago</small>
-                            </div>
-                            <p class="mb-1">Meteorological department has predicted heavy rainfall this monsoon. What preparations are you making to protect crops and prevent waterlogging? Any specific drainage solutions that work well?</p>
-                            <div class="d-flex justify-content-between align-items-center mt-2">
-                                <div>
-                                    <small class="text-muted me-3">
-                                        <i class="fas fa-user me-1"></i>Sunil Verma
-                                    </small>
-                                    <small class="text-muted me-3">
-                                        <i class="fas fa-comment me-1"></i>16 replies
-                                    </small>
-                                    <small class="text-muted">
-                                        <i class="fas fa-eye me-1"></i>178 views
-                                    </small>
-                                </div>
-                                <div>
-                                    <button class="btn btn-sm btn-outline-success me-1">
-                                        <i class="fas fa-thumbs-up me-1"></i>29
-                                    </button>
-                                    <button class="btn btn-sm btn-outline-primary">
-                                        <i class="fas fa-reply me-1"></i>Reply
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- Pagination -->
-                    <nav aria-label="Discussion pagination">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item">
-                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
-                            </li>
-                            <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                            <li class="page-item"><a class="page-link" href="#">2</a></li>
-                            <li class="page-item"><a class="page-link" href="#">3</a></li>
-                            <li class="page-item">
-                                <a class="page-link" href="#">Next</a>
-                            </li>
-                        </ul>
-                    </nav>
-                </div>
+                {% endif %}
             </div>
             
-            <!-- Featured Discussion -->
-            <div class="card mb-4">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-star me-2"></i>Featured Discussion</h5>
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">Organic Farming Certification Process: A Step-by-Step Guide</h5>
-                    <div class="mb-3">
-                        <span class="badge bg-success me-2">Organic Farming</span>
-                        <small class="text-muted">Posted by Dr. Sharma (Agricultural Scientist) • 2 weeks ago</small>
+            <!-- Pagination -->
+            <nav aria-label="Discussion pagination" class="mb-5">
+                <ul class="pagination pagination-premium justify-content-center">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                    </li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <!-- Bottom Pinned Advisory Banner -->
+            <div class="forum-cta-banner p-4 mb-5 text-start">
+                <div class="row align-items-center">
+                    <div class="col-md-9 position-relative z-index-2">
+                        <h4 class="fw-bold mb-2 text-white">Need Direct Agricultural Assistance?</h4>
+                        <p class="mb-0 text-white-50" style="font-size: 0.95rem;">Connect with certified crop scientists and successful agricultural mentors to get customized recommendations for your farm.</p>
                     </div>
-                    <p class="card-text">Many farmers are interested in transitioning to organic farming but find the certification process daunting. In this comprehensive guide, I'll walk you through each step of getting certified, from documentation to inspection...</p>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <small class="text-muted me-3">
-                                <i class="fas fa-comment me-1"></i>47 replies
-                            </small>
-                            <small class="text-muted">
-                                <i class="fas fa-eye me-1"></i>512 views
-                            </small>
+                    <div class="col-md-3 text-md-end mt-3 mt-md-0 position-relative z-index-2">
+                        <a href="{{ url_for('categorized_dashboard') }}" class="btn btn-gold text-uppercase fw-bold shadow-sm" style="font-size: 0.85rem; border-radius: 20px;">Find Mentor</a>
+                    </div>
+                </div>
+                <div class="forum-cta-bg-image" style="background-image: url('{{ url_for('static', filename='img/team_specialist.png') }}')"></div>
+            </div>
+
+            <!-- Farmer Success Spotlights -->
+            <div class="text-start mb-4">
+                <h4 class="fw-bold text-forest mb-3"><i class="fas fa-seedling text-gold me-2"></i>Farmer Success Spotlights</h4>
+                <div class="row g-4">
+                    <!-- Success Card 1 -->
+                    <div class="col-md-6">
+                        <div class="crop-card">
+                            <div class="crop-card-img-wrapper">
+                                <img src="{{ url_for('static', filename='img/blog_harvest.png') }}" alt="Ramesh Patel Yield">
+                                <span class="crop-card-tag">Yield +40%</span>
+                            </div>
+                            <div class="crop-card-body">
+                                <div>
+                                    <h6 class="fw-bold text-forest mb-2">Precision Cotton Farming Success</h6>
+                                    <p class="text-muted mb-3" style="font-size: 0.85rem; line-height: 1.5;">"Using AgriSuper's yield prediction tools, I increased cotton yield by 40% and profits by 60%..."</p>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-gold fw-bold" style="font-size: 0.78rem;">Ramesh Patel (Gujarat)</small>
+                                    <span class="badge bg-success-subtle text-success py-1 px-2 rounded-2" style="font-size: 0.72rem; font-weight: 700;">+60% Profit</span>
+                                </div>
+                            </div>
                         </div>
-                        <button class="btn btn-sm btn-success">Read Full Discussion</button>
+                    </div>
+                    <!-- Success Card 2 -->
+                    <div class="col-md-6">
+                        <div class="crop-card">
+                            <div class="crop-card-img-wrapper">
+                                <img src="{{ url_for('static', filename='img/blog_organic.png') }}" alt="Sunita Devi Income">
+                                <span class="crop-card-tag">Income +59%</span>
+                            </div>
+                            <div class="crop-card-body">
+                                <div>
+                                    <h6 class="fw-bold text-forest mb-2">Organic Wheat Transition Success</h6>
+                                    <p class="text-muted mb-3" style="font-size: 0.85rem; line-height: 1.5;">"With AgriSuper's courses and soil knowledge base, I successfully transitioned to organic wheat..."</p>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-gold fw-bold" style="font-size: 0.78rem;">Sunita Devi (Punjab)</small>
+                                    <span class="badge bg-success-subtle text-success py-1 px-2 rounded-2" style="font-size: 0.72rem; font-weight: 700;">+59% profit</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- Sidebar -->
+        <!-- Sidebar Content -->
         <div class="col-lg-4">
             <!-- Community Stats -->
-            <div class="card mb-4">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Community Stats</h5>
+            <div class="sidebar-panel">
+                <div class="sidebar-header">
+                    <i class="fas fa-chart-bar me-2"></i>Community Stats
                 </div>
-                <div class="card-body">
-                    <div class="row text-center">
+                <div class="card-body p-4 text-start">
+                    <div class="row text-center g-2">
                         <div class="col-4">
-                            <h3 class="mb-0">{{ forum_stats.members }}</h3>
-                            <small class="text-muted">Members</small>
+                            <h3 class="mb-0 fw-bold text-forest" style="font-size: 1.4rem;">{{ forum_stats.members }}</h3>
+                            <small class="text-muted" style="font-size: 0.75rem;">Members</small>
                         </div>
                         <div class="col-4">
-                            <h3 class="mb-0">{{ forum_stats.questions }}</h3>
-                            <small class="text-muted">Discussions</small>
+                            <h3 class="mb-0 fw-bold text-forest" style="font-size: 1.4rem;">{{ forum_stats.questions }}</h3>
+                            <small class="text-muted" style="font-size: 0.75rem;">Discussions</small>
                         </div>
                         <div class="col-4">
-                            <h3 class="mb-0">{{ forum_stats.answers }}</h3>
-                            <small class="text-muted">Replies</small>
+                            <h3 class="mb-0 fw-bold text-forest" style="font-size: 1.4rem;">{{ forum_stats.answers }}</h3>
+                            <small class="text-muted" style="font-size: 0.75rem;">Replies</small>
                         </div>
+                    </div>
+                    <hr class="my-3 rgba(14, 56, 41, 0.05)">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small class="text-muted"><i class="far fa-clock me-1"></i>Avg. Response Time</small>
+                        <span class="badge bg-mint text-forest fw-bold">{{ forum_stats.avg_response_time or '4.2 hours' }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted"><i class="far fa-smile me-1"></i>Satisfaction Rate</small>
+                        <span class="badge bg-mint text-forest fw-bold">{{ forum_stats.satisfaction_rate or '94%' }}</span>
                     </div>
                 </div>
             </div>
             
             <!-- Top Contributors -->
-            <div class="card mb-4">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-award me-2"></i>Top Contributors</h5>
+            <div class="sidebar-panel text-start">
+                <div class="sidebar-header">
+                    <i class="fas fa-award me-2"></i>Top Contributors
                 </div>
                 <div class="card-body p-0">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User">
-                                <div>
-                                    <h6 class="mb-0">Dr. Sharma</h6>
-                                    <small class="text-muted">Agricultural Scientist</small>
-                                </div>
+                    <div class="contributor-item">
+                        <div class="d-flex align-items-center">
+                            <img src="https://i.pravatar.cc/100?img=12" class="contributor-avatar me-3" alt="User">
+                            <div>
+                                <h6 class="mb-0 fw-bold">Dr. Rajesh Kumar</h6>
+                                <small class="text-muted">Crop Scientist</small>
                             </div>
-                            <span class="badge bg-success rounded-pill">142 posts</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User">
-                                <div>
-                                    <h6 class="mb-0">Rajesh Kumar</h6>
-                                    <small class="text-muted">Experienced Farmer</small>
-                                </div>
+                        </div>
+                        <span class="badge bg-mint text-forest rounded-pill fw-bold px-2 py-1">245 posts</span>
+                    </div>
+                    <div class="contributor-item">
+                        <div class="d-flex align-items-center">
+                            <img src="https://i.pravatar.cc/100?img=47" class="contributor-avatar me-3" alt="User">
+                            <div>
+                                <h6 class="mb-0 fw-bold">Dr. Priya Sharma</h6>
+                                <small class="text-muted">Organic Expert</small>
                             </div>
-                            <span class="badge bg-success rounded-pill">98 posts</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User">
-                                <div>
-                                    <h6 class="mb-0">Anita Sharma</h6>
-                                    <small class="text-muted">Organic Farming Expert</small>
-                                </div>
+                        </div>
+                        <span class="badge bg-mint text-forest rounded-pill fw-bold px-2 py-1">189 posts</span>
+                    </div>
+                    <div class="contributor-item">
+                        <div class="d-flex align-items-center">
+                            <img src="https://i.pravatar.cc/100?img=33" class="contributor-avatar me-3" alt="User">
+                            <div>
+                                <h6 class="mb-0 fw-bold">Farmer Ramesh</h6>
+                                <small class="text-muted">Experienced Farmer</small>
                             </div>
-                            <span class="badge bg-success rounded-pill">87 posts</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User">
-                                <div>
-                                    <h6 class="mb-0">Mohan Singh</h6>
-                                    <small class="text-muted">Equipment Specialist</small>
-                                </div>
-                            </div>
-                            <span class="badge bg-success rounded-pill">76 posts</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <img src="https://via.placeholder.com/40" class="rounded-circle me-2" alt="User">
-                                <div>
-                                    <h6 class="mb-0">Priya Patel</h6>
-                                    <small class="text-muted">Soil Health Advisor</small>
-                                </div>
-                            </div>
-                            <span class="badge bg-success rounded-pill">65 posts</span>
-                        </li>
-                    </ul>
+                        </div>
+                        <span class="badge bg-mint text-forest rounded-pill fw-bold px-2 py-1">98 posts</span>
+                    </div>
                 </div>
             </div>
             
             <!-- Popular Categories -->
-            <div class="card mb-4">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-tags me-2"></i>Popular Categories</h5>
+            <div class="sidebar-panel text-start">
+                <div class="sidebar-header">
+                    <i class="fas fa-tags me-2"></i>Popular Categories
                 </div>
                 <div class="card-body p-0">
                     <div class="list-group list-group-flush">
                         {% for category in categories %}
-                        <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                        <a href="#" class="category-link" data-category="{{ category }}">
                             <span>
-                                {% if category == 'Crop Management' %}
-                                <i class="fas fa-seedling text-success me-2"></i>
-                                {% elif category == 'Weather' %}
-                                <i class="fas fa-cloud-rain text-primary me-2"></i>
-                                {% elif category == 'Equipment' %}
-                                <i class="fas fa-tractor text-warning me-2"></i>
-                                {% elif category == 'Market Prices' %}
-                                <i class="fas fa-chart-line text-info me-2"></i>
+                                {% if category == 'Crop Diseases' %}
+                                <i class="fas fa-virus text-danger me-2"></i>
+                                {% elif category == 'Pest Control' %}
+                                <i class="fas fa-bug text-warning me-2"></i>
                                 {% elif category == 'Soil Health' %}
-                                <i class="fas fa-microscope text-danger me-2"></i>
-                                {% elif category == 'General Discussion' %}
-                                <i class="fas fa-comments text-secondary me-2"></i>
+                                <i class="fas fa-mountain text-success me-2"></i>
+                                {% elif category == 'Irrigation' %}
+                                <i class="fas fa-tint text-primary me-2"></i>
+                                {% elif category == 'Fertilizers' %}
+                                <i class="fas fa-leaf text-success me-2"></i>
+                                {% elif category == 'Weather' %}
+                                <i class="fas fa-cloud-sun text-info me-2"></i>
+                                {% elif category == 'Market Prices' %}
+                                <i class="fas fa-chart-line text-primary me-2"></i>
+                                {% elif category == 'Government Schemes' %}
+                                <i class="fas fa-landmark text-secondary me-2"></i>
                                 {% else %}
                                 <i class="fas fa-folder text-secondary me-2"></i>
                                 {% endif %}
                                 {{ category }}
                             </span>
-                            <span class="badge bg-success rounded-pill">{{ category_counts[category] }}</span>
+                            <span class="badge bg-mint text-forest rounded-pill fw-bold">{{ category_counts[category] or 0 }}</span>
                         </a>
                         {% endfor %}
                     </div>
@@ -370,55 +374,47 @@
             </div>
             
             <!-- Upcoming Events -->
-            <div class="card mb-4">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-calendar-alt me-2"></i>Upcoming Events</h5>
+            <div class="sidebar-panel text-start">
+                <div class="sidebar-header">
+                    <i class="fas fa-calendar-alt me-2"></i>Upcoming Events
                 </div>
                 <div class="card-body p-0">
-                    <div class="list-group list-group-flush">
-                        <div class="list-group-item">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">Organic Farming Workshop</h6>
-                                <small class="text-muted">Aug 15</small>
-                            </div>
-                            <p class="mb-1 small">Learn practical techniques for transitioning to organic farming methods.</p>
-                            <small class="text-muted">Online Webinar • 10:00 AM</small>
+                    <div class="event-item">
+                        <div class="event-date-box">
+                            <span class="event-date-day">15</span>
+                            <span class="event-date-month">Jun</span>
                         </div>
-                        <div class="list-group-item">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">Soil Testing Camp</h6>
-                                <small class="text-muted">Aug 22</small>
-                            </div>
-                            <p class="mb-1 small">Free soil testing for all community members. Bring your soil samples.</p>
-                            <small class="text-muted">District Agricultural Office • 9:00 AM - 4:00 PM</small>
-                        </div>
-                        <div class="list-group-item">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1">Q&A with Market Experts</h6>
-                                <small class="text-muted">Aug 28</small>
-                            </div>
-                            <p class="mb-1 small">Live discussion about current market trends and price forecasts.</p>
-                            <small class="text-muted">Online Webinar • 6:00 PM</small>
+                        <div class="event-info">
+                            <h6>Organic Farming Workshop</h6>
+                            <p class="mb-0">Practical training on transition & certs.</p>
+                            <small class="text-gold font-monospace">Online • 10:00 AM</small>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer bg-light">
-                    <a href="#" class="btn btn-sm btn-outline-success w-100">View All Events</a>
+                    <div class="event-item">
+                        <div class="event-date-box">
+                            <span class="event-date-day">22</span>
+                            <span class="event-date-month">Jun</span>
+                        </div>
+                        <div class="event-info">
+                            <h6>Soil Analysis Camp</h6>
+                            <p class="mb-0">Free nutrient test & advisory bulletins.</p>
+                            <small class="text-gold font-monospace">PAU Campus • 9:00 AM</small>
+                        </div>
+                    </div>
                 </div>
             </div>
             
             <!-- Community Guidelines -->
-            <div class="card">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Community Guidelines</h5>
+            <div class="sidebar-panel text-start">
+                <div class="sidebar-header">
+                    <i class="fas fa-info-circle me-2"></i>Community Guidelines
                 </div>
-                <div class="card-body">
-                    <ul class="list-unstyled mb-0">
-                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Be respectful and supportive of fellow farmers</li>
-                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Share knowledge and experiences freely</li>
-                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Provide sources when sharing information</li>
-                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i>Keep discussions relevant to agriculture</li>
-                        <li><i class="fas fa-check-circle text-success me-2"></i>Report inappropriate content to moderators</li>
+                <div class="card-body p-4">
+                    <ul class="guideline-list">
+                        <li>Be respectful and supportive of fellow members</li>
+                        <li>Share knowledge and experiences freely</li>
+                        <li>Keep discussions relevant to agriculture</li>
+                        <li>Provide source guidelines when offering scientific opinions</li>
                     </ul>
                 </div>
             </div>
@@ -428,51 +424,46 @@
 
 <!-- New Post Modal -->
 <div class="modal fade" id="newPostModal" tabindex="-1" aria-labelledby="newPostModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-success text-white">
-                <h5 class="modal-title" id="newPostModalLabel"><i class="fas fa-plus-circle me-2"></i>Ask a Question</h5>
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content modal-content-premium text-start">
+            <div class="modal-header modal-header-premium">
+                <h5 class="modal-title fw-bold" id="newPostModalLabel"><i class="fas fa-plus-circle me-2"></i>Ask a Question</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
+            <div class="modal-body modal-body-premium">
                 <form action="/submit-question" method="post" id="questionForm">
                     <div class="mb-3">
-                        <label for="postTitle" class="form-label">Question Title</label>
-                        <input type="text" class="form-control" id="postTitle" name="title" placeholder="Enter a clear, specific title for your question" required>
+                        <label for="postTitle" class="form-label fw-semibold">Question Title</label>
+                        <input type="text" class="form-control premium-input" id="postTitle" name="title" placeholder="Enter a clear, specific title for your question" required>
                     </div>
                     <div class="mb-3">
-                        <label for="postCategory" class="form-label">Category</label>
-                        <select class="form-select" id="postCategory" name="category" required>
-                            <option value="" selected>Select Category</option>
+                        <label for="postCategory" class="form-label fw-semibold">Category</label>
+                        <select class="form-select premium-input" id="postCategory" name="category" required>
+                            <option value="" selected disabled>Select Category</option>
                             {% for category in categories %}
                             <option value="{{ category }}">{{ category }}</option>
                             {% endfor %}
                         </select>
                     </div>
                     <div class="mb-3">
-                        <label for="postContent" class="form-label">Question Details</label>
-                        <textarea class="form-control" id="postContent" name="question" rows="6" placeholder="Describe your question in detail. Include relevant information to help others understand your question." required></textarea>
+                        <label for="postContent" class="form-label fw-semibold">Question Details</label>
+                        <textarea class="form-control premium-textarea" id="postContent" name="question" rows="6" placeholder="Describe your question in detail. Include crop type, soil texture, symptoms, or location parameters to help experts respond." required></textarea>
                     </div>
                     <div class="mb-3">
-                        <label for="postTags" class="form-label">Tags (optional)</label>
-                        <input type="text" class="form-control" id="postTags" name="tags" placeholder="Enter tags separated by commas (e.g., wheat, irrigation, organic)">
+                        <label for="postTags" class="form-label fw-semibold">Tags (optional)</label>
+                        <input type="text" class="form-control premium-input" id="postTags" name="tags" placeholder="wheat, pest-control, irrigation, punjab">
                     </div>
-                    <div class="mb-3">
-                        <label for="postAttachments" class="form-label">Attachments (optional)</label>
-                        <input class="form-control" type="file" id="postAttachments" name="attachments" multiple>
-                        <div class="form-text">You can upload images or documents related to your question (max 5 files, 5MB each).</div>
-                    </div>
-                    <div class="form-check mb-3">
+                    <div class="form-check mb-2">
                         <input class="form-check-input" type="checkbox" id="notifyReplies" name="notify" checked>
-                        <label class="form-check-label" for="notifyReplies">
-                            Notify me of replies
+                        <label class="form-check-label text-muted" for="notifyReplies">
+                            Notify me via SMS/Email of answers
                         </label>
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button type="submit" form="questionForm" class="btn btn-success">Post Question</button>
+            <div class="modal-footer modal-footer-premium">
+                <button type="button" class="btn btn-outline-secondary px-4 py-2" style="border-radius: 30px;" data-bs-dismiss="modal">Cancel</button>
+                <button type="submit" form="questionForm" class="btn btn-gold px-4 py-2 text-uppercase fw-bold shadow-sm">Post Question</button>
             </div>
         </div>
     </div>
@@ -482,71 +473,59 @@
 {% block scripts %}
 <script>
     $(document).ready(function() {
-        // Handle post button click
-        $('.modal .btn-success').click(function() {
-            // In a real app, this would submit the form data
-            $('#newPostModal').modal('hide');
-            
-            // Show confirmation toast
-            showToast('Your discussion has been posted successfully!');
-            
-            // In a real app, we would refresh the discussions list or add the new post
+        // Live search filter on frontend
+        $("#forumSearch").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#discussionsContainer .discussion-card").filter(function() {
+                $(this).toggle($(this).find('.discussion-title, .discussion-body').text().toLowerCase().indexOf(value) > -1);
+            });
         });
-        
-        // Handle reply button clicks
-        $('.btn-outline-primary').click(function() {
-            if ($(this).find('i').hasClass('fa-reply')) {
-                // In a real app, this would open a reply form or navigate to the discussion
-                showToast('Reply feature will be implemented soon!');
+
+        // Category sidebar and select filters
+        $("#categoryFilter, .category-link").on("click change", function(e) {
+            var selectedCategory = "";
+            
+            if ($(this).hasClass('category-link')) {
+                e.preventDefault();
+                selectedCategory = $(this).data('category');
+                $("#categoryFilter").val(selectedCategory);
+            } else {
+                selectedCategory = $(this).val();
+            }
+
+            if (selectedCategory === "All Categories" || selectedCategory === "") {
+                $("#discussionsContainer .discussion-card").show();
+            } else {
+                $("#discussionsContainer .discussion-card").hide().filter(function() {
+                    return $(this).find('.badge-category').text().trim() === selectedCategory;
+                }).show();
             }
         });
-        
-        // Handle like button clicks
-        $('.btn-outline-success').click(function() {
-            if ($(this).find('i').hasClass('fa-thumbs-up')) {
-                // Toggle active state
-                $(this).toggleClass('active');
-                
-                // Update count (this is just a demo - in a real app we'd update the server)
-                var currentCount = parseInt($(this).text().trim());
-                if ($(this).hasClass('active')) {
-                    $(this).html('<i class="fas fa-thumbs-up me-1"></i>' + (currentCount + 1));
+
+        // Sort items simple implementation
+        $("#sortSelector").on("change", function() {
+            var sortType = $(this).val();
+            var cards = $("#discussionsContainer .discussion-card").get();
+            
+            cards.sort(function(a, b) {
+                if (sortType === "Popular") {
+                    var viewsA = parseInt($(a).find('.fa-eye').parent().text().trim()) || 0;
+                    var viewsB = parseInt($(b).find('.fa-eye').parent().text().trim()) || 0;
+                    return viewsB - viewsA;
+                } else if (sortType === "Unanswered") {
+                    var repliesA = parseInt($(a).find('.fa-comment').parent().text().trim()) || 0;
+                    var repliesB = parseInt($(b).find('.fa-comment').parent().text().trim()) || 0;
+                    return repliesA - repliesB; // unanswered first
                 } else {
-                    $(this).html('<i class="fas fa-thumbs-up me-1"></i>' + (currentCount - 1));
+                    // Recent is default (they are loaded sorted by date from backend)
+                    return 0; 
                 }
-            }
+            });
+            
+            $.each(cards, function(idx, item) {
+                $("#discussionsContainer").append(item);
+            });
         });
-        
-        // Function to show toast notification
-        function showToast(message) {
-            // Create toast element
-            var toast = $('<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">'+
-                          '<div class="toast-header bg-success text-white">'+
-                          '<strong class="me-auto">Community Forum</strong>'+
-                          '<small>Just now</small>'+
-                          '<button type="button" class="btn-close btn-close-white" data-bs-dismiss="toast" aria-label="Close"></button>'+
-                          '</div>'+
-                          '<div class="toast-body">'+message+'</div>'+
-                          '</div>');
-            
-            // Add to container
-            if ($('.toast-container').length === 0) {
-                $('body').append('<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>');
-            }
-            $('.toast-container').append(toast);
-            
-            // Initialize and show toast
-            var toastEl = new bootstrap.Toast(toast, {
-                autohide: true,
-                delay: 5000
-            });
-            toastEl.show();
-            
-            // Remove after hidden
-            toast.on('hidden.bs.toast', function() {
-                $(this).remove();
-            });
-        }
     });
 </script>
 {% endblock %}
