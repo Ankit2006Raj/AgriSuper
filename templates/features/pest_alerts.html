@@ -3,167 +3,488 @@
 {% block title %}Pest Alerts - AgriSuper{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="mb-4">Pest Alerts</h1>
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Early Warning System for Crop Pests</h5>
-                    <p class="card-text">Stay ahead of pest outbreaks with our predictive alert system. Get timely notifications about potential pest threats in your area.</p>
+<style>
+    /* Custom Styling for Bugfree / Pest Alerts Redesign */
+    .pa-body {
+        font-family: 'Inter', 'Segoe UI', sans-serif;
+        color: #333;
+        background-color: #f8f9fa;
+    }
+    
+    /* Theme Colors */
+    :root {
+        --dark-green: #153a2b;
+        --lime-green: #c4f033;
+        --light-bg: #f5f8f5;
+        --text-muted: #6c757d;
+    }
+
+    /* Override base container styles to allow full width sections */
+    main { padding: 0 !important; margin: 0 !important; max-width: 100% !important; }
+    .pa-body { margin-top: -24px; } /* Adjust for base template padding */
+
+    /* Buttons */
+    .btn-lime {
+        background-color: var(--lime-green);
+        color: #000;
+        font-weight: 600;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+    .btn-lime:hover {
+        background-color: #a8d61c;
+        color: #000;
+    }
+
+    /* Hero Section */
+    .pa-hero {
+        background: linear-gradient(rgba(21, 58, 43, 0.85), rgba(21, 58, 43, 0.9)), url("{{ url_for('static', filename='images/pest_alerts/hero_bg.png') }}") center/cover;
+        color: white;
+        padding: 120px 0 80px 0;
+        border-bottom-left-radius: 40px;
+        border-bottom-right-radius: 40px;
+        margin-bottom: 30px;
+    }
+    .pa-hero-badge {
+        display: inline-flex;
+        align-items: center;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        margin-bottom: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .pa-hero-badge i {
+        color: var(--lime-green);
+        margin-right: 8px;
+    }
+    .pa-hero h1 {
+        font-size: 4rem;
+        font-weight: 700;
+        line-height: 1.1;
+        margin-bottom: 25px;
+    }
+    .pa-feature-item {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 20px;
+    }
+    .pa-icon-circle {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background-color: var(--lime-green);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--dark-green);
+        font-size: 1.2rem;
+    }
+    
+    /* Play Button */
+    .pa-play-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        transition: opacity 0.3s;
+    }
+    .pa-play-wrapper:hover { opacity: 0.8; color: white; }
+    .pa-play-btn {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: rgba(196, 240, 51, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--lime-green);
+        border: 1px solid var(--lime-green);
+    }
+
+    /* Trusted Strip */
+    .pa-trusted-strip {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        padding: 20px 40px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        margin-top: -60px;
+        position: relative;
+        z-index: 10;
+        max-width: 1100px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .pa-trusted-text { font-size: 0.9rem; color: var(--text-muted); max-width: 250px; }
+    .pa-logo-placeholder { color: #a1aab2; font-weight: 700; font-size: 1.2rem; display: flex; align-items: center; gap: 8px; }
+    .pa-logo-placeholder i { color: var(--lime-green); }
+
+    /* About Section */
+    .pa-about { padding: 80px 0; }
+    .pa-about-images { position: relative; height: 500px; }
+    .pa-img-large {
+        width: 80%;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 20px;
+        position: absolute;
+        top: 0;
+        right: 0;
+    }
+    .pa-img-small {
+        width: 55%;
+        height: 250px;
+        object-fit: cover;
+        border-radius: 20px;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        border: 8px solid #f8f9fa;
+    }
+    .pa-about-content h6 { color: var(--text-muted); font-weight: 600; font-size: 0.9rem; margin-bottom: 15px;}
+    .pa-about-content h6 i { color: var(--lime-green); margin-right: 5px;}
+    .pa-about-content h2 { font-size: 2.8rem; font-weight: 700; color: var(--dark-green); margin-bottom: 20px; }
+    .pa-stats-box {
+        background: white;
+        padding: 25px;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-top: 30px;
+        margin-bottom: 30px;
+    }
+    .pa-stats-num { font-size: 2.5rem; font-weight: 800; color: var(--dark-green); }
+    .pa-stats-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.4; }
+    .pa-check-list { list-style: none; padding: 0; }
+    .pa-check-list li { margin-bottom: 12px; display: flex; align-items: center; gap: 10px; font-weight: 500; color: #555; }
+    .pa-check-list i { color: var(--lime-green); background: rgba(196, 240, 51, 0.2); border-radius: 50%; padding: 4px; font-size: 0.8rem; }
+
+    /* Services / Pests Section */
+    .pa-services { padding: 80px 0; background-color: white; }
+    .pa-section-title { text-align: center; margin-bottom: 60px; }
+    .pa-section-title h6 { color: #a1aab2; font-weight: 600; font-size: 0.9rem; margin-bottom: 15px; }
+    .pa-section-title h6 i { color: var(--lime-green); margin-right: 5px; }
+    .pa-section-title h2 { font-size: 2.5rem; font-weight: 700; color: var(--dark-green); }
+    .pa-highlight {
+        background-color: var(--lime-green);
+        padding: 0 10px;
+        display: inline-block;
+        border-radius: 4px;
+        color: var(--dark-green);
+    }
+    
+    .pa-card {
+        background: var(--light-bg);
+        border-radius: 16px;
+        padding: 30px 20px;
+        text-align: center;
+        border: none;
+        transition: transform 0.3s, box-shadow 0.3s;
+        height: 100%;
+    }
+    .pa-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        background: white;
+    }
+    .pa-card-img {
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin: 0 auto 20px auto;
+        border: 5px solid white;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    .pa-card-title { font-weight: 700; color: var(--dark-green); font-size: 1.2rem; margin-bottom: 15px; }
+    .pa-card-text { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 20px; }
+    .pa-card-link { color: var(--dark-green); font-weight: 600; text-decoration: none; font-size: 0.9rem; }
+    .pa-card-link i { transition: transform 0.3s; }
+    .pa-card-link:hover { color: var(--dark-green); }
+    .pa-card-link:hover i { transform: translateX(5px); }
+
+    /* Alerts Form Area */
+    .pa-form-section {
+        background: var(--dark-green);
+        padding: 40px;
+        border-radius: 20px;
+        margin-bottom: 80px;
+    }
+    .pa-form-section h3 { color: white; font-weight: 700; margin-bottom: 25px; }
+    .pa-form-label { color: rgba(255,255,255,0.8); font-weight: 500; font-size: 0.9rem; }
+    .pa-form-control {
+        background: rgba(255,255,255,0.1);
+        border: 1px solid rgba(255,255,255,0.2);
+        color: white;
+        border-radius: 8px;
+        padding: 12px;
+    }
+    .pa-form-control:focus {
+        background: rgba(255,255,255,0.15);
+        border-color: var(--lime-green);
+        color: white;
+        box-shadow: none;
+    }
+    .pa-form-control option { color: #333; }
+    
+    /* IPM Process */
+    .pa-process { padding: 60px 0; background: var(--light-bg); border-radius: 20px;}
+    .pa-process-box {
+        border-left: 3px solid var(--lime-green);
+        padding-left: 25px;
+        margin-bottom: 30px;
+        position: relative;
+    }
+    .pa-process-box::before {
+        content: '';
+        position: absolute;
+        left: -8px;
+        top: 0;
+        width: 13px;
+        height: 13px;
+        border-radius: 50%;
+        background: var(--lime-green);
+    }
+    .pa-process-box h4 { color: var(--dark-green); font-weight: 700; font-size: 1.3rem; margin-bottom: 10px;}
+    .pa-process-box p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0;}
+
+</style>
+
+<div class="pa-body">
+    <!-- Hero Section -->
+    <section class="pa-hero">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-7">
+                    <div class="pa-hero-badge">
+                        <i class="fas fa-shield-alt"></i> Trusted Crop Protection
+                    </div>
+                    <h1>Protecting crops with<br>expert pest alerts</h1>
+                    <p class="lead mb-4" style="color: rgba(255,255,255,0.8); max-width: 600px;">
+                        Our advanced predictive system uses localized data to tackle everything from fall armyworms and stem borers to aphids and blight.
+                    </p>
                     
-                    <div class="row mb-4">
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="crop-type">Crop Type</label>
-                                <select class="form-control" id="crop-type">
-                                    <option value="">Select your crop</option>
-                                    <option value="rice">Rice</option>
-                                    <option value="wheat">Wheat</option>
-                                    <option value="cotton">Cotton</option>
-                                    <option value="sugarcane">Sugarcane</option>
-                                    <option value="vegetables">Vegetables</option>
-                                </select>
+                    <div class="row mb-5">
+                        <div class="col-sm-6">
+                            <div class="pa-feature-item">
+                                <div class="pa-icon-circle"><i class="fas fa-radar"></i></div>
+                                <div><strong class="d-block">Early Detection</strong><small style="color: rgba(255,255,255,0.7);">AI-driven forecasts</small></div>
                             </div>
                         </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="location">Your Location</label>
-                                <select class="form-control" id="location">
-                                    <option value="">Select your region</option>
-                                    <option value="north">North India</option>
-                                    <option value="south">South India</option>
-                                    <option value="east">East India</option>
-                                    <option value="west">West India</option>
-                                    <option value="central">Central India</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group">
-                                <label for="alert-radius">Alert Radius (km)</label>
-                                <select class="form-control" id="alert-radius">
-                                    <option value="5">5 km</option>
-                                    <option value="10" selected>10 km</option>
-                                    <option value="25">25 km</option>
-                                    <option value="50">50 km</option>
-                                    <option value="100">100 km</option>
-                                </select>
+                        <div class="col-sm-6">
+                            <div class="pa-feature-item">
+                                <div class="pa-icon-circle"><i class="fas fa-leaf"></i></div>
+                                <div><strong class="d-block">Eco-Friendly</strong><small style="color: rgba(255,255,255,0.7);">Sustainable solutions</small></div>
                             </div>
                         </div>
                     </div>
                     
-                    <button class="btn btn-primary" id="check-alerts">Check for Alerts</button>
-                </div>
-            </div>
-            
-            <div class="card mt-4 shadow-sm d-none" id="current-alerts">
-                <div class="card-header bg-warning text-white">
-                    <h5 class="mb-0">Current Pest Alerts</h5>
-                </div>
-                <div class="card-body">
-                    <div class="alert-list">
-                        <!-- Alert items will be populated here -->
-                    </div>
-                </div>
-            </div>
-            
-            <div class="row mt-4">
-                <div class="col-md-6">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Common Pests Library</h5>
-                            <p class="card-text">Learn about common pests affecting various crops and how to identify them.</p>
-                            
-                            <div class="list-group">
-                                <a href="#" class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">Aphids</h6>
-                                        <small>Multiple crops</small>
-                                    </div>
-                                    <p class="mb-1">Small sap-sucking insects that can transmit plant viruses</p>
-                                </a>
-                                <a href="#" class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">Bollworms</h6>
-                                        <small>Cotton</small>
-                                    </div>
-                                    <p class="mb-1">Caterpillars that feed on cotton bolls and flowers</p>
-                                </a>
-                                <a href="#" class="list-group-item list-group-item-action">
-                                    <div class="d-flex w-100 justify-content-between">
-                                        <h6 class="mb-1">Stem Borers</h6>
-                                        <small>Rice, Maize</small>
-                                    </div>
-                                    <p class="mb-1">Larvae that tunnel into plant stems causing wilting</p>
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="col-md-6">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Integrated Pest Management</h5>
-                            <p class="card-text">Sustainable approaches to manage pests while minimizing environmental impact.</p>
-                            
-                            <div class="accordion" id="ipmAccordion">
-                                <div class="card">
-                                    <div class="card-header" id="headingOne">
-                                        <h2 class="mb-0">
-                                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseOne">
-                                                Biological Control
-                                            </button>
-                                        </h2>
-                                    </div>
-                                    <div id="collapseOne" class="collapse" data-parent="#ipmAccordion">
-                                        <div class="card-body">
-                                            Using natural enemies like predatory insects, parasitoids, and pathogens to control pest populations.
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="card">
-                                    <div class="card-header" id="headingTwo">
-                                        <h2 class="mb-0">
-                                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseTwo">
-                                                Cultural Practices
-                                            </button>
-                                        </h2>
-                                    </div>
-                                    <div id="collapseTwo" class="collapse" data-parent="#ipmAccordion">
-                                        <div class="card-body">
-                                            Modifying growing practices to reduce pest establishment, reproduction, and survival.
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="card">
-                                    <div class="card-header" id="headingThree">
-                                        <h2 class="mb-0">
-                                            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseThree">
-                                                Resistant Varieties
-                                            </button>
-                                        </h2>
-                                    </div>
-                                    <div id="collapseThree" class="collapse" data-parent="#ipmAccordion">
-                                        <div class="card-body">
-                                            Using crop varieties that are resistant or tolerant to specific pests.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="d-flex flex-wrap gap-4 align-items-center">
+                        <a href="#alerts-planner" class="btn-lime">Get Alerts Today <i class="fas fa-arrow-right ms-2"></i></a>
+                        <a href="#" class="pa-play-wrapper">
+                            <div class="pa-play-btn"><i class="fas fa-play" style="margin-left: 3px;"></i></div>
+                            Watch Video
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
+    </section>
+
+    <!-- Trusted Partners Strip -->
+    <div class="container">
+        <div class="pa-trusted-strip">
+            <div class="pa-trusted-text">Your trusted partner for healthier, safer, and pest-free crop yields.</div>
+            <div class="pa-logo-placeholder"><i class="fas fa-seedling"></i> AgroLife</div>
+            <div class="pa-logo-placeholder"><i class="fas fa-tractor"></i> FarmTech</div>
+            <div class="pa-logo-placeholder"><i class="fas fa-sun"></i> CropCare</div>
+            <div class="pa-logo-placeholder"><i class="fas fa-leaf"></i> BioGuard</div>
+            <div class="pa-logo-placeholder"><i class="fas fa-globe"></i> EcoYield</div>
+        </div>
     </div>
+
+    <!-- About Section -->
+    <section class="pa-about">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <div class="pa-about-images">
+                        <img src="{{ url_for('static', filename='images/pest_alerts/collage_1.png') }}" alt="Crop Inspection" class="pa-img-large shadow-lg">
+                        <img src="{{ url_for('static', filename='images/pest_alerts/collage_2.png') }}" alt="Agricultural Sprayer" class="pa-img-small shadow-sm">
+                    </div>
+                </div>
+                <div class="col-lg-6 ps-lg-5 pa-about-content">
+                    <h6><i class="fas fa-info-circle"></i> ABOUT OUR SYSTEM</h6>
+                    <h2>Dedicated to protecting your crops from pests</h2>
+                    <p class="text-muted">Dedicated to protecting your farm from yield-destroying pests. Our mission is to provide comprehensive, reliable, and localized early warning alerts to ensure crop safety and maximize profitability.</p>
+                    
+                    <div class="pa-stats-box">
+                        <div class="pa-stats-num">10+</div>
+                        <div class="pa-stats-text">Years of historical agricultural pest data powering our predictive models.</div>
+                    </div>
+                    
+                    <ul class="pa-check-list">
+                        <li><i class="fas fa-check"></i> Expert Agronomists & Data Scientists</li>
+                        <li><i class="fas fa-check"></i> Advanced Satellite & Weather Detection</li>
+                        <li><i class="fas fa-check"></i> Transparent Reporting & No Hidden Costs</li>
+                    </ul>
+                    
+                    <a href="#alerts-planner" class="btn-lime mt-3">Learn More About <i class="fas fa-arrow-right ms-2"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services / Pest Library Section -->
+    <section class="pa-services">
+        <div class="container">
+            <!-- Alert Form (Integrated here) -->
+            <div id="alerts-planner" class="pa-form-section shadow-lg">
+                <div class="row align-items-center">
+                    <div class="col-lg-4 mb-4 mb-lg-0">
+                        <h3>Check Local<br><span style="color: var(--lime-green);">Pest Threats</span></h3>
+                        <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem;">Configure your field parameters below to receive instant predictive alerts.</p>
+                    </div>
+                    <div class="col-lg-8">
+                        <form id="pestAlertForm">
+                            <div class="row g-3">
+                                <div class="col-md-4">
+                                    <label class="pa-form-label">Crop Type</label>
+                                    <select class="form-select pa-form-control" id="crop-type" required>
+                                        <option value="">Select your crop</option>
+                                        <option value="rice">Rice</option>
+                                        <option value="wheat">Wheat</option>
+                                        <option value="cotton">Cotton</option>
+                                        <option value="sugarcane">Sugarcane</option>
+                                        <option value="vegetables">Vegetables</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="pa-form-label">Your Location</label>
+                                    <select class="form-select pa-form-control" id="location" required>
+                                        <option value="">Select your region</option>
+                                        <option value="north">North India</option>
+                                        <option value="south">South India</option>
+                                        <option value="east">East India</option>
+                                        <option value="west">West India</option>
+                                        <option value="central">Central India</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4 d-flex align-items-end">
+                                    <button type="submit" class="btn-lime w-100" id="check-alerts" style="padding: 12px;">Get Alerts</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dynamic Alerts Container -->
+            <div id="current-alerts" class="d-none mb-5">
+                <h4 class="mb-4" style="color: var(--dark-green); font-weight: 700;">Active Threat Warnings</h4>
+                <div class="row g-4 alert-list">
+                    <!-- Alerts populated via JS -->
+                </div>
+            </div>
+
+            <div class="pa-section-title">
+                <h6><i class="fas fa-layer-group"></i> OUR PEST LIBRARY</h6>
+                <h2>Safe and reliable <span class="pa-highlight">crop protection</span><br>strategies & solutions</h2>
+            </div>
+            
+            <div class="row g-4 justify-content-center">
+                <!-- Card 1 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="pa-card">
+                        <img src="{{ url_for('static', filename='images/pest_alerts/collage_2.png') }}" alt="Aphids" class="pa-card-img">
+                        <h4 class="pa-card-title">Aphids Control</h4>
+                        <p class="pa-card-text">Manage sap-sucking insects that transmit plant viruses across multiple crop types.</p>
+                        <a href="#" class="pa-card-link">Learn More <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+                <!-- Card 2 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="pa-card">
+                        <img src="{{ url_for('static', filename='images/pest_alerts/collage_2.png') }}" alt="Bollworm" class="pa-card-img">
+                        <h4 class="pa-card-title">Bollworm Alert</h4>
+                        <p class="pa-card-text">Protect cotton bolls and flowers from devastating caterpillar infestations.</p>
+                        <a href="#" class="pa-card-link">Learn More <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+                <!-- Card 3 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="pa-card">
+                        <img src="{{ url_for('static', filename='images/pest_alerts/collage_2.png') }}" alt="Stem Borers" class="pa-card-img">
+                        <h4 class="pa-card-title">Stem Borers</h4>
+                        <p class="pa-card-text">Prevent larvae from tunneling into rice and maize stems, avoiding crop wilt.</p>
+                        <a href="#" class="pa-card-link">Learn More <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+                <!-- Card 4 -->
+                <div class="col-lg-3 col-md-6">
+                    <div class="pa-card">
+                        <img src="{{ url_for('static', filename='images/pest_alerts/collage_2.png') }}" alt="Armyworm" class="pa-card-img">
+                        <h4 class="pa-card-title">Fall Armyworm</h4>
+                        <p class="pa-card-text">Rapid detection systems for migratory armyworms targeting maize fields.</p>
+                        <a href="#" class="pa-card-link">Learn More <i class="fas fa-arrow-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IPM Process Section -->
+    <div class="container mb-5">
+        <section class="pa-process p-4 p-md-5">
+            <div class="row align-items-center">
+                <div class="col-lg-5 mb-4 mb-lg-0">
+                    <img src="{{ url_for('static', filename='images/pest_alerts/hero_bg.png') }}" alt="IPM Process" class="img-fluid rounded-4 shadow-sm" style="height: 450px; object-fit: cover;">
+                </div>
+                <div class="col-lg-7 ps-lg-5">
+                    <h6 style="color: var(--text-muted); font-weight: 600; margin-bottom: 15px;"><i class="fas fa-cogs" style="color: var(--lime-green);"></i> INTEGRATED PEST MANAGEMENT</h6>
+                    <h2 style="font-size: 2.2rem; font-weight: 700; color: var(--dark-green); margin-bottom: 30px;">Our Process for Safe & Effective Results</h2>
+                    
+                    <div class="pa-process-box">
+                        <h4>1. Biological Control</h4>
+                        <p>Using natural enemies like predatory insects, parasitoids, and pathogens to control pest populations without relying heavily on chemical pesticides.</p>
+                    </div>
+                    <div class="pa-process-box">
+                        <h4>2. Cultural Practices</h4>
+                        <p>Modifying growing practices, such as altering planting dates or implementing crop rotation, to reduce pest establishment and survival.</p>
+                    </div>
+                    <div class="pa-process-box">
+                        <h4>3. Resistant Varieties</h4>
+                        <p>Deploying seed varieties naturally resistant or highly tolerant to specific local pests to secure baseline yields against infestations.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
 </div>
 
+<!-- Include FontAwesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
 <script>
-    document.getElementById('check-alerts').addEventListener('click', function() {
+    document.getElementById('pestAlertForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
         const cropType = document.getElementById('crop-type').value;
         const location = document.getElementById('location').value;
         
@@ -172,8 +493,7 @@
             return;
         }
         
-        // In a real application, this would make an API call to get data
-        // For demo purposes, we'll just show some sample alerts
+        // Sample alerts
         const alertsData = [
             {
                 pest: 'Fall Armyworm',
@@ -190,14 +510,6 @@
                 location: 'Within 8km of your location',
                 date: '2023-06-12',
                 description: 'Increasing populations observed. Monitor fields closely and prepare control measures.'
-            },
-            {
-                pest: 'Aphids',
-                severity: 'Low',
-                crops: 'Multiple crops',
-                location: 'Within 20km of your location',
-                date: '2023-06-10',
-                description: 'Seasonal aphid activity beginning. Preventive measures recommended for vulnerable crops.'
             }
         ];
         
@@ -205,24 +517,39 @@
         alertList.innerHTML = '';
         
         alertsData.forEach(alert => {
-            const severityClass = alert.severity === 'High' ? 'danger' : 
-                                 alert.severity === 'Medium' ? 'warning' : 'info';
+            const severityColor = alert.severity === 'High' ? '#dc3545' : 
+                                 alert.severity === 'Medium' ? '#ffc107' : '#17a2b8';
+            const icon = alert.severity === 'High' ? 'exclamation-triangle' : 'info-circle';
             
             const alertElement = document.createElement('div');
-            alertElement.className = `alert alert-${severityClass} mb-3`;
+            alertElement.className = `col-md-6`;
             alertElement.innerHTML = `
-                <h5 class="alert-heading">${alert.pest} - ${alert.severity} Risk</h5>
-                <p><strong>Affected Crops:</strong> ${alert.crops}</p>
-                <p><strong>Location:</strong> ${alert.location}</p>
-                <p><strong>Reported:</strong> ${alert.date}</p>
-                <hr>
-                <p class="mb-0">${alert.description}</p>
+                <div class="card h-100 border-0 shadow-sm" style="border-left: 5px solid ${severityColor} !important; border-radius: 12px; overflow: hidden;">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h5 class="mb-0 fw-bold" style="color: var(--dark-green);">
+                                <i class="fas fa-${icon}" style="color: ${severityColor}; margin-right: 8px;"></i> ${alert.pest}
+                            </h5>
+                            <span class="badge" style="background-color: ${severityColor}; color: ${alert.severity === 'Medium' ? '#000' : '#fff'};">${alert.severity} Risk</span>
+                        </div>
+                        <p class="text-muted small mb-2"><strong><i class="fas fa-leaf me-1"></i> Crops:</strong> ${alert.crops}</p>
+                        <p class="text-muted small mb-2"><strong><i class="fas fa-map-marker-alt me-1"></i> Area:</strong> ${alert.location}</p>
+                        <p class="text-muted small mb-3"><strong><i class="fas fa-calendar-alt me-1"></i> Reported:</strong> ${alert.date}</p>
+                        <p class="mb-0" style="font-size: 0.95rem;">${alert.description}</p>
+                    </div>
+                </div>
             `;
             
             alertList.appendChild(alertElement);
         });
         
-        document.getElementById('current-alerts').classList.remove('d-none');
+        const currentAlerts = document.getElementById('current-alerts');
+        currentAlerts.classList.remove('d-none');
+        
+        // Scroll smoothly to alerts
+        setTimeout(() => {
+            currentAlerts.scrollIntoView({behavior: 'smooth', block: 'center'});
+        }, 100);
     });
 </script>
 {% endblock %}

@@ -1,96 +1,458 @@
 {% extends "base.html" %}
-{% block title %}Dynamic Pricing Engine{% endblock %}
+{% block title %}Dynamic Pricing Engine - AgriSuper{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --pe-primary: #1A9031;
+        --pe-primary-dark: #127224;
+        --pe-dark-bg: #153a2b;
+        --pe-accent: #c4f033;
+        --pe-text-dark: #222222;
+        --pe-text-gray: #6B7280;
+        --pe-bg-light: #F8FAF9;
+    }
+
+    .pe-page {
+        font-family: 'Poppins', sans-serif;
+        color: var(--pe-text-dark);
+        background: #ffffff;
+    }
+
+    .pe-page h1, .pe-page h2, .pe-page h3, .pe-page h4, .pe-page h5 {
+        font-weight: 700;
+    }
+
+    /* Hero Section */
+    .pe-hero {
+        position: relative;
+        background-image: url("{{ url_for('static', filename='images/pest_alerts/hero_bg.png') }}");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        padding: 140px 0 160px 0;
+        text-align: center;
+        color: white;
+    }
+
+    .pe-hero::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(rgba(21, 58, 43, 0.8), rgba(21, 58, 43, 0.95));
+        z-index: 1;
+    }
+
+    .pe-hero .container {
+        position: relative;
+        z-index: 2;
+    }
+
+    .pe-hero-subtitle {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        color: var(--pe-accent);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .pe-hero h1 {
+        font-size: 4.2rem;
+        line-height: 1.1;
+        margin-bottom: 25px;
+    }
+    
+    .pe-hero p {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* Wave Bottom */
+    .pe-hero-wave {
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        overflow: hidden;
+        line-height: 0;
+        z-index: 3;
+    }
+
+    .pe-hero-wave svg {
+        position: relative;
+        display: block;
+        width: calc(100% + 1.3px);
+        height: 70px;
+    }
+
+    .pe-hero-wave .shape-fill {
+        fill: #F8FAF9;
+    }
+
+    /* Main Content Area */
+    .pe-main-section {
+        background-color: var(--pe-bg-light);
+        padding-bottom: 100px;
+    }
+
+    /* Form Card */
+    .pe-form-wrapper {
+        margin-top: -80px;
+        position: relative;
+        z-index: 10;
+        margin-bottom: 40px;
+    }
+
+    .pe-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+        border: none;
+    }
+
+    .pe-form-label {
+        font-weight: 600;
+        color: var(--pe-dark-bg);
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+    }
+
+    .pe-form-control {
+        border: 1.5px solid #E5E7EB;
+        border-radius: 10px;
+        padding: 14px 18px;
+        background-color: #fafbfa;
+        transition: all 0.3s;
+        font-size: 1rem;
+        color: var(--pe-text-dark);
+    }
+
+    .pe-form-control:focus {
+        border-color: var(--pe-primary);
+        box-shadow: 0 0 0 4px rgba(26, 144, 49, 0.1);
+        background-color: white;
+    }
+    
+    .btn-pe-primary {
+        background-color: var(--pe-primary);
+        color: white;
+        border: none;
+        padding: 14px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .btn-pe-primary:hover {
+        background-color: var(--pe-primary-dark);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* Results Area */
+    #pricingResultsArea {
+        display: none;
+        animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pe-result-card {
+        background: white;
+        border-radius: 16px;
+        padding: 30px;
+        text-align: center;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        border: 1px solid rgba(0,0,0,0.02);
+        height: 100%;
+        transition: transform 0.3s;
+    }
+    
+    .pe-result-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .pe-result-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px auto;
+        font-size: 1.5rem;
+    }
+
+    /* Colors for Result Cards */
+    .card-current .pe-result-icon { background-color: rgba(26, 144, 49, 0.1); color: var(--pe-primary); }
+    .card-predicted .pe-result-icon { background-color: rgba(13, 110, 253, 0.1); color: #0d6efd; }
+    .card-trend .pe-result-icon { background-color: rgba(255, 193, 7, 0.1); color: #d39e00; }
+
+    .pe-result-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--pe-text-gray);
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .pe-result-value {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--pe-dark-bg);
+        margin-bottom: 5px;
+    }
+
+    .pe-result-subtext {
+        font-size: 0.9rem;
+        color: var(--pe-text-gray);
+        font-weight: 500;
+    }
+
+    /* Trend Colors */
+    .trend-up { color: #198754; }
+    .trend-down { color: #dc3545; }
+    
+    /* Stats Layout */
+    .pe-stats-row {
+        background: white;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-top: 30px;
+    }
+    
+    .pe-stat-item {
+        text-align: center;
+        padding: 15px 30px;
+    }
+    
+    .pe-stat-item:not(:last-child) {
+        border-right: 1px solid #E5E7EB;
+    }
+    
+    .pe-stat-label { font-size: 0.85rem; color: var(--pe-text-gray); font-weight: 600; text-transform: uppercase;}
+    .pe-stat-val { font-size: 1.2rem; font-weight: 700; color: var(--pe-dark-bg); margin-top: 5px;}
+
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container-fluid py-4">
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0"><i class="fas fa-chart-line me-2"></i>Dynamic Pricing Engine</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <label class="form-label" for="cropSelect">Select Crop</label>
-                            <select class="form-select" id="cropSelect" title="Select a crop type" aria-label="Select crop type">
-                                <option value="">Choose crop...</option>
-                                <option value="rice">Rice</option>
-                                <option value="wheat">Wheat</option>
-                                <option value="cotton">Cotton</option>
-                            </select>
+<div class="pe-page">
+    
+    <!-- Hero Section -->
+    <section class="pe-hero">
+        <div class="container">
+            <div class="pe-hero-subtitle">
+                <i class="fas fa-chart-line"></i> Dynamic Pricing Engine
+            </div>
+            <h1>Market Intelligence<br>At Your Fingertips</h1>
+            <p>Access real-time commodity prices, AI-driven market predictions, and historical trends to maximize your harvest revenue across local markets.</p>
+        </div>
+        
+        <!-- Bottom Wave SVG -->
+        <div class="pe-hero-wave">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,119.34,196.47,101.45,241.22,89.17,284.14,70.52,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </section>
+
+    <div class="pe-main-section">
+        <div class="container pe-form-wrapper">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="pe-card">
+                        <div class="text-center mb-4">
+                            <h3 style="color: var(--pe-dark-bg);">Select Parameters</h3>
+                            <p class="text-muted">Choose a crop and market location to view pricing data.</p>
                         </div>
-                        <div class="col-md-6">
-                            <label class="form-label" for="marketSelect">Market Location</label>
-                            <select class="form-select" id="marketSelect" title="Select a market location" aria-label="Select market location">
-                                <option value="">Choose market...</option>
-                                <option value="delhi">Delhi</option>
-                                <option value="mumbai">Mumbai</option>
-                                <option value="kolkata">Kolkata</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div id="pricingResults" class="row">
-                        <!-- Dynamic content will be loaded here -->
-                    </div>
-                    
-                    <div class="row mt-4">
-                        <div class="col-md-4">
-                            <div class="card bg-success text-white">
-                                <div class="card-body text-center">
-                                    <h5>Current Price</h5>
-                                    <h3 id="currentPrice">₹3,500</h3>
-                                    <small>per quintal</small>
-                                </div>
+                        
+                        <div class="row g-4 align-items-end">
+                            <div class="col-md-5">
+                                <label class="pe-form-label" for="cropSelect"><i class="fas fa-seedling text-success me-2"></i>Crop Type</label>
+                                <select class="form-select pe-form-control" id="cropSelect">
+                                    <option value="" selected disabled>Choose crop...</option>
+                                    <option value="rice">Rice (Paddy)</option>
+                                    <option value="wheat">Wheat</option>
+                                    <option value="cotton">Cotton</option>
+                                    <option value="maize">Maize</option>
+                                    <option value="sugarcane">Sugarcane</option>
+                                </select>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card bg-info text-white">
-                                <div class="card-body text-center">
-                                    <h5>Predicted Price</h5>
-                                    <h3 id="predictedPrice">₹3,750</h3>
-                                    <small>next week</small>
-                                </div>
+                            <div class="col-md-5">
+                                <label class="pe-form-label" for="marketSelect"><i class="fas fa-map-marker-alt text-danger me-2"></i>Market Location</label>
+                                <select class="form-select pe-form-control" id="marketSelect">
+                                    <option value="" selected disabled>Choose market...</option>
+                                    <option value="delhi">Delhi (Azadpur Mandi)</option>
+                                    <option value="mumbai">Mumbai (APMC)</option>
+                                    <option value="kolkata">Kolkata</option>
+                                    <option value="punjab">Punjab (Khanna Mandi)</option>
+                                </select>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="card bg-warning text-white">
-                                <div class="card-body text-center">
-                                    <h5>Price Trend</h5>
-                                    <h3 id="priceTrend">↗ +7.1%</h3>
-                                    <small>this month</small>
-                                </div>
+                            <div class="col-md-2">
+                                <button type="button" class="btn-pe-primary" id="analyzeBtn" disabled>
+                                    Analyze
+                                </button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            
+            <!-- Pricing Results Section -->
+            <div id="pricingResultsArea" class="row justify-content-center mt-5">
+                <div class="col-lg-10">
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="mb-0" style="color: var(--pe-dark-bg);">Market Insights</h3>
+                        <span class="badge rounded-pill bg-success px-3 py-2">Live Data Updated Today</span>
+                    </div>
+
+                    <div class="row g-4">
+                        <!-- Current Price -->
+                        <div class="col-md-4">
+                            <div class="pe-result-card card-current">
+                                <div class="pe-result-icon"><i class="fas fa-tag"></i></div>
+                                <div class="pe-result-title">Current Market Price</div>
+                                <div class="pe-result-value" id="currentPrice">₹---</div>
+                                <div class="pe-result-subtext">per quintal</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Predicted Price -->
+                        <div class="col-md-4">
+                            <div class="pe-result-card card-predicted">
+                                <div class="pe-result-icon"><i class="fas fa-magic"></i></div>
+                                <div class="pe-result-title">Predicted Price</div>
+                                <div class="pe-result-value" id="predictedPrice">₹---</div>
+                                <div class="pe-result-subtext">expected next week</div>
+                            </div>
+                        </div>
+                        
+                        <!-- Price Trend -->
+                        <div class="col-md-4">
+                            <div class="pe-result-card card-trend">
+                                <div class="pe-result-icon" id="trendIconBox"><i class="fas fa-chart-line"></i></div>
+                                <div class="pe-result-title">30-Day Trend</div>
+                                <div class="pe-result-value" id="priceTrend">---</div>
+                                <div class="pe-result-subtext">overall movement</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pe-stats-row">
+                        <div class="pe-stat-item">
+                            <div class="pe-stat-label">Market Demand</div>
+                            <div class="pe-stat-val text-success">High</div>
+                        </div>
+                        <div class="pe-stat-item">
+                            <div class="pe-stat-label">Supply Volume</div>
+                            <div class="pe-stat-val">Moderate</div>
+                        </div>
+                        <div class="pe-stat-item">
+                            <div class="pe-stat-label">Confidence Score</div>
+                            <div class="pe-stat-val">92%</div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const cropSelect = document.getElementById('cropSelect');
     const marketSelect = document.getElementById('marketSelect');
+    const analyzeBtn = document.getElementById('analyzeBtn');
+    const resultsArea = document.getElementById('pricingResultsArea');
     
-    function loadPricingData() {
-        const crop = cropSelect.value;
-        const market = marketSelect.value;
-        
-        if (crop && market) {
-            fetch(`/api/pricing-engine?crop=${crop}&market=${market}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('currentPrice').textContent = `₹${data.current_price}`;
-                    document.getElementById('predictedPrice').textContent = `₹${data.predicted_price}`;
-                    document.getElementById('priceTrend').textContent = `${data.trend_direction} ${data.trend_percentage}%`;
-                });
+    function checkInputs() {
+        if (cropSelect.value && marketSelect.value) {
+            analyzeBtn.disabled = false;
+        } else {
+            analyzeBtn.disabled = true;
         }
     }
     
-    cropSelect.addEventListener('change', loadPricingData);
-    marketSelect.addEventListener('change', loadPricingData);
+    cropSelect.addEventListener('change', checkInputs);
+    marketSelect.addEventListener('change', checkInputs);
+    
+    analyzeBtn.addEventListener('click', function() {
+        const crop = cropSelect.value;
+        const market = marketSelect.value;
+        
+        // Show loading state
+        const originalBtnText = analyzeBtn.innerHTML;
+        analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading';
+        
+        fetch(`/api/pricing-engine?crop=${crop}&market=${market}`)
+            .then(response => response.json())
+            .then(data => {
+                // Restore button
+                analyzeBtn.innerHTML = originalBtnText;
+                
+                // Show results
+                resultsArea.style.display = 'flex';
+                
+                // Populate data
+                // Format numbers with commas
+                const curPriceStr = parseFloat(data.current_price).toLocaleString('en-IN');
+                const predPriceStr = parseFloat(data.predicted_price).toLocaleString('en-IN');
+                
+                document.getElementById('currentPrice').textContent = `₹${curPriceStr}`;
+                document.getElementById('predictedPrice').textContent = `₹${predPriceStr}`;
+                
+                const trendEl = document.getElementById('priceTrend');
+                const trendIconBox = document.getElementById('trendIconBox');
+                
+                if (data.trend_direction === 'Up') {
+                    trendEl.innerHTML = `<span class="trend-up"><i class="fas fa-arrow-up"></i> +${data.trend_percentage}%</span>`;
+                    trendIconBox.innerHTML = '<i class="fas fa-chart-line text-success"></i>';
+                } else if (data.trend_direction === 'Down') {
+                    trendEl.innerHTML = `<span class="trend-down"><i class="fas fa-arrow-down"></i> -${data.trend_percentage}%</span>`;
+                    trendIconBox.innerHTML = '<i class="fas fa-chart-line text-danger"></i>';
+                } else {
+                    trendEl.innerHTML = `<span><i class="fas fa-minus"></i> ${data.trend_percentage}%</span>`;
+                }
+                
+                // Smooth scroll to results
+                setTimeout(() => {
+                    resultsArea.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+                }, 100);
+            })
+            .catch(err => {
+                console.error("Error fetching pricing data:", err);
+                analyzeBtn.innerHTML = originalBtnText;
+                alert("Failed to load pricing data. Please try again.");
+            });
+    });
 });
 </script>
 {% endblock %}

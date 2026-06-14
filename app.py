@@ -107,9 +107,6 @@ def dashboard():
 def categorized_dashboard():
     return render_template('categorized_dashboard.html')
 
-@app.route('/workspace')
-def workspace():
-    return render_template('workspace.html')
 
 
 @app.route('/search')

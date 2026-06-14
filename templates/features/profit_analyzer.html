@@ -2,218 +2,630 @@
 
 {% block title %}Profit Analyzer - AgriSuper{% endblock %}
 
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --pa-primary: #1A9031;
+        --pa-primary-dark: #127224;
+        --pa-dark-bg: #153a2b;
+        --pa-accent: #c4f033;
+        --pa-text-dark: #222222;
+        --pa-text-gray: #6B7280;
+        --pa-bg-light: #F8FAF9;
+        --pa-red: #e11d48;
+    }
+
+    .pa-page {
+        font-family: 'Poppins', sans-serif;
+        color: var(--pa-text-dark);
+        background: #ffffff;
+    }
+
+    .pa-page h1, .pa-page h2, .pa-page h3, .pa-page h4, .pa-page h5 {
+        font-weight: 700;
+    }
+
+    /* Hero Section */
+    .pa-hero {
+        position: relative;
+        background-image: url("{{ url_for('static', filename='images/crop_rotation/collage_1.png') }}");
+        background-size: cover;
+        background-position: center 30%;
+        padding: 140px 0 160px 0;
+        text-align: center;
+        color: white;
+    }
+
+    .pa-hero::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: linear-gradient(rgba(21, 58, 43, 0.8), rgba(21, 58, 43, 0.95));
+        z-index: 1;
+    }
+
+    .pa-hero .container {
+        position: relative;
+        z-index: 2;
+    }
+
+    .pa-hero-subtitle {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        color: var(--pa-accent);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .pa-hero h1 {
+        font-size: 4.2rem;
+        line-height: 1.1;
+        margin-bottom: 25px;
+    }
+    
+    .pa-hero p {
+        font-size: 1.1rem;
+        color: rgba(255, 255, 255, 0.8);
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    /* Wave Bottom */
+    .pa-hero-wave {
+        position: absolute;
+        bottom: -2px;
+        left: 0;
+        width: 100%;
+        overflow: hidden;
+        line-height: 0;
+        z-index: 3;
+    }
+
+    .pa-hero-wave svg {
+        position: relative;
+        display: block;
+        width: calc(100% + 1.3px);
+        height: 70px;
+    }
+
+    .pa-hero-wave .shape-fill {
+        fill: #F8FAF9;
+    }
+
+    /* Main Content Area */
+    .pa-main-section {
+        background-color: var(--pa-bg-light);
+        padding-bottom: 100px;
+    }
+
+    /* Form Card */
+    .pa-form-wrapper {
+        margin-top: -80px;
+        position: relative;
+        z-index: 10;
+        margin-bottom: 40px;
+    }
+
+    .pa-card {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+        border: none;
+    }
+
+    .pa-section-title {
+        color: var(--pa-dark-bg);
+        margin-bottom: 20px;
+        font-size: 1.2rem;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--pa-bg-light);
+    }
+    .pa-section-title i {
+        color: var(--pa-primary);
+    }
+
+    .pa-form-label {
+        font-weight: 600;
+        color: var(--pa-text-gray);
+        margin-bottom: 8px;
+        font-size: 0.9rem;
+    }
+
+    .pa-form-control {
+        border: 1.5px solid #E5E7EB;
+        border-radius: 10px;
+        padding: 12px 16px;
+        background-color: #fafbfa;
+        transition: all 0.3s;
+        font-size: 1rem;
+        color: var(--pa-text-dark);
+    }
+
+    .pa-form-control:focus {
+        border-color: var(--pa-primary);
+        box-shadow: 0 0 0 4px rgba(26, 144, 49, 0.1);
+        background-color: white;
+    }
+    
+    .btn-pa-primary {
+        background-color: var(--pa-primary);
+        color: white;
+        border: none;
+        padding: 14px 30px;
+        border-radius: 10px;
+        font-weight: 600;
+        transition: all 0.3s;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        font-size: 1.1rem;
+    }
+
+    .btn-pa-primary:hover {
+        background-color: var(--pa-primary-dark);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* Results Area */
+    #profit-results {
+        display: none;
+        animation: slideUp 0.5s ease-out;
+    }
+
+    @keyframes slideUp {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .pa-results-container {
+        background: white;
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 15px 40px rgba(0,0,0,0.06);
+    }
+
+    .pa-table-card {
+        background: var(--pa-bg-light);
+        border-radius: 12px;
+        padding: 25px;
+        height: 100%;
+    }
+
+    .pa-table {
+        width: 100%;
+        margin-bottom: 0;
+    }
+    
+    .pa-table td {
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(0,0,0,0.05);
+        color: var(--pa-text-gray);
+        font-weight: 500;
+    }
+    
+    .pa-table td.val {
+        text-align: right;
+        color: var(--pa-text-dark);
+        font-weight: 600;
+    }
+
+    .pa-table tr:last-child td {
+        border-bottom: none;
+    }
+
+    .pa-total-row {
+        margin-top: 15px;
+        padding-top: 15px;
+        border-top: 2px solid rgba(0,0,0,0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .pa-total-row.cost-total .val { color: var(--pa-red); }
+    .pa-total-row.revenue-total .val { color: var(--pa-primary); }
+
+    .pa-net-profit-box {
+        background: linear-gradient(135deg, var(--pa-dark-bg), var(--pa-primary));
+        border-radius: 16px;
+        padding: 30px;
+        color: white;
+        text-align: center;
+        margin-top: 30px;
+        box-shadow: 0 10px 20px rgba(26, 144, 49, 0.2);
+    }
+
+    .pa-net-profit-box h4 {
+        color: rgba(255,255,255,0.9);
+        font-size: 1.1rem;
+        margin-bottom: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .pa-net-profit-box .profit-val {
+        font-size: 3.5rem;
+        font-weight: 800;
+        margin-bottom: 5px;
+        color: var(--pa-accent);
+    }
+
+    .pa-net-profit-box .profit-sub {
+        font-size: 1rem;
+        color: rgba(255,255,255,0.8);
+    }
+
+    /* Suggestions */
+    .pa-suggestion-card {
+        display: flex;
+        align-items: flex-start;
+        gap: 15px;
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        border: 1px solid #E5E7EB;
+        margin-bottom: 15px;
+        transition: transform 0.2s;
+    }
+    
+    .pa-suggestion-card:hover {
+        transform: translateX(5px);
+        border-color: var(--pa-primary);
+    }
+
+    .pa-suggestion-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        background: rgba(196, 240, 51, 0.2);
+        color: var(--pa-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+    }
+
+    .pa-suggestion-text {
+        color: var(--pa-text-dark);
+        font-weight: 500;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+</style>
+{% endblock %}
+
 {% block content %}
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <h1 class="mb-4">Profit Analyzer</h1>
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">Calculate Your Farming Profits</h5>
-                    <p class="card-text">Enter your farming details to analyze costs, revenue, and potential profits.</p>
-                    
-                    <form id="profit-calculator-form">
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <h6>Crop Information</h6>
-                                <div class="form-group mb-3">
-                                    <label for="crop-type">Crop Type</label>
-                                    <select class="form-control" id="crop-type" required>
-                                        <option value="">Select crop</option>
-                                        <option value="rice">Rice</option>
-                                        <option value="wheat">Wheat</option>
-                                        <option value="maize">Maize</option>
-                                        <option value="cotton">Cotton</option>
-                                        <option value="sugarcane">Sugarcane</option>
-                                    </select>
+<div class="pa-page">
+    
+    <!-- Hero Section -->
+    <section class="pa-hero">
+        <div class="container">
+            <div class="pa-hero-subtitle">
+                <i class="fas fa-calculator"></i> Farm Financial Analytics
+            </div>
+            <h1>Profit Analyzer</h1>
+            <p>Accurately calculate your farming costs, estimate crop revenue, and discover actionable insights to maximize your net profit.</p>
+        </div>
+        
+        <!-- Bottom Wave SVG -->
+        <div class="pa-hero-wave">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,119.34,196.47,101.45,241.22,89.17,284.14,70.52,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </section>
+
+    <div class="pa-main-section">
+        <div class="container pa-form-wrapper">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="pa-card" id="formCard">
+                        <div class="text-center mb-5">
+                            <h3 style="color: var(--pa-dark-bg);">Enter Farming Details</h3>
+                            <p class="text-muted">Fill out your estimated costs and yields to generate a financial report.</p>
+                        </div>
+                        
+                        <form id="profit-calculator-form">
+                            <div class="row g-5">
+                                <!-- Column 1: Crop & Revenue Info -->
+                                <div class="col-md-6">
+                                    <h4 class="pa-section-title"><i class="fas fa-seedling"></i> Crop Information</h4>
+                                    
+                                    <div class="mb-4">
+                                        <label for="crop-type" class="pa-form-label">Crop Type</label>
+                                        <select class="form-select pa-form-control" id="crop-type" required>
+                                            <option value="" selected disabled>Select crop</option>
+                                            <option value="rice">Rice</option>
+                                            <option value="wheat">Wheat</option>
+                                            <option value="maize">Maize</option>
+                                            <option value="cotton">Cotton</option>
+                                            <option value="sugarcane">Sugarcane</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="land-area" class="pa-form-label">Land Area (Acres)</label>
+                                        <input type="number" class="form-control pa-form-control" id="land-area" min="0.1" step="0.1" placeholder="e.g. 5" required>
+                                    </div>
+                                    <div class="mb-5">
+                                        <label for="expected-yield" class="pa-form-label">Expected Yield (Quintals/Acre)</label>
+                                        <input type="number" class="form-control pa-form-control" id="expected-yield" min="1" step="0.5" placeholder="e.g. 20" required>
+                                    </div>
+
+                                    <h4 class="pa-section-title mt-4"><i class="fas fa-coins text-warning"></i> Revenue Information</h4>
+                                    <div class="mb-4">
+                                        <label for="expected-price" class="pa-form-label">Expected Price (₹/Quintal)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text border-0 bg-light">₹</span>
+                                            <input type="number" class="form-control pa-form-control" id="expected-price" min="0" placeholder="e.g. 2500" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="subsidy-amount" class="pa-form-label">Government Subsidy (₹)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text border-0 bg-light">₹</span>
+                                            <input type="number" class="form-control pa-form-control" id="subsidy-amount" min="0" value="0">
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group mb-3">
-                                    <label for="land-area">Land Area (Acres)</label>
-                                    <input type="number" class="form-control" id="land-area" min="0.1" step="0.1" required>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="expected-yield">Expected Yield (Quintals/Acre)</label>
-                                    <input type="number" class="form-control" id="expected-yield" min="1" step="0.5" required>
+                                
+                                <!-- Column 2: Cost Info -->
+                                <div class="col-md-6">
+                                    <h4 class="pa-section-title"><i class="fas fa-wallet text-danger"></i> Cost Information</h4>
+                                    
+                                    <div class="mb-4">
+                                        <label for="seed-cost" class="pa-form-label">Total Seed Cost (₹)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text border-0 bg-light">₹</span>
+                                            <input type="number" class="form-control pa-form-control" id="seed-cost" min="0" placeholder="0" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="fertilizer-cost" class="pa-form-label">Fertilizer & Pesticide Cost (₹)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text border-0 bg-light">₹</span>
+                                            <input type="number" class="form-control pa-form-control" id="fertilizer-cost" min="0" placeholder="0" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="labor-cost" class="pa-form-label">Labor Cost (₹)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text border-0 bg-light">₹</span>
+                                            <input type="number" class="form-control pa-form-control" id="labor-cost" min="0" placeholder="0" required>
+                                        </div>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label for="other-costs" class="pa-form-label">Other Costs (Fuel, Machinary, etc.) (₹)</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text border-0 bg-light">₹</span>
+                                            <input type="number" class="form-control pa-form-control" id="other-costs" min="0" placeholder="0" required>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <div class="col-md-6">
-                                <h6>Cost Information</h6>
-                                <div class="form-group mb-3">
-                                    <label for="seed-cost">Seed Cost (₹)</label>
-                                    <input type="number" class="form-control" id="seed-cost" min="0" required>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="fertilizer-cost">Fertilizer Cost (₹)</label>
-                                    <input type="number" class="form-control" id="fertilizer-cost" min="0" required>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="labor-cost">Labor Cost (₹)</label>
-                                    <input type="number" class="form-control" id="labor-cost" min="0" required>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="other-costs">Other Costs (₹)</label>
-                                    <input type="number" class="form-control" id="other-costs" min="0" required>
+                            <div class="row mt-5">
+                                <div class="col-12">
+                                    <button type="submit" class="btn-pa-primary">
+                                        <i class="fas fa-chart-pie"></i> Calculate Profit Analysis
+                                    </button>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="row mb-3">
-                            <div class="col-md-6">
-                                <h6>Revenue Information</h6>
-                                <div class="form-group mb-3">
-                                    <label for="expected-price">Expected Price (₹/Quintal)</label>
-                                    <input type="number" class="form-control" id="expected-price" min="0" required>
-                                </div>
-                                <div class="form-group mb-3">
-                                    <label for="subsidy-amount">Subsidy Amount (₹)</label>
-                                    <input type="number" class="form-control" id="subsidy-amount" min="0" value="0">
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary">Calculate Profit</button>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
             
-            <div class="card shadow-sm d-none" id="profit-results">
-                <div class="card-header bg-success text-white">
-                    <h5 class="mb-0">Profit Analysis Results</h5>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h6>Cost Breakdown</h6>
-                            <table class="table table-sm">
-                                <tbody>
-                                    <tr>
-                                        <td>Seed Cost</td>
-                                        <td id="result-seed-cost">₹0</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Fertilizer Cost</td>
-                                        <td id="result-fertilizer-cost">₹0</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Labor Cost</td>
-                                        <td id="result-labor-cost">₹0</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Other Costs</td>
-                                        <td id="result-other-costs">₹0</td>
-                                    </tr>
-                                    <tr class="table-secondary">
-                                        <th>Total Cost</th>
-                                        <th id="result-total-cost">₹0</th>
-                                    </tr>
-                                </tbody>
-                            </table>
+            <!-- Results Section -->
+            <div id="profit-results" class="row justify-content-center mt-5">
+                <div class="col-lg-10">
+                    <div class="pa-results-container">
+                        
+                        <div class="d-flex justify-content-between align-items-center mb-5">
+                            <h3 class="mb-0" style="color: var(--pa-dark-bg);">Analysis Results</h3>
+                            <button class="btn btn-sm btn-outline-secondary px-3" onclick="document.getElementById('profit-results').style.display='none'; document.getElementById('formCard').scrollIntoView({behavior:'smooth'})"><i class="fas fa-edit me-1"></i> Edit Inputs</button>
                         </div>
                         
-                        <div class="col-md-6">
-                            <h6>Revenue & Profit</h6>
-                            <table class="table table-sm">
-                                <tbody>
-                                    <tr>
-                                        <td>Expected Yield</td>
-                                        <td id="result-total-yield">0 Quintals</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Crop Revenue</td>
-                                        <td id="result-crop-revenue">₹0</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Subsidy Amount</td>
-                                        <td id="result-subsidy">₹0</td>
-                                    </tr>
-                                    <tr class="table-secondary">
-                                        <th>Total Revenue</th>
-                                        <th id="result-total-revenue">₹0</th>
-                                    </tr>
-                                    <tr class="table-success">
-                                        <th>Net Profit</th>
-                                        <th id="result-net-profit">₹0</th>
-                                    </tr>
-                                    <tr>
-                                        <td>Profit per Acre</td>
-                                        <td id="result-profit-per-acre">₹0</td>
-                                    </tr>
-                                </tbody>
-                            </table>
+                        <div class="row g-4">
+                            <!-- Costs Breakdown -->
+                            <div class="col-md-6">
+                                <div class="pa-table-card">
+                                    <h5 style="color: var(--pa-dark-bg); margin-bottom: 20px;"><i class="fas fa-minus-circle text-danger me-2"></i>Cost Breakdown</h5>
+                                    <table class="pa-table">
+                                        <tbody>
+                                            <tr>
+                                                <td>Seeds</td>
+                                                <td class="val" id="result-seed-cost">₹0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Fertilizers</td>
+                                                <td class="val" id="result-fertilizer-cost">₹0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Labor</td>
+                                                <td class="val" id="result-labor-cost">₹0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Others</td>
+                                                <td class="val" id="result-other-costs">₹0</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="pa-total-row cost-total">
+                                        <h6 class="mb-0 fw-bold">Total Cost</h6>
+                                        <h5 class="mb-0 val fw-bold" id="result-total-cost">₹0</h5>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Revenue Breakdown -->
+                            <div class="col-md-6">
+                                <div class="pa-table-card">
+                                    <h5 style="color: var(--pa-dark-bg); margin-bottom: 20px;"><i class="fas fa-plus-circle text-success me-2"></i>Revenue Estimation</h5>
+                                    <table class="pa-table">
+                                        <tbody>
+                                            <tr>
+                                                <td>Expected Yield</td>
+                                                <td class="val" id="result-total-yield">0 Qtl</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Crop Revenue</td>
+                                                <td class="val" id="result-crop-revenue">₹0</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Govt. Subsidy</td>
+                                                <td class="val" id="result-subsidy">₹0</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class="pa-total-row revenue-total" style="margin-top: 55px;">
+                                        <h6 class="mb-0 fw-bold">Total Revenue</h6>
+                                        <h5 class="mb-0 val fw-bold" id="result-total-revenue">₹0</h5>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="mt-3">
-                        <h6>Profit Optimization Suggestions</h6>
-                        <ul id="optimization-suggestions" class="list-group">
-                            <!-- Suggestions will be added here -->
-                        </ul>
+                        
+                        <!-- Net Profit Banner -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="pa-net-profit-box">
+                                    <h4>Estimated Net Profit</h4>
+                                    <div class="profit-val" id="result-net-profit">₹0</div>
+                                    <div class="profit-sub" id="result-profit-per-acre">That's ₹0 per acre</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Optimization Suggestions -->
+                        <div class="row mt-5">
+                            <div class="col-12">
+                                <h4 class="mb-4" style="color: var(--pa-dark-bg);"><i class="fas fa-lightbulb text-warning me-2"></i>Optimization Tips</h4>
+                                <div id="optimization-suggestions">
+                                    <!-- Suggestions added by JS -->
+                                </div>
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>
+            
         </div>
     </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
 <script>
     document.getElementById('profit-calculator-form').addEventListener('submit', function(e) {
         e.preventDefault();
         
-        // Get input values
-        const cropType = document.getElementById('crop-type').value;
-        const landArea = parseFloat(document.getElementById('land-area').value);
-        const expectedYield = parseFloat(document.getElementById('expected-yield').value);
-        const seedCost = parseFloat(document.getElementById('seed-cost').value);
-        const fertilizerCost = parseFloat(document.getElementById('fertilizer-cost').value);
-        const laborCost = parseFloat(document.getElementById('labor-cost').value);
-        const otherCosts = parseFloat(document.getElementById('other-costs').value);
-        const expectedPrice = parseFloat(document.getElementById('expected-price').value);
-        const subsidyAmount = parseFloat(document.getElementById('subsidy-amount').value);
+        // Show loading state briefly
+        const submitBtn = this.querySelector('button[type="submit"]');
+        const origText = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Calculating...';
         
-        // Calculate results
-        const totalYield = landArea * expectedYield;
-        const totalCost = seedCost + fertilizerCost + laborCost + otherCosts;
-        const cropRevenue = totalYield * expectedPrice;
-        const totalRevenue = cropRevenue + subsidyAmount;
-        const netProfit = totalRevenue - totalCost;
-        const profitPerAcre = netProfit / landArea;
-        
-        // Update results in the UI
-        document.getElementById('result-seed-cost').textContent = `₹${seedCost.toLocaleString()}`;
-        document.getElementById('result-fertilizer-cost').textContent = `₹${fertilizerCost.toLocaleString()}`;
-        document.getElementById('result-labor-cost').textContent = `₹${laborCost.toLocaleString()}`;
-        document.getElementById('result-other-costs').textContent = `₹${otherCosts.toLocaleString()}`;
-        document.getElementById('result-total-cost').textContent = `₹${totalCost.toLocaleString()}`;
-        
-        document.getElementById('result-total-yield').textContent = `${totalYield.toLocaleString()} Quintals`;
-        document.getElementById('result-crop-revenue').textContent = `₹${cropRevenue.toLocaleString()}`;
-        document.getElementById('result-subsidy').textContent = `₹${subsidyAmount.toLocaleString()}`;
-        document.getElementById('result-total-revenue').textContent = `₹${totalRevenue.toLocaleString()}`;
-        document.getElementById('result-net-profit').textContent = `₹${netProfit.toLocaleString()}`;
-        document.getElementById('result-profit-per-acre').textContent = `₹${profitPerAcre.toLocaleString()}`;
-        
-        // Generate optimization suggestions
-        const suggestionsList = document.getElementById('optimization-suggestions');
-        suggestionsList.innerHTML = '';
-        
-        // Add some sample suggestions
-        const suggestions = [
-            'Consider using high-yield seed varieties to increase production.',
-            'Explore organic farming methods to reduce fertilizer costs.',
-            'Implement water conservation techniques to reduce irrigation costs.',
-            'Consider crop insurance to protect against yield losses.'
-        ];
-        
-        suggestions.forEach(suggestion => {
-            const li = document.createElement('li');
-            li.className = 'list-group-item';
-            li.textContent = suggestion;
-            suggestionsList.appendChild(li);
-        });
-        
-        // Show results
-        document.getElementById('profit-results').classList.remove('d-none');
+        setTimeout(() => {
+            submitBtn.innerHTML = origText;
+            
+            // Get input values
+            const cropType = document.getElementById('crop-type').value;
+            const landArea = parseFloat(document.getElementById('land-area').value);
+            const expectedYield = parseFloat(document.getElementById('expected-yield').value);
+            const seedCost = parseFloat(document.getElementById('seed-cost').value);
+            const fertilizerCost = parseFloat(document.getElementById('fertilizer-cost').value);
+            const laborCost = parseFloat(document.getElementById('labor-cost').value);
+            const otherCosts = parseFloat(document.getElementById('other-costs').value);
+            const expectedPrice = parseFloat(document.getElementById('expected-price').value);
+            const subsidyAmount = parseFloat(document.getElementById('subsidy-amount').value || 0);
+            
+            // Calculate results
+            const totalYield = landArea * expectedYield;
+            const totalCost = seedCost + fertilizerCost + laborCost + otherCosts;
+            const cropRevenue = totalYield * expectedPrice;
+            const totalRevenue = cropRevenue + subsidyAmount;
+            const netProfit = totalRevenue - totalCost;
+            const profitPerAcre = netProfit / landArea;
+            
+            // Helper for formatting
+            const fmt = (num) => '₹' + num.toLocaleString('en-IN', {maximumFractionDigits: 0});
+            
+            // Update results in the UI
+            document.getElementById('result-seed-cost').textContent = fmt(seedCost);
+            document.getElementById('result-fertilizer-cost').textContent = fmt(fertilizerCost);
+            document.getElementById('result-labor-cost').textContent = fmt(laborCost);
+            document.getElementById('result-other-costs').textContent = fmt(otherCosts);
+            document.getElementById('result-total-cost').textContent = fmt(totalCost);
+            
+            document.getElementById('result-total-yield').textContent = `${totalYield.toLocaleString('en-IN')} Quintals`;
+            document.getElementById('result-crop-revenue').textContent = fmt(cropRevenue);
+            document.getElementById('result-subsidy').textContent = fmt(subsidyAmount);
+            document.getElementById('result-total-revenue').textContent = fmt(totalRevenue);
+            
+            const netProfitEl = document.getElementById('result-net-profit');
+            netProfitEl.textContent = fmt(netProfit);
+            
+            // Change color based on profit/loss
+            const profitBox = document.querySelector('.pa-net-profit-box');
+            if (netProfit < 0) {
+                netProfitEl.style.color = '#fda4af'; // light red for loss
+                profitBox.style.background = 'linear-gradient(135deg, #4c0519, #e11d48)';
+                profitBox.style.boxShadow = '0 10px 20px rgba(225, 29, 72, 0.2)';
+            } else {
+                netProfitEl.style.color = 'var(--pa-accent)';
+                profitBox.style.background = 'linear-gradient(135deg, var(--pa-dark-bg), var(--pa-primary))';
+                profitBox.style.boxShadow = '0 10px 20px rgba(26, 144, 49, 0.2)';
+            }
+            
+            document.getElementById('result-profit-per-acre').textContent = `That's ${fmt(profitPerAcre)} per acre`;
+            
+            // Generate optimization suggestions
+            const suggestionsList = document.getElementById('optimization-suggestions');
+            suggestionsList.innerHTML = '';
+            
+            const suggestions = [
+                { icon: 'seedling', text: 'Consider using high-yield hybrid seed varieties. While initial seed costs might be 15% higher, the yield increase often offsets the expense.' },
+                { icon: 'leaf', text: 'Explore localized organic farming methods to incrementally reduce heavy chemical fertilizer dependencies and improve soil longevity.' },
+                { icon: 'water', text: 'Implement smart water conservation techniques like drip irrigation to reduce both fuel costs for pumps and labor overhead.' }
+            ];
+            
+            if (netProfit < 0) {
+                suggestions.unshift({ icon: 'shield-alt', text: 'Since you are operating at a projected loss, urgently review your labor expenses or consider government crop insurance to protect against further yield losses.' });
+            }
+            
+            suggestions.forEach(suggestion => {
+                const div = document.createElement('div');
+                div.className = 'pa-suggestion-card';
+                div.innerHTML = `
+                    <div class="pa-suggestion-icon"><i class="fas fa-${suggestion.icon}"></i></div>
+                    <p class="pa-suggestion-text">${suggestion.text}</p>
+                `;
+                suggestionsList.appendChild(div);
+            });
+            
+            // Show results and scroll
+            const resultsContainer = document.getElementById('profit-results');
+            resultsContainer.style.display = 'flex';
+            setTimeout(() => {
+                resultsContainer.scrollIntoView({behavior: 'smooth', block: 'start'});
+            }, 100);
+        }, 600);
     });
 </script>
 {% endblock %}

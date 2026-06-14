@@ -1,293 +1,766 @@
 {% extends 'base.html' %}
 
-{% block title %}Crop Rotation{% endblock %}
+{% block title %}Scientific Crop Rotation - AgriSuper{% endblock %}
+
+{% block extra_css %}
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --cr-primary: #1A9031;
+        --cr-primary-dark: #127224;
+        --cr-dark-bg: #1A2E24;
+        --cr-dark-overlay: rgba(26, 46, 36, 0.7);
+        --cr-text-dark: #222222;
+        --cr-text-gray: #6B7280;
+        --cr-bg-light: #F8FAF9;
+    }
+
+    .cr-page {
+        font-family: 'Poppins', sans-serif;
+        color: var(--cr-text-dark);
+        background: #ffffff;
+    }
+
+    .cr-page h1, .cr-page h2, .cr-page h3, .cr-page h4 {
+        font-weight: 700;
+    }
+
+    .btn-cr-primary {
+        background-color: var(--cr-primary);
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .btn-cr-primary:hover {
+        background-color: var(--cr-primary-dark);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .btn-cr-outline {
+        background-color: transparent;
+        color: white;
+        border: 2px solid white;
+        padding: 10px 28px;
+        border-radius: 8px;
+        font-weight: 600;
+        transition: all 0.3s;
+    }
+
+    .btn-cr-outline:hover {
+        background-color: white;
+        color: var(--cr-dark-bg);
+    }
+
+    /* Hero Section */
+    .cr-hero {
+        position: relative;
+        background-image: url("{{ url_for('static', filename='images/crop_rotation/hero_bg.png') }}");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        padding: 160px 0 200px 0;
+        text-align: center;
+        color: white;
+    }
+
+    .cr-hero::before {
+        content: '';
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: var(--cr-dark-overlay);
+        z-index: 1;
+    }
+
+    .cr-hero .container {
+        position: relative;
+        z-index: 2;
+    }
+
+    .cr-hero-subtitle {
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .cr-hero-subtitle i {
+        color: var(--cr-primary);
+    }
+
+    .cr-hero h1 {
+        font-size: 4.5rem;
+        line-height: 1.1;
+        margin-bottom: 30px;
+    }
+
+    .cr-hero-wave {
+        position: absolute;
+        bottom: -2px; /* Fix for thin gap */
+        left: 0;
+        width: 100%;
+        overflow: hidden;
+        line-height: 0;
+        z-index: 3;
+    }
+
+    .cr-hero-wave svg {
+        position: relative;
+        display: block;
+        width: calc(100% + 1.3px);
+        height: 80px;
+    }
+
+    .cr-hero-wave .shape-fill {
+        fill: #FFFFFF;
+    }
+
+    /* About Section */
+    .cr-about {
+        padding: 100px 0;
+        background-color: #ffffff;
+        position: relative;
+    }
+
+    /* Faint wave background */
+    .cr-about::before {
+        content: '';
+        position: absolute;
+        top: 0; right: 0; bottom: 0; left: 0;
+        background: radial-gradient(circle at 100% 50%, rgba(26, 144, 49, 0.03) 0%, transparent 50%),
+                    radial-gradient(circle at 0% 50%, rgba(26, 144, 49, 0.03) 0%, transparent 50%);
+        pointer-events: none;
+    }
+
+    .cr-collage {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 20px;
+        position: relative;
+    }
+
+    .img-arched {
+        border-radius: 120px 120px 20px 20px;
+        width: 100%;
+        object-fit: cover;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .cr-collage-1 {
+        grid-column: 1 / 2;
+        grid-row: 1 / 3;
+        height: 500px;
+        margin-top: 40px;
+    }
+
+    .cr-collage-2 {
+        grid-column: 2 / 3;
+        grid-row: 1 / 2;
+        height: 240px;
+    }
+
+    .cr-collage-3 {
+        grid-column: 2 / 3;
+        grid-row: 2 / 3;
+        height: 340px;
+    }
+
+    .cr-about-content {
+        padding-left: 30px;
+    }
+
+    .cr-section-subtitle {
+        color: var(--cr-primary);
+        font-weight: 600;
+        font-size: 0.95rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+        display: inline-block;
+    }
+
+    .cr-about h2 {
+        font-size: 2.8rem;
+        margin-bottom: 25px;
+        color: var(--cr-text-dark);
+        line-height: 1.2;
+    }
+
+    .cr-about p {
+        color: var(--cr-text-gray);
+        font-size: 1.05rem;
+        margin-bottom: 30px;
+    }
+
+    .cr-check-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+        margin-bottom: 40px;
+    }
+
+    .cr-check-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-weight: 500;
+        font-size: 0.95rem;
+    }
+
+    .cr-check-item i {
+        color: var(--cr-primary);
+    }
+
+    /* Services / Planner Section */
+    .cr-planner {
+        position: relative;
+        background-color: var(--cr-dark-bg);
+        background-image: url("{{ url_for('static', filename='images/crop_rotation/hero_bg.png') }}");
+        background-blend-mode: overlay;
+        background-size: cover;
+        background-position: center;
+        padding: 100px 0 160px 0;
+        text-align: center;
+        color: white;
+    }
+
+    .cr-planner h2 {
+        font-size: 2.8rem;
+        margin-bottom: 60px;
+    }
+
+    /* Overlapping Form Cards */
+    .cr-form-wrapper {
+        margin-top: -80px; /* Overlap from dark section into light section */
+        position: relative;
+        z-index: 10;
+        margin-bottom: 100px;
+    }
+
+    .cr-card {
+        background: white;
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+        text-align: left;
+    }
+
+    .cr-form-label {
+        font-weight: 600;
+        color: var(--cr-text-dark);
+        margin-bottom: 8px;
+    }
+
+    .cr-form-control {
+        border: 1px solid #E5E7EB;
+        border-radius: 8px;
+        padding: 12px 16px;
+        background-color: var(--cr-bg-light);
+        transition: all 0.3s;
+    }
+
+    .cr-form-control:focus {
+        border-color: var(--cr-primary);
+        box-shadow: 0 0 0 3px rgba(26, 144, 49, 0.1);
+        background-color: white;
+    }
+    
+    .cr-checkbox-group .form-check {
+        margin-bottom: 10px;
+    }
+
+    .cr-checkbox-group .form-check-input:checked {
+        background-color: var(--cr-primary);
+        border-color: var(--cr-primary);
+    }
+
+    /* Rotation Results Overlay */
+    .cr-results-card {
+        background: white;
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 15px 50px rgba(0,0,0,0.08);
+        text-align: left;
+        display: none;
+        animation: fadeIn 0.5s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .rotation-timeline {
+        border-left: 3px solid #E5E7EB;
+        padding-left: 24px;
+        margin-left: 12px;
+        margin-top: 30px;
+    }
+
+    .timeline-item {
+        position: relative;
+        margin-bottom: 30px;
+    }
+
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -33px;
+        top: 0;
+        width: 15px;
+        height: 15px;
+        border-radius: 50%;
+        background-color: var(--cr-primary);
+        border: 3px solid white;
+        box-shadow: 0 0 0 2px var(--cr-primary);
+    }
+    
+    .timeline-season {
+        font-weight: 700;
+        color: var(--cr-primary);
+        margin-bottom: 5px;
+    }
+
+    .timeline-crops {
+        background: var(--cr-bg-light);
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #E5E7EB;
+        display: flex;
+        gap: 15px;
+    }
+
+    .crop-badge {
+        background: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        border: 1px solid #E5E7EB;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .crop-badge i {
+        color: var(--cr-primary);
+    }
+
+    /* Bottom Features Section */
+    .cr-features-section {
+        padding: 50px 0 100px 0;
+        background-color: #ffffff;
+    }
+
+    .feature-img-wrapper {
+        position: relative;
+    }
+
+    .feature-img-arched {
+        border-radius: 20px 120px 20px 20px;
+        width: 100%;
+        height: 450px;
+        object-fit: cover;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .play-btn-overlay {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 80px;
+        height: 80px;
+        background: var(--cr-primary);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.5rem;
+        box-shadow: 0 0 0 15px rgba(26, 144, 49, 0.3);
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .play-btn-overlay:hover {
+        transform: translate(-50%, -50%) scale(1.1);
+        box-shadow: 0 0 0 20px rgba(26, 144, 49, 0.2);
+    }
+
+</style>
+{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-12">
-            <h2 class="text-success mb-4">Crop Rotation Planner</h2>
-            <p class="lead">Optimize your farm's productivity with scientific crop rotation planning.</p>
+<div class="cr-page">
+    
+    <!-- Hero Section -->
+    <section class="cr-hero">
+        <div class="container">
+            <div class="cr-hero-subtitle">
+                <i class="fas fa-leaf"></i> Scientific Crop Rotation
+            </div>
+            <h1>Optimize Your Farm's<br>Productivity</h1>
+            <div class="mt-4">
+                <a href="#planner" class="btn-cr-primary me-3">Plan Rotation</a>
+                <a href="#principles" class="btn-cr-outline">How It Works</a>
+            </div>
         </div>
-    </div>
+        
+        <!-- Bottom Wave SVG -->
+        <div class="cr-hero-wave">
+            <svg data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120" preserveAspectRatio="none">
+                <path d="M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V120H0V95.8C59.71,118.08,130.83,119.34,196.47,101.45,241.22,89.17,284.14,70.52,321.39,56.44Z" class="shape-fill"></path>
+            </svg>
+        </div>
+    </section>
 
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h4 class="card-title">Plan Your Rotation</h4>
+    <!-- About Section -->
+    <section id="principles" class="cr-about">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Collage -->
+                <div class="col-lg-6 mb-5 mb-lg-0">
+                    <div class="cr-collage">
+                        <img src="{{ url_for('static', filename='images/crop_rotation/collage_1.png') }}" alt="Farmer" class="img-arched cr-collage-1">
+                        <img src="{{ url_for('static', filename='images/crop_rotation/collage_2.png') }}" alt="Planting" class="img-arched cr-collage-2">
+                        <img src="{{ url_for('static', filename='images/crop_rotation/collage_3.png') }}" alt="Harvesting" class="img-arched cr-collage-3">
+                    </div>
+                </div>
+                
+                <!-- Content -->
+                <div class="col-lg-6">
+                    <div class="cr-about-content">
+                        <span class="cr-section-subtitle">About Crop Rotation</span>
+                        <h2>We'll Help You Create The Perfect Rotation Plan</h2>
+                        <p>Backed by decades of hands-on agricultural research, our scientific rotation models combine traditional knowledge with modern data. We deliver personalized planting sequences that naturally enhance soil fertility and break pest cycles.</p>
+                        
+                        <div class="cr-check-list">
+                            <div class="cr-check-item">
+                                <i class="fas fa-check-circle"></i> Nutrient Management
+                            </div>
+                            <div class="cr-check-item">
+                                <i class="fas fa-check-circle"></i> Natural Pest Control
+                            </div>
+                            <div class="cr-check-item">
+                                <i class="fas fa-check-circle"></i> Soil Health Improvement
+                            </div>
+                            <div class="cr-check-item">
+                                <i class="fas fa-check-circle"></i> Yield Maximization
+                            </div>
+                            <div class="cr-check-item">
+                                <i class="fas fa-check-circle"></i> Disease Cycle Breaking
+                            </div>
+                            <div class="cr-check-item">
+                                <i class="fas fa-check-circle"></i> Weed Suppression
+                            </div>
+                        </div>
+                        
+                        <button class="btn-cr-primary">Learn More Principles</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Planner Section (Dark Background) -->
+    <section id="planner" class="cr-planner">
+        <div class="container">
+            <span class="cr-section-subtitle text-white">Rotation Planner</span>
+            <h2>Generate Your Scientific Schedule</h2>
+        </div>
+    </section>
+
+    <!-- Overlapping Form / Results Container -->
+    <div class="container cr-form-wrapper">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- The Form Card -->
+                <div class="cr-card" id="formCard">
                     <form id="rotationForm">
-                        <div class="mb-3">
-                            <label for="farmLocation" class="form-label">Farm Location</label>
-                            <select class="form-select" id="farmLocation" required>
-                                <option value="" selected disabled>Select your location</option>
-                                <option value="north">Northern Region</option>
-                                <option value="south">Southern Region</option>
-                                <option value="east">Eastern Region</option>
-                                <option value="west">Western Region</option>
-                                <option value="central">Central Region</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="soilType" class="form-label">Soil Type</label>
-                            <select class="form-select" id="soilType" required>
-                                <option value="" selected disabled>Select soil type</option>
-                                <option value="clay">Clay Soil</option>
-                                <option value="sandy">Sandy Soil</option>
-                                <option value="loamy">Loamy Soil</option>
-                                <option value="silty">Silty Soil</option>
-                                <option value="peaty">Peaty Soil</option>
-                                <option value="chalky">Chalky Soil</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="farmSize" class="form-label">Farm Size (acres)</label>
-                            <input type="number" class="form-control" id="farmSize" min="0.1" step="0.1" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="previousCrop" class="form-label">Previous Crop</label>
-                            <select class="form-select" id="previousCrop" required>
-                                <option value="" selected disabled>Select previous crop</option>
-                                <option value="rice">Rice</option>
-                                <option value="wheat">Wheat</option>
-                                <option value="maize">Maize</option>
-                                <option value="cotton">Cotton</option>
-                                <option value="sugarcane">Sugarcane</option>
-                                <option value="pulses">Pulses</option>
-                                <option value="vegetables">Vegetables</option>
-                                <option value="none">First Planting (No Previous Crop)</option>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Farming Goals (Select all that apply)</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="soilHealth" id="soilHealth">
-                                <label class="form-check-label" for="soilHealth">Improve Soil Health</label>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <label for="farmLocation" class="cr-form-label">Farm Location</label>
+                                <select class="form-select cr-form-control" id="farmLocation" required>
+                                    <option value="" selected disabled>Select your region</option>
+                                    <option value="north">Northern Region</option>
+                                    <option value="south">Southern Region</option>
+                                    <option value="east">Eastern Region</option>
+                                    <option value="west">Western Region</option>
+                                    <option value="central">Central Region</option>
+                                </select>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="pestControl" id="pestControl">
-                                <label class="form-check-label" for="pestControl">Natural Pest Control</label>
+                            <div class="col-md-6">
+                                <label for="soilType" class="cr-form-label">Soil Type</label>
+                                <select class="form-select cr-form-control" id="soilType" required>
+                                    <option value="" selected disabled>Select soil composition</option>
+                                    <option value="clay">Clay Soil</option>
+                                    <option value="sandy">Sandy Soil</option>
+                                    <option value="loamy">Loamy Soil</option>
+                                    <option value="silty">Silty Soil</option>
+                                </select>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="yieldMax" id="yieldMax">
-                                <label class="form-check-label" for="yieldMax">Maximize Yield</label>
+                            <div class="col-md-6">
+                                <label for="previousCrop" class="cr-form-label">Most Recent Crop</label>
+                                <select class="form-select cr-form-control" id="previousCrop" required>
+                                    <option value="" selected disabled>Select previous planting</option>
+                                    <option value="rice">Rice (Cereal)</option>
+                                    <option value="wheat">Wheat (Cereal)</option>
+                                    <option value="maize">Maize (Cereal)</option>
+                                    <option value="cotton">Cotton (Fiber)</option>
+                                    <option value="sugarcane">Sugarcane</option>
+                                    <option value="pulses">Pulses (Legume)</option>
+                                    <option value="vegetables">Vegetables</option>
+                                    <option value="none">Fallow / First Planting</option>
+                                </select>
                             </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="organic" id="organic">
-                                <label class="form-check-label" for="organic">Organic Farming</label>
+                            <div class="col-md-6">
+                                <label for="farmSize" class="cr-form-label">Farm Size (acres)</label>
+                                <input type="number" class="form-control cr-form-control" id="farmSize" min="0.1" step="0.1" placeholder="e.g. 5.5" required>
+                            </div>
+                            
+                            <div class="col-12 mt-4">
+                                <label class="cr-form-label mb-3">Primary Farming Goals</label>
+                                <div class="row cr-checkbox-group">
+                                    <div class="col-md-3 col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="soilHealth" id="soilHealth">
+                                            <label class="form-check-label" for="soilHealth">Improve Soil Health</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="pestControl" id="pestControl">
+                                            <label class="form-check-label" for="pestControl">Pest Control</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="yieldMax" id="yieldMax">
+                                            <label class="form-check-label" for="yieldMax">Maximize Yield</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 col-6">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" value="organic" id="organic">
+                                            <label class="form-check-label" for="organic">Organic Farming</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-12 mt-4 text-center">
+                                <button type="submit" class="btn-cr-primary px-5 py-3 fs-5 w-100">Generate Rotation Plan</button>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-success">Generate Rotation Plan</button>
                     </form>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h4 class="card-title">Benefits of Crop Rotation</h4>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Improves soil structure and fertility</li>
-                        <li class="list-group-item">Reduces pest and disease pressure</li>
-                        <li class="list-group-item">Prevents soil erosion and nutrient depletion</li>
-                        <li class="list-group-item">Increases biodiversity and ecosystem health</li>
-                        <li class="list-group-item">Optimizes water and nutrient use efficiency</li>
-                        <li class="list-group-item">Reduces dependency on chemical fertilizers</li>
-                    </ul>
+
+                <!-- The Results Card -->
+                <div class="cr-results-card" id="resultsCard">
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <h3 class="mb-0 text-success">Personalized Rotation Plan</h3>
+                        <button class="btn btn-sm btn-outline-secondary" onclick="resetForm()">Edit Setup</button>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-7">
+                            <h5 class="cr-form-label">Annual Planting Sequence</h5>
+                            <div class="rotation-timeline" id="rotationTimeline">
+                                <!-- Timeline items injected via JS -->
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="bg-light p-4 rounded-4 h-100">
+                                <h5 class="cr-form-label text-primary">Strategic Benefits</h5>
+                                <ul id="rotationBenefits" class="mb-4 ps-3" style="font-size: 0.95rem; color: var(--cr-text-gray);">
+                                    <!-- Benefits injected via JS -->
+                                </ul>
+                                
+                                <h5 class="cr-form-label text-primary">Implementation Tips</h5>
+                                <div id="implementationTips" style="font-size: 0.95rem; color: var(--cr-text-gray);">
+                                    <!-- Tips injected via JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                
             </div>
         </div>
     </div>
 
-    <div class="row mb-4" id="rotationPlanSection" style="display: none;">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h4 class="card-title">Your Personalized Rotation Plan</h4>
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead class="table-success">
-                                <tr>
-                                    <th>Season</th>
-                                    <th>Year 1</th>
-                                    <th>Year 2</th>
-                                    <th>Year 3</th>
-                                </tr>
-                            </thead>
-                            <tbody id="rotationTable">
-                                <!-- Rotation plan will be inserted here -->
-                            </tbody>
-                        </table>
+    <!-- Bottom Features Section -->
+    <section class="cr-features-section">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Content -->
+                <div class="col-lg-5 mb-5 mb-lg-0 order-2 order-lg-1">
+                    <span class="cr-section-subtitle">Farming Features</span>
+                    <h2>We Want To Help You Grow Better</h2>
+                    <p class="mb-4 text-muted">We tailor every rotation service to fit your unique soil composition and regional climate—no one-size-fits-all approach here. Every generated plan is an opportunity to build lasting soil resilience through scientific crop cycling.</p>
+                    
+                    <div class="row mb-4 g-3 font-monospace small" style="font-family: 'Poppins', sans-serif !important;">
+                        <div class="col-6">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="fas fa-check-circle text-success"></i> <strong>Scientific Models</strong>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-check-circle text-success"></i> <strong>Adapt To Soil</strong>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="d-flex align-items-center gap-2 mb-2">
+                                <i class="fas fa-check-circle text-success"></i> <strong>Data-Driven Growth</strong>
+                            </div>
+                            <div class="d-flex align-items-center gap-2">
+                                <i class="fas fa-check-circle text-success"></i> <strong>Sustainable Yields</strong>
+                            </div>
+                        </div>
                     </div>
                     
-                    <h5 class="mt-4">Rotation Benefits</h5>
-                    <ul id="rotationBenefits">
-                        <!-- Benefits will be inserted here -->
-                    </ul>
-                    
-                    <h5 class="mt-4">Implementation Tips</h5>
-                    <div id="implementationTips">
-                        <!-- Tips will be inserted here -->
+                    <button class="btn-cr-primary">Start A Project</button>
+                </div>
+                
+                <!-- Image -->
+                <div class="col-lg-6 offset-lg-1 order-1 order-lg-2 mb-5 mb-lg-0">
+                    <div class="feature-img-wrapper">
+                        <img src="{{ url_for('static', filename='images/crop_rotation/feature.png') }}" alt="Garden Care" class="feature-img-arched">
+                        <div class="play-btn-overlay">
+                            <i class="fas fa-play" style="margin-left: 5px;"></i>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <div class="row">
-        <div class="col-12">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h4 class="card-title">Crop Rotation Principles</h4>
-                    <div class="accordion" id="rotationPrinciples">
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingOne">
-                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                    Crop Family Rotation
-                                </button>
-                            </h2>
-                            <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#rotationPrinciples">
-                                <div class="accordion-body">
-                                    <p>Rotate crops from different plant families to break pest and disease cycles. For example, follow a legume (beans, peas) with a leaf crop (lettuce, spinach), then a fruit crop (tomatoes, peppers), and finally a root crop (carrots, onions).</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingTwo">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                    Nutrient Management
-                                </button>
-                            </h2>
-                            <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#rotationPrinciples">
-                                <div class="accordion-body">
-                                    <p>Follow heavy feeders (corn, cabbage) with light feeders (root vegetables), then soil builders (legumes). This helps maintain soil fertility and reduces the need for external inputs.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="headingThree">
-                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                    Cover Crops and Green Manures
-                                </button>
-                            </h2>
-                            <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#rotationPrinciples">
-                                <div class="accordion-body">
-                                    <p>Incorporate cover crops like clover, vetch, or rye into your rotation to improve soil structure, add organic matter, and fix nitrogen. These can be planted during fallow periods or as part of a planned rotation.</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
+{% endblock %}
 
+{% block extra_js %}
 <script>
     document.getElementById('rotationForm').addEventListener('submit', function(e) {
         e.preventDefault();
         
-        // Show the rotation plan section
-        document.getElementById('rotationPlanSection').style.display = 'block';
+        // Hide form, show results
+        document.getElementById('formCard').style.display = 'none';
+        const resultsCard = document.getElementById('resultsCard');
+        resultsCard.style.display = 'block';
         
         // Get form values
         const location = document.getElementById('farmLocation').value;
         const soilType = document.getElementById('soilType').value;
         const previousCrop = document.getElementById('previousCrop').value;
         
-        // Sample rotation plan - in a real app, this would be generated based on the inputs
-        let rotationHTML = '';
+        let timelineHTML = '';
         
         if (previousCrop === 'rice') {
-            rotationHTML = `
-                <tr>
-                    <td>Kharif (Monsoon)</td>
-                    <td>Pulses (Moong/Urad)</td>
-                    <td>Cotton</td>
-                    <td>Rice</td>
-                </tr>
-                <tr>
-                    <td>Rabi (Winter)</td>
-                    <td>Wheat</td>
-                    <td>Mustard</td>
-                    <td>Vegetables</td>
-                </tr>
-                <tr>
-                    <td>Zaid (Summer)</td>
-                    <td>Green Manure</td>
-                    <td>Moong Bean</td>
-                    <td>Fallow</td>
-                </tr>
+            timelineHTML = `
+                <div class="timeline-item">
+                    <div class="timeline-season">Kharif (Monsoon)</div>
+                    <div class="timeline-crops">
+                        <span class="crop-badge"><i class="fas fa-seedling"></i> Pulses (Moong/Urad)</span>
+                        <span class="crop-badge"><i class="fas fa-leaf"></i> Cotton</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-season">Rabi (Winter)</div>
+                    <div class="timeline-crops">
+                        <span class="crop-badge"><i class="fas fa-spa"></i> Wheat</span>
+                        <span class="crop-badge"><i class="fas fa-carrot"></i> Vegetables</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-season">Zaid (Summer)</div>
+                    <div class="timeline-crops">
+                        <span class="crop-badge"><i class="fas fa-tree"></i> Green Manure</span>
+                    </div>
+                </div>
             `;
         } else if (previousCrop === 'wheat') {
-            rotationHTML = `
-                <tr>
-                    <td>Kharif (Monsoon)</td>
-                    <td>Maize</td>
-                    <td>Soybean</td>
-                    <td>Rice</td>
-                </tr>
-                <tr>
-                    <td>Rabi (Winter)</td>
-                    <td>Vegetables</td>
-                    <td>Wheat</td>
-                    <td>Gram</td>
-                </tr>
-                <tr>
-                    <td>Zaid (Summer)</td>
-                    <td>Moong Bean</td>
-                    <td>Fallow</td>
-                    <td>Green Manure</td>
-                </tr>
+            timelineHTML = `
+                <div class="timeline-item">
+                    <div class="timeline-season">Kharif (Monsoon)</div>
+                    <div class="timeline-crops">
+                        <span class="crop-badge"><i class="fas fa-seedling"></i> Maize</span>
+                        <span class="crop-badge"><i class="fas fa-leaf"></i> Soybean</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-season">Rabi (Winter)</div>
+                    <div class="timeline-crops">
+                        <span class="crop-badge"><i class="fas fa-carrot"></i> Vegetables</span>
+                        <span class="crop-badge"><i class="fas fa-spa"></i> Gram</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-season">Zaid (Summer)</div>
+                    <div class="timeline-crops">
+                        <span class="crop-badge"><i class="fas fa-tree"></i> Moong Bean</span>
+                    </div>
+                </div>
             `;
         } else {
-            rotationHTML = `
-                <tr>
-                    <td>Kharif (Monsoon)</td>
-                    <td>Maize</td>
-                    <td>Rice</td>
-                    <td>Cotton</td>
-                </tr>
-                <tr>
-                    <td>Rabi (Winter)</td>
-                    <td>Wheat</td>
-                    <td>Pulses</td>
-                    <td>Vegetables</td>
-                </tr>
-                <tr>
-                    <td>Zaid (Summer)</td>
-                    <td>Green Manure</td>
-                    <td>Moong Bean</td>
-                    <td>Fallow</td>
-                </tr>
+            timelineHTML = `
+                <div class="timeline-item">
+                    <div class="timeline-season">Kharif (Monsoon)</div>
+                    <div class="timeline-crops">
+                        <span class="crop-badge"><i class="fas fa-seedling"></i> Maize</span>
+                        <span class="crop-badge"><i class="fas fa-leaf"></i> Rice</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-season">Rabi (Winter)</div>
+                    <div class="timeline-crops">
+                        <span class="crop-badge"><i class="fas fa-spa"></i> Wheat</span>
+                        <span class="crop-badge"><i class="fas fa-carrot"></i> Pulses</span>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-season">Zaid (Summer)</div>
+                    <div class="timeline-crops">
+                        <span class="crop-badge"><i class="fas fa-tree"></i> Green Manure</span>
+                    </div>
+                </div>
             `;
         }
         
-        document.getElementById('rotationTable').innerHTML = rotationHTML;
+        document.getElementById('rotationTimeline').innerHTML = timelineHTML;
         
         // Sample benefits
         document.getElementById('rotationBenefits').innerHTML = `
-            <li>Improved soil fertility through nitrogen fixation from pulses</li>
-            <li>Reduced pest pressure by breaking pest cycles</li>
-            <li>Enhanced water use efficiency across seasons</li>
-            <li>Diversified income sources throughout the year</li>
+            <li class="mb-2">Improved soil fertility through nitrogen fixation from pulses</li>
+            <li class="mb-2">Reduced pest pressure by breaking pest cycles</li>
+            <li class="mb-2">Enhanced water use efficiency across seasons</li>
             <li>Reduced fertilizer requirements by 20-30%</li>
         `;
         
         // Sample implementation tips
         document.getElementById('implementationTips').innerHTML = `
-            <p>For your ${soilType} soil in the ${location} region, consider these implementation tips:</p>
-            <ul>
-                <li>Prepare your soil 2-3 weeks before sowing each crop</li>
-                <li>Apply organic compost during land preparation</li>
+            <p class="mb-2">For your <strong>${soilType}</strong> soil in the <strong>${location}</strong> region, consider these implementation tips:</p>
+            <ul class="ps-3 mb-0">
+                <li class="mb-1">Prepare your soil 2-3 weeks before sowing each crop</li>
+                <li class="mb-1">Apply organic compost during land preparation</li>
                 <li>Monitor soil moisture levels regularly</li>
-                <li>Consider intercropping compatible plants for better land utilization</li>
-                <li>Maintain detailed records of each crop's performance for future planning</li>
             </ul>
         `;
         
-        // Scroll to the rotation plan
-        document.getElementById('rotationPlanSection').scrollIntoView({behavior: 'smooth'});
+        // Scroll to the results
+        resultsCard.scrollIntoView({behavior: 'smooth', block: 'center'});
     });
+
+    function resetForm() {
+        document.getElementById('resultsCard').style.display = 'none';
+        document.getElementById('formCard').style.display = 'block';
+    }
 </script>
 {% endblock %}
