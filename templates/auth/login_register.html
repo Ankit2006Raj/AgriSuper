@@ -1,49 +1,170 @@
 {% extends "base.html" %}
 
-{% block title %}Login & Registration - AgriSuper{% endblock %}
+{% block title %}Login & Registration - AgriSuper | Your Agriculture Platform{% endblock %}
 
 {% block extra_css %}
 <link href="{{ url_for('static', filename='css/auth.css') }}" rel="stylesheet">
+<style>
+    .auth-sidebar {
+        background: linear-gradient(135deg, #0e3829 0%, #1b4d3e 100%);
+        position: relative;
+        overflow: hidden;
+    }
+    .auth-sidebar::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        right: -50%;
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(198,156,89,0.15) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+    .auth-sidebar::after {
+        content: '';
+        position: absolute;
+        bottom: -30%;
+        left: -30%;
+        width: 80%;
+        height: 80%;
+        background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+        border-radius: 50%;
+    }
+    .auth-feature-item {
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.08);
+        transition: transform 0.3s ease;
+    }
+    .auth-feature-item:hover {
+        transform: translateX(5px);
+    }
+    .auth-feature-item:last-child {
+        border-bottom: none;
+    }
+    .auth-feature-icon {
+        width: 44px;
+        height: 44px;
+        background: rgba(198,156,89,0.15);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .auth-feature-icon i {
+        color: #c69c59;
+        font-size: 1.1rem;
+    }
+    .nav-tabs .nav-link {
+        border: none;
+        color: #666;
+        font-weight: 600;
+        padding: 12px 24px;
+        border-bottom: 3px solid transparent;
+        transition: all 0.3s ease;
+    }
+    .nav-tabs .nav-link.active {
+        color: #0e3829;
+        border-bottom-color: #c69c59;
+        background: transparent;
+    }
+    .nav-tabs .nav-link:hover:not(.active) {
+        color: #0e3829;
+        border-bottom-color: rgba(198,156,89,0.3);
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #0e3829;
+        box-shadow: 0 0 0 0.2rem rgba(14,56,41,0.15);
+    }
+    .input-group-text {
+        background: #f8f9fa;
+        border-color: #dee2e6;
+    }
+    .password-strength-progress {
+        height: 5px;
+        border-radius: 3px;
+    }
+    .divider-text {
+        position: relative;
+        display: inline-block;
+        z-index: 1;
+        font-size: 0.85rem;
+        color: #999;
+    }
+    .divider-text:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: -60px;
+        right: -60px;
+        height: 1px;
+        background-color: #dee2e6;
+        z-index: -1;
+    }
+    .auth-card {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 20px 60px rgba(14,56,41,0.08);
+    }
+</style>
 {% endblock %}
 
 {% block content %}
 <div class="container py-5">
     <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card shadow border-0 overflow-hidden">
+        <div class="col-lg-10 col-xl-10">
+            <div class="card auth-card border-0">
                 <div class="row g-0">
-                    <!-- Left Side - Image/Info -->
-                    <div class="col-lg-5 d-none d-lg-block bg-success text-white">
-                        <div class="d-flex flex-column h-100 p-4">
+                    <!-- Left Side - Branded Info Panel -->
+                    <div class="col-lg-5 d-none d-lg-block auth-sidebar text-white">
+                        <div class="d-flex flex-column h-100 p-4 position-relative" style="z-index: 1;">
                             <div class="text-center mb-4 mt-5">
-                                <img src="{{ url_for('static', filename='img/logo-white.png') }}" alt="AgriSuper Logo" class="img-fluid mb-3 auth-logo">
-                                <h3 class="fw-bold">Welcome to AgriSuper</h3>
-                                <p class="lead">Your complete agriculture management solution</p>
+                                <div class="mb-3">
+                                    <i class="fas fa-seedling" style="font-size: 3rem; color: #c69c59;"></i>
+                                </div>
+                                <h3 class="fw-bold mb-2">Welcome to AgriSuper</h3>
+                                <p class="mb-0" style="color: rgba(255,255,255,0.7); font-size: 0.95rem;">India's leading digital agriculture ecosystem</p>
                             </div>
-                            <div class="mt-auto mb-5">
-                                <div class="mb-4">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <i class="fas fa-chart-line fa-2x me-3"></i>
-                                        <div>
-                                            <h5 class="mb-0">Data-Driven Farming</h5>
-                                            <p class="mb-0 small">Make informed decisions with real-time insights</p>
-                                        </div>
+                            <div class="mt-auto mb-4">
+                                <div class="auth-feature-item d-flex align-items-center gap-3">
+                                    <div class="auth-feature-icon">
+                                        <i class="fas fa-chart-line"></i>
                                     </div>
-                                    <div class="d-flex align-items-center mb-3">
-                                        <i class="fas fa-mobile-alt fa-2x me-3"></i>
-                                        <div>
-                                            <h5 class="mb-0">Farm Management</h5>
-                                            <p class="mb-0 small">Track crops, equipment, and finances in one place</p>
-                                        </div>
-                                    </div>
-                                    <div class="d-flex align-items-center">
-                                        <i class="fas fa-users fa-2x me-3"></i>
-                                        <div>
-                                            <h5 class="mb-0">Community Support</h5>
-                                            <p class="mb-0 small">Connect with experts and fellow farmers</p>
-                                        </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">AI-Driven Insights</h6>
+                                        <p class="mb-0 small" style="color: rgba(255,255,255,0.6);">Real-time crop predictions & market analysis</p>
                                     </div>
                                 </div>
+                                <div class="auth-feature-item d-flex align-items-center gap-3">
+                                    <div class="auth-feature-icon">
+                                        <i class="fas fa-rupee-sign"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">Live Mandi Prices</h6>
+                                        <p class="mb-0 small" style="color: rgba(255,255,255,0.6);">3000+ mandis tracked across India</p>
+                                    </div>
+                                </div>
+                                <div class="auth-feature-item d-flex align-items-center gap-3">
+                                    <div class="auth-feature-icon">
+                                        <i class="fas fa-users"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">Community Support</h6>
+                                        <p class="mb-0 small" style="color: rgba(255,255,255,0.6);">Connect with experts & fellow farmers</p>
+                                    </div>
+                                </div>
+                                <div class="auth-feature-item d-flex align-items-center gap-3">
+                                    <div class="auth-feature-icon">
+                                        <i class="fas fa-shield-alt"></i>
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0 fw-bold">Secure & Trusted</h6>
+                                        <p class="mb-0 small" style="color: rgba(255,255,255,0.6);">Bank-grade security for all transactions</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-center" style="color: rgba(255,255,255,0.4); font-size: 0.8rem;">
+                                <p class="mb-0">🌾 Empowering 10,00,000+ farmers across India</p>
                             </div>
                         </div>
                     </div>
@@ -54,12 +175,12 @@
                             <!-- Auth Tabs -->
                             <ul class="nav nav-tabs nav-fill mb-4" id="authTabs" role="tablist">
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link active" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="true">
+                                    <button class="nav-link {% if active_tab != 'register' %}active{% endif %}" id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login" aria-selected="{{ 'true' if active_tab != 'register' else 'false' }}">
                                         <i class="fas fa-sign-in-alt me-2"></i>Login
                                     </button>
                                 </li>
                                 <li class="nav-item" role="presentation">
-                                    <button class="nav-link" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab" aria-controls="register" aria-selected="false">
+                                    <button class="nav-link {% if active_tab == 'register' %}active{% endif %}" id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab" aria-controls="register" aria-selected="{{ 'true' if active_tab == 'register' else 'false' }}">
                                         <i class="fas fa-user-plus me-2"></i>Register
                                     </button>
                                 </li>
@@ -67,166 +188,163 @@
                             
                             <!-- Tab Content -->
                             <div class="tab-content" id="authTabsContent">
-                                <!-- Login Tab -->
-                                <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
-                                    <h4 class="fw-bold mb-4">Login to Your Account</h4>
-                                    
-                                    <!-- Social Login Buttons -->
-                                    <div class="d-grid gap-2 mb-4">
-                                        <button class="btn btn-outline-primary">
-                                            <i class="fab fa-google me-2"></i>Continue with Google
-                                        </button>
-                                        <button class="btn btn-outline-primary">
-                                            <i class="fab fa-facebook-f me-2"></i>Continue with Facebook
-                                        </button>
-                                    </div>
-                                    
-                                    <div class="text-center mb-4">
-                                        <span class="divider-text bg-white px-3">OR</span>
-                                    </div>
+                                <!-- ========== LOGIN TAB ========== -->
+                                <div class="tab-pane fade {% if active_tab != 'register' %}show active{% endif %}" id="login" role="tabpanel" aria-labelledby="login-tab">
+                                    <h4 class="fw-bold mb-1">Login to Your Account</h4>
+                                    <p class="text-muted mb-4" style="font-size: 0.9rem;">Enter your credentials to access your dashboard</p>
                                     
                                     <!-- Login Form -->
                                     <form id="loginForm" method="POST" action="{{ url_for('login') }}">
                                         {% if login_error %}
-                                        <div class="alert alert-danger" role="alert">
+                                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                            <i class="fas fa-exclamation-circle me-2"></i>
                                             {{ login_error }}
                                         </div>
                                         {% endif %}
                                         
                                         <div class="mb-3">
-                                            <label for="loginEmail" class="form-label">Email Address</label>
+                                            <label for="loginEmail" class="form-label fw-semibold">Email Address</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                                <input type="email" class="form-control" id="loginEmail" name="email" required>
+                                                <input type="email" class="form-control" id="loginEmail" name="email" placeholder="you@example.com" required autocomplete="email">
                                             </div>
                                         </div>
                                         <div class="mb-3">
-                                            <label for="loginPassword" class="form-label">Password</label>
+                                            <label for="loginPassword" class="form-label fw-semibold">Password</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                                <input type="password" class="form-control" id="loginPassword" name="password" required>
+                                                <input type="password" class="form-control" id="loginPassword" name="password" placeholder="Enter your password" required autocomplete="current-password">
                                                 <button type="button" class="btn btn-outline-secondary toggle-password" title="Toggle password visibility" aria-label="Toggle password visibility">
                                                     <i class="fas fa-eye" aria-hidden="true"></i>
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="mb-3 d-flex justify-content-between align-items-center">
+                                        <div class="mb-4 d-flex justify-content-between align-items-center">
                                             <div class="form-check">
                                                 <input type="checkbox" class="form-check-input" id="rememberMe" name="remember">
                                                 <label class="form-check-label" for="rememberMe">Remember me</label>
                                             </div>
-                                            <a href="#" class="text-decoration-none small" data-bs-toggle="modal" data-bs-target="#forgotPasswordModal">Forgot Password?</a>
+                                            <a href="{{ url_for('forgot_password') }}" class="text-decoration-none small fw-semibold" style="color: #0e3829;">Forgot Password?</a>
                                         </div>
                                         
                                         <div class="d-grid">
-                                            <button type="submit" name="login" value="login" class="btn btn-success btn-lg">Login</button>
+                                            <button type="submit" class="btn btn-success btn-lg fw-bold">
+                                                <i class="fas fa-sign-in-alt me-2"></i>Login
+                                            </button>
                                         </div>
                                     </form>
+                                    
+                                    <div class="text-center mt-4">
+                                        <span class="text-muted">Don't have an account?</span>
+                                        <a href="#" class="fw-bold text-decoration-none ms-1" style="color: #0e3829;" onclick="document.getElementById('register-tab').click(); return false;">Create one now</a>
+                                    </div>
                                 </div>
                                 
-                                <!-- Register Tab -->
-                                <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
-                                    <h4 class="fw-bold mb-4">Create New Account</h4>
-                                    
-                                    <!-- Social Register Buttons -->
-                                    <div class="d-grid gap-2 mb-4">
-                                        <button class="btn btn-outline-primary">
-                                            <i class="fab fa-google me-2"></i>Register with Google
-                                        </button>
-                                        <button class="btn btn-outline-primary">
-                                            <i class="fab fa-facebook-f me-2"></i>Register with Facebook
-                                        </button>
-                                    </div>
-                                    
-                                    <div class="text-center mb-4">
-                                        <span class="divider-text bg-white px-3">OR</span>
-                                    </div>
+                                <!-- ========== REGISTER TAB ========== -->
+                                <div class="tab-pane fade {% if active_tab == 'register' %}show active{% endif %}" id="register" role="tabpanel" aria-labelledby="register-tab">
+                                    <h4 class="fw-bold mb-1">Create Your Account</h4>
+                                    <p class="text-muted mb-4" style="font-size: 0.9rem;">Join thousands of farmers on AgriSuper</p>
                                     
                                     <!-- Register Form -->
-                                    <form id="registerForm" method="POST" action="{{ url_for('login') }}">
-                                        {% if register_success %}
-                                        <div class="alert alert-success" role="alert">
-                                            {{ register_success }}
-                                        </div>
-                                        {% endif %}
-                                        
+                                    <form id="registerForm" method="POST" action="{{ url_for('register') }}">
                                         {% if register_error %}
-                                        <div class="alert alert-danger" role="alert">
+                                        <div class="alert alert-danger d-flex align-items-center" role="alert">
+                                            <i class="fas fa-exclamation-circle me-2"></i>
                                             {{ register_error }}
                                         </div>
                                         {% endif %}
                                         
-                                        <div class="mb-3">
-                                            <label for="reg_full_name" class="form-label">Full Name</label>
-                                            <input type="text" class="form-control" id="reg_full_name" name="reg_full_name" placeholder="Enter your full name" required>
-                                        </div>
-                                        
-                                        <div class="mb-3">
-                                            <label for="reg_username" class="form-label">Username</label>
-                                            <div class="input-group">
-                                                <span class="input-group-text"><i class="fas fa-user"></i></span>
-                                                <input type="text" class="form-control" id="reg_username" name="reg_username" placeholder="Choose a username" required>
+                                        <!-- Name Fields -->
+                                        <div class="row mb-3">
+                                            <div class="col-6">
+                                                <label for="reg_first_name" class="form-label fw-semibold">First Name</label>
+                                                <input type="text" class="form-control" id="reg_first_name" name="first_name" placeholder="First name" required>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="reg_last_name" class="form-label fw-semibold">Last Name</label>
+                                                <input type="text" class="form-control" id="reg_last_name" name="last_name" placeholder="Last name" required>
                                             </div>
                                         </div>
                                         
+                                        <!-- Phone -->
                                         <div class="mb-3">
-                                            <label for="reg_email" class="form-label">Email Address</label>
+                                            <label for="reg_phone" class="form-label fw-semibold">Phone Number</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                                <input type="tel" class="form-control" id="reg_phone" name="phone" placeholder="10-digit mobile number" pattern="[0-9]{10}" maxlength="10" required>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Email -->
+                                        <div class="mb-3">
+                                            <label for="reg_email" class="form-label fw-semibold">Email Address</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                                                <input type="email" class="form-control" id="reg_email" name="reg_email" placeholder="Enter your email" required>
+                                                <input type="email" class="form-control" id="reg_email" name="email" placeholder="you@example.com" required autocomplete="email">
                                             </div>
                                         </div>
                                         
+                                        <!-- Password -->
                                         <div class="mb-3">
-                                            <label for="reg_password" class="form-label">Password</label>
+                                            <label for="reg_password" class="form-label fw-semibold">Password</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                                <input type="password" class="form-control" id="reg_password" name="reg_password" placeholder="Create a password" required>
+                                                <input type="password" class="form-control" id="reg_password" name="password" placeholder="Minimum 8 characters" minlength="8" required autocomplete="new-password">
                                                 <button class="btn btn-outline-secondary toggle-password" type="button" aria-label="Toggle password visibility">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
                                             </div>
-                                            <div class="password-strength mt-1">
+                                            <div class="password-strength mt-2">
                                                 <div class="progress password-strength-progress">
-                                                    <div class="progress-bar bg-danger" role="progressbar" aria-label="Password strength indicator" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                                                    <div class="progress-bar" role="progressbar" id="strengthBar" aria-label="Password strength indicator" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
                                                 </div>
-                                                <small class="text-muted">Password strength: <span id="password-strength-text">Weak</span></small>
+                                                <small class="text-muted">Strength: <span id="password-strength-text" class="fw-semibold">—</span></small>
                                             </div>
                                         </div>
                                         
+                                        <!-- Confirm Password -->
                                         <div class="mb-3">
-                                            <label for="reg_confirm_password" class="form-label">Confirm Password</label>
+                                            <label for="reg_confirm_password" class="form-label fw-semibold">Confirm Password</label>
                                             <div class="input-group">
                                                 <span class="input-group-text"><i class="fas fa-lock"></i></span>
-                                                <input type="password" class="form-control" id="reg_confirm_password" name="reg_confirm_password" placeholder="Confirm your password" required>
+                                                <input type="password" class="form-control" id="reg_confirm_password" name="confirm_password" placeholder="Re-enter your password" minlength="8" required autocomplete="new-password">
                                                 <button class="btn btn-outline-secondary toggle-password" type="button" aria-label="Toggle confirm password visibility">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
                                             </div>
+                                            <small class="text-muted" id="passwordMatchMsg"></small>
                                         </div>
                                         
+                                        <!-- Role Selection -->
                                         <div class="mb-3">
-                                            <label for="reg_user_type" class="form-label">I am a</label>
-                                            <select class="form-select" id="reg_user_type" name="reg_user_type" required>
-                                                <option value="" selected>Select user type</option>
-                                                <option value="farmer">Farmer</option>
-                                                <option value="buyer">Buyer/Trader</option>
+                                            <label for="reg_role" class="form-label fw-semibold">I am a</label>
+                                            <select class="form-select" id="reg_role" name="role" required>
+                                                <option value="farmer" selected>Farmer</option>
+                                                <option value="buyer">Buyer / Trader</option>
                                                 <option value="supplier">Input Supplier</option>
                                                 <option value="expert">Agriculture Expert</option>
                                             </select>
                                         </div>
                                         
+                                        <!-- Terms -->
                                         <div class="mb-4 form-check">
                                             <input type="checkbox" class="form-check-input" id="termsCheck" name="terms" required>
                                             <label class="form-check-label" for="termsCheck">
-                                                I agree to the <a href="#" class="text-decoration-none">Terms of Service</a> and <a href="#" class="text-decoration-none">Privacy Policy</a>
+                                                I agree to the <a href="#" class="text-decoration-none fw-semibold" style="color: #0e3829;">Terms of Service</a> and <a href="#" class="text-decoration-none fw-semibold" style="color: #0e3829;">Privacy Policy</a>
                                             </label>
                                         </div>
                                         
                                         <div class="d-grid">
-                                            <button type="submit" class="btn btn-success btn-lg" name="register" value="register">Create Account</button>
+                                            <button type="submit" class="btn btn-success btn-lg fw-bold" id="registerBtn">
+                                                <i class="fas fa-user-plus me-2"></i>Create Account
+                                            </button>
                                         </div>
                                     </form>
+                                    
+                                    <div class="text-center mt-4">
+                                        <span class="text-muted">Already have an account?</span>
+                                        <a href="#" class="fw-bold text-decoration-none ms-1" style="color: #0e3829;" onclick="document.getElementById('login-tab').click(); return false;">Login here</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -236,63 +354,9 @@
         </div>
     </div>
 </div>
+{% endblock %}
 
-<!-- Forgot Password Modal -->
-<div class="modal fade" id="forgotPasswordModal" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header bg-light">
-                <h5 class="modal-title" id="forgotPasswordModalLabel"><i class="fas fa-key me-2"></i>Reset Password</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <p class="text-muted mb-4">Enter your email address and we'll send you a link to reset your password.</p>
-                <form id="forgotPasswordForm">
-                    <div class="mb-3">
-                        <label for="resetEmail" class="form-label">Email Address</label>
-                        <div class="input-group">
-                            <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-                            <input type="email" class="form-control" id="resetEmail" name="email" placeholder="Enter your email" required>
-                        </div>
-                    </div>
-                    <div class="d-grid">
-                        <button type="submit" class="btn btn-success">Send Reset Link</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Custom CSS -->
-<style>
-    .divider-text {
-        position: relative;
-        display: inline-block;
-        z-index: 1;
-    }
-    
-    .divider-text:before {
-        content: "";
-        position: absolute;
-        top: 50%;
-        left: -50px;
-        right: -50px;
-        height: 1px;
-        background-color: #dee2e6;
-        z-index: -1;
-    }
-    
-    .password-strength-progress {
-        height: 5px;
-    }
-    
-    .progress-bar {
-        transition: width 0.3s ease-in-out;
-    }
-</style>
-
-<!-- Custom JavaScript -->
+{% block extra_js %}
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         // Toggle password visibility
@@ -315,100 +379,67 @@
         });
         
         // Password strength meter
-        const passwordInput = document.getElementById('reg_password'); // Changed from registerPassword
-        const strengthBar = document.querySelector('.progress-bar');
+        const passwordInput = document.getElementById('reg_password');
+        const strengthBar = document.getElementById('strengthBar');
         const strengthText = document.getElementById('password-strength-text');
         
-        passwordInput.addEventListener('input', function() {
-            const password = this.value;
-            let strength = 0;
-            
-            if (password.length >= 8) strength += 25;
-            if (password.match(/[a-z]+/)) strength += 25;
-            if (password.match(/[A-Z]+/)) strength += 25;
-            if (password.match(/[0-9]+/) || password.match(/[^a-zA-Z0-9]+/)) strength += 25;
-            
-            strengthBar.style.width = strength + '%';
-            
-            if (strength <= 25) {
-                strengthBar.className = 'progress-bar bg-danger';
-                strengthText.textContent = 'Weak';
-            } else if (strength <= 50) {
-                strengthBar.className = 'progress-bar bg-warning';
-                strengthText.textContent = 'Fair';
-            } else if (strength <= 75) {
-                strengthBar.className = 'progress-bar bg-info';
-                strengthText.textContent = 'Good';
-            } else {
-                strengthBar.className = 'progress-bar bg-success';
-                strengthText.textContent = 'Strong';
-            }
-        });
-        
-        // Form submission handling
-        const forgotPasswordForm = document.getElementById('forgotPasswordForm');
-        
-        forgotPasswordForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('resetEmail').value;
-            
-            fetch('/reset-password', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email: email })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showToast('Password reset link sent to your email!', 'success');
-                    $('#forgotPasswordModal').modal('hide');
+        if (passwordInput) {
+            passwordInput.addEventListener('input', function() {
+                const password = this.value;
+                let strength = 0;
+                
+                if (password.length >= 8) strength += 25;
+                if (password.match(/[a-z]+/)) strength += 25;
+                if (password.match(/[A-Z]+/)) strength += 25;
+                if (password.match(/[0-9]+/) || password.match(/[^a-zA-Z0-9]+/)) strength += 25;
+                
+                strengthBar.style.width = strength + '%';
+                
+                if (strength <= 25) {
+                    strengthBar.className = 'progress-bar bg-danger';
+                    strengthText.textContent = 'Weak';
+                    strengthText.style.color = '#dc3545';
+                } else if (strength <= 50) {
+                    strengthBar.className = 'progress-bar bg-warning';
+                    strengthText.textContent = 'Fair';
+                    strengthText.style.color = '#ffc107';
+                } else if (strength <= 75) {
+                    strengthBar.className = 'progress-bar bg-info';
+                    strengthText.textContent = 'Good';
+                    strengthText.style.color = '#0dcaf0';
                 } else {
-                    showToast(data.message || 'Error sending reset link', 'danger');
+                    strengthBar.className = 'progress-bar bg-success';
+                    strengthText.textContent = 'Strong';
+                    strengthText.style.color = '#198754';
                 }
-            })
-            .catch(error => {
-                showToast('Error sending reset link', 'danger');
             });
-        });
+        }
         
-        // Toast notification function
-        function showToast(message, type = 'info') {
-            const toastContainer = document.createElement('div');
-            toastContainer.className = 'toast-container position-fixed bottom-0 end-0 p-3';
-            toastContainer.style.zIndex = '5';
-            
-            const toastEl = document.createElement('div');
-            toastEl.className = `toast align-items-center text-white bg-${type} border-0`;
-            toastEl.setAttribute('role', 'alert');
-            toastEl.setAttribute('aria-live', 'assertive');
-            toastEl.setAttribute('aria-atomic', 'true');
-            
-            const toastBody = document.createElement('div');
-            toastBody.className = 'd-flex';
-            
-            const messageDiv = document.createElement('div');
-            messageDiv.className = 'toast-body';
-            messageDiv.textContent = message;
-            
-            const closeButton = document.createElement('button');
-            closeButton.type = 'button';
-            closeButton.className = 'btn-close btn-close-white me-2 m-auto';
-            closeButton.setAttribute('data-bs-dismiss', 'toast');
-            closeButton.setAttribute('aria-label', 'Close');
-            
-            toastBody.appendChild(messageDiv);
-            toastBody.appendChild(closeButton);
-            toastEl.appendChild(toastBody);
-            toastContainer.appendChild(toastEl);
-            document.body.appendChild(toastContainer);
-            
-            const toast = new bootstrap.Toast(toastEl, { delay: 5000 });
-            toast.show();
-            
-            toastEl.addEventListener('hidden.bs.toast', function() {
-                document.body.removeChild(toastContainer);
+        // Password match check
+        const confirmInput = document.getElementById('reg_confirm_password');
+        const matchMsg = document.getElementById('passwordMatchMsg');
+        
+        if (confirmInput && passwordInput) {
+            confirmInput.addEventListener('input', function() {
+                if (this.value && passwordInput.value) {
+                    if (this.value === passwordInput.value) {
+                        matchMsg.textContent = '✓ Passwords match';
+                        matchMsg.style.color = '#198754';
+                    } else {
+                        matchMsg.textContent = '✗ Passwords do not match';
+                        matchMsg.style.color = '#dc3545';
+                    }
+                } else {
+                    matchMsg.textContent = '';
+                }
+            });
+        }
+        
+        // Phone number - digits only
+        const phoneInput = document.getElementById('reg_phone');
+        if (phoneInput) {
+            phoneInput.addEventListener('input', function() {
+                this.value = this.value.replace(/[^0-9]/g, '').slice(0, 10);
             });
         }
     });

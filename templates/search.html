@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% extends "dashboards/base_dashboard.html" %}
 
 {% block title %}AgriSuper - Search Features{% endblock %}
 
-{% block content %}
+{% block dashboard_content %}
 <div class="container-fluid py-5">
     <!-- Search Section -->
     <div class="row mb-5">
@@ -193,7 +193,7 @@
             icon: "fas fa-tags",
             iconBg: "bg-light-success",
             iconColor: "text-success",
-            url: "{{ url_for('pricing_engine_page') }}"
+            url: "{{ url_for('pricing_engine') }}"
         },
         {
             id: 2,
@@ -203,7 +203,7 @@
             icon: "fas fa-sync-alt",
             iconBg: "bg-light-success",
             iconColor: "text-success",
-            url: "{{ url_for('subscription_model_page') }}"
+            url: "{{ url_for('subscription_model') }}"
         },
         {
             id: 3,
@@ -213,7 +213,7 @@
             icon: "fas fa-handshake",
             iconBg: "bg-light-success",
             iconColor: "text-success",
-            url: "{{ url_for('contract_farming_page') }}"
+            url: "{{ url_for('contract_farming') }}"
         },
         {
             id: 4,
@@ -223,7 +223,7 @@
             icon: "fas fa-boxes",
             iconBg: "bg-light-success",
             iconColor: "text-success",
-            url: "{{ url_for('bulk_deals_page') }}"
+            url: "{{ url_for('bulk_deals') }}"
         },
         {
             id: 5,
@@ -233,7 +233,7 @@
             icon: "fas fa-chart-bar",
             iconBg: "bg-light-primary",
             iconColor: "text-primary",
-            url: "{{ url_for('yield_prediction_page') }}"
+            url: "{{ url_for('yield_prediction') }}"
         },
         {
             id: 6,
@@ -243,7 +243,7 @@
             icon: "fas fa-sync",
             iconBg: "bg-light-primary",
             iconColor: "text-primary",
-            url: "{{ url_for('crop_rotation_page') }}"
+            url: "{{ url_for('crop_rotation') }}"
         }
         // Additional features would be added here
     ];

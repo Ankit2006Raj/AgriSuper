@@ -1,0 +1,279 @@
+{% extends "dashboards/base_dashboard.html" %}
+
+{% block title %}Admin Portal - AgriSuper{% endblock %}
+{% block role_name %}System Administrator{% endblock %}
+{% block role_name_badge %}Admin{% endblock %}
+{% block dashboard_title %}Admin Control Panel{% endblock %}
+{% block dashboard_title_mobile %}Admin Panel{% endblock %}
+{% block dashboard_subtitle %}Manage users, transactions, and platform settings.{% endblock %}
+
+{% block custom_css %}
+<style>
+    .stat-card {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+    .stat-number {
+        font-size: 28px;
+        font-weight: 800;
+    }
+    .chart-container {
+        background: white;
+        border-radius: 12px;
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        border: 1px solid rgba(0,0,0,0.05);
+    }
+</style>
+{% endblock %}
+
+{% block sidebar_links %}
+<div class="nav-item">
+    <a href="#dashboard" class="nav-link active">
+        <i class="fas fa-chart-pie text-primary"></i> Analytics
+    </a>
+</div>
+<div class="nav-item">
+    <a href="#users" class="nav-link">
+        <i class="fas fa-users text-success"></i> Users
+    </a>
+</div>
+<div class="nav-item">
+    <a href="#transactions" class="nav-link">
+        <i class="fas fa-exchange-alt text-warning"></i> Transactions
+    </a>
+</div>
+<div class="nav-item">
+    <a href="#content" class="nav-link">
+        <i class="fas fa-file-alt text-info"></i> Content Moderation
+    </a>
+</div>
+<div class="nav-item">
+    <a href="#reports" class="nav-link">
+        <i class="fas fa-flag text-danger"></i> Reports
+    </a>
+</div>
+{% endblock %}
+
+{% block dashboard_content %}
+<!-- Key Metrics -->
+<div class="row g-4">
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <p class="text-muted mb-1 fw-bold text-uppercase" style="font-size: 0.8rem;">Total Users</p>
+                    <div class="stat-number text-primary" id="totalUsers">0</div>
+                </div>
+                <div class="bg-light-primary p-3 rounded-circle">
+                    <i class="fas fa-users fa-2x text-primary"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <p class="text-muted mb-1 fw-bold text-uppercase" style="font-size: 0.8rem;">Active Listings</p>
+                    <div class="stat-number text-success" id="activeListings">0</div>
+                </div>
+                <div class="bg-light-success p-3 rounded-circle">
+                    <i class="fas fa-shopping-cart fa-2x text-success"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <p class="text-muted mb-1 fw-bold text-uppercase" style="font-size: 0.8rem;">Transactions</p>
+                    <div class="stat-number text-warning" id="transactions">0</div>
+                </div>
+                <div class="bg-light-warning p-3 rounded-circle">
+                    <i class="fas fa-exchange-alt fa-2x text-warning"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card h-100">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <p class="text-muted mb-1 fw-bold text-uppercase" style="font-size: 0.8rem;">Revenue</p>
+                    <div class="stat-number text-info" id="revenue">₹0</div>
+                </div>
+                <div class="bg-light-info p-3 rounded-circle">
+                    <i class="fas fa-rupee-sign fa-2x text-info"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts -->
+<div class="row g-4 mt-1">
+    <div class="col-lg-8">
+        <div class="chart-container h-100">
+            <h5 class="fw-bold mb-4 text-dark">User Growth</h5>
+            <canvas id="userGrowthChart" height="100"></canvas>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="chart-container h-100">
+            <h5 class="fw-bold mb-4 text-dark">User Distribution</h5>
+            <canvas id="userDistChart" height="200"></canvas>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Activity -->
+<div class="row g-4 mt-1 mb-5">
+    <div class="col-lg-6">
+        <div class="chart-container h-100">
+            <h5 class="fw-bold mb-4 text-dark">Recent Users</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Name</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recentUsers">
+                        <tr><td colspan="4" class="text-center py-4">Loading...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="chart-container h-100">
+            <h5 class="fw-bold mb-4 text-dark">Pending Reports</h5>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Type</th>
+                            <th>Reporter</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="pendingReports">
+                        <tr><td colspan="4" class="text-center py-4 text-muted">No pending reports</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        loadAnalytics();
+        loadRecentUsers();
+        // Charts Initialization Mock
+        initCharts();
+    });
+
+    async function loadAnalytics() {
+        try {
+            const response = await fetch('/api/admin/analytics');
+            const data = await response.json();
+            
+            if (data.success) {
+                updateDashboard(data.analytics);
+            } else {
+                updateDashboard(getMockData());
+            }
+        } catch (error) {
+            updateDashboard(getMockData());
+        }
+    }
+
+    function getMockData() {
+        return {
+            total_users: 15234,
+            active_listings: 3456,
+            total_transactions: 8901,
+            total_revenue: 25680000
+        };
+    }
+
+    function updateDashboard(data) {
+        document.getElementById('totalUsers').textContent = data.total_users.toLocaleString();
+        document.getElementById('activeListings').textContent = data.active_listings.toLocaleString();
+        document.getElementById('transactions').textContent = data.total_transactions.toLocaleString();
+        document.getElementById('revenue').textContent = '₹' + (data.total_revenue / 100000).toFixed(1) + 'L';
+    }
+
+    function loadRecentUsers() {
+        const users = [
+            {name: 'Rajesh Kumar', type: 'Farmer', status: 'Active'},
+            {name: 'Priya Sharma', type: 'Buyer', status: 'Active'},
+            {name: 'Amit Singh', type: 'Farmer', status: 'Pending'}
+        ];
+
+        const tbody = document.getElementById('recentUsers');
+        tbody.innerHTML = '';
+        users.forEach(user => {
+            tbody.innerHTML += `
+                <tr>
+                    <td class="fw-medium">${user.name}</td>
+                    <td><span class="badge bg-light text-dark border">${user.type}</span></td>
+                    <td><span class="badge bg-${user.status === 'Active' ? 'success' : 'warning'}">${user.status}</span></td>
+                    <td><button class="btn btn-sm btn-outline-primary rounded-pill px-3">View</button></td>
+                </tr>
+            `;
+        });
+    }
+
+    function initCharts() {
+        // Growth Chart
+        const growthCtx = document.getElementById('userGrowthChart');
+        if(growthCtx) {
+            new Chart(growthCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Users',
+                        data: [12000, 12500, 13200, 14000, 14800, 15234],
+                        borderColor: '#0e3829',
+                        backgroundColor: 'rgba(14, 56, 41, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        // Dist Chart
+        const distCtx = document.getElementById('userDistChart');
+        if(distCtx) {
+            new Chart(distCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Farmers', 'Buyers', 'Suppliers', 'Experts'],
+                    datasets: [{
+                        data: [65, 20, 10, 5],
+                        backgroundColor: ['#0e3829', '#c69c59', '#10b981', '#3b82f6']
+                    }]
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+    }
+</script>
+{% endblock %}

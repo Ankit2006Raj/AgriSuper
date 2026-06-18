@@ -1,0 +1,49 @@
+{% extends "dashboards/base_dashboard.html" %}
+
+{% block title %}Expert Portal - AgriSuper{% endblock %}
+{% block role_name %}Agriculture Expert{% endblock %}
+{% block role_name_badge %}Expert{% endblock %}
+{% block dashboard_title %}Advisory Portal{% endblock %}
+{% block dashboard_title_mobile %}Advisory Portal{% endblock %}
+{% block dashboard_subtitle %}Answer queries, guide farmers, and build your reputation.{% endblock %}
+
+{% block sidebar_links %}
+<div class="nav-item">
+    <a href="{{ url_for('mentorship') }}" class="nav-link {% if request.endpoint == 'mentorship' %}active{% endif %}">
+        <i class="fas fa-chalkboard-teacher text-success"></i> Mentorship
+    </a>
+</div>
+<div class="nav-item">
+    <a href="{{ url_for('community_forum') }}" class="nav-link {% if request.endpoint == 'community_forum' %}active{% endif %}">
+        <i class="fas fa-comments text-info"></i> Community Forum
+    </a>
+</div>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="feature-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+    <!-- Mentorship Requests -->
+    <div class="premium-feature-card feature-card">
+        <div class="card-body p-4 bg-white text-center" style="border: 1px solid rgba(0,0,0,0.05); border-radius: 12px;">
+            <div class="feature-icon bg-light-success mx-auto mb-4" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                <i class="fas fa-chalkboard-teacher fa-2x text-success"></i>
+            </div>
+            <h5 class="card-title fw-bold text-dark mb-2">Mentorship Requests</h5>
+            <p class="card-text text-muted small mb-3">Review and accept mentorship requests from farmers.</p>
+            <a href="{{ url_for('mentorship') }}" class="btn btn-outline-success btn-sm w-100">View Requests</a>
+        </div>
+    </div>
+
+    <!-- Community Forum -->
+    <div class="premium-feature-card feature-card">
+        <div class="card-body p-4 bg-white text-center" style="border: 1px solid rgba(0,0,0,0.05); border-radius: 12px;">
+            <div class="feature-icon bg-light-info mx-auto mb-4" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                <i class="fas fa-comments fa-2x text-info"></i>
+            </div>
+            <h5 class="card-title fw-bold text-dark mb-2">Community Forum</h5>
+            <p class="card-text text-muted small mb-3">Provide expert answers to farmer's questions.</p>
+            <a href="{{ url_for('community_forum') }}" class="btn btn-outline-success btn-sm w-100">Open Forum</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

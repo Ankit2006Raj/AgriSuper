@@ -1,0 +1,66 @@
+{% extends "dashboards/base_dashboard.html" %}
+
+{% block title %}Buyer Portal - AgriSuper{% endblock %}
+{% block role_name %}Buyer & Trader{% endblock %}
+{% block role_name_badge %}Buyer{% endblock %}
+{% block dashboard_title %}Agri-Trading Portal{% endblock %}
+{% block dashboard_title_mobile %}Agri-Trading Portal{% endblock %}
+{% block dashboard_subtitle %}Source quality produce, create bulk deals, and set up contracts.{% endblock %}
+
+{% block sidebar_links %}
+<div class="nav-item">
+    <a href="{{ url_for('bulk_deals') }}" class="nav-link {% if request.endpoint == 'bulk_deals' %}active{% endif %}">
+        <i class="fas fa-boxes text-success"></i> Bulk Deals Hub
+    </a>
+</div>
+<div class="nav-item">
+    <a href="{{ url_for('contract_farming') }}" class="nav-link {% if request.endpoint == 'contract_farming' %}active{% endif %}">
+        <i class="fas fa-file-signature text-info"></i> Contract Farming
+    </a>
+</div>
+<div class="nav-item">
+    <a href="{{ url_for('organic_marketplace') }}" class="nav-link {% if request.endpoint == 'organic_marketplace' %}active{% endif %}">
+        <i class="fas fa-leaf text-warning"></i> Organic Market
+    </a>
+</div>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="feature-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+    <!-- Bulk Deals Hub -->
+    <div class="premium-feature-card feature-card">
+        <div class="card-body p-4 bg-white text-center" style="border: 1px solid rgba(0,0,0,0.05); border-radius: 12px;">
+            <div class="feature-icon bg-light-success mx-auto mb-4" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                <i class="fas fa-boxes fa-2x text-success"></i>
+            </div>
+            <h5 class="card-title fw-bold text-dark mb-2">Bulk Deals Hub</h5>
+            <p class="card-text text-muted small mb-3">Browse large scale produce listings from verified farmers.</p>
+            <a href="{{ url_for('bulk_deals') }}" class="btn btn-outline-success btn-sm w-100">Browse Deals</a>
+        </div>
+    </div>
+
+    <!-- Contract Farming -->
+    <div class="premium-feature-card feature-card">
+        <div class="card-body p-4 bg-white text-center" style="border: 1px solid rgba(0,0,0,0.05); border-radius: 12px;">
+            <div class="feature-icon bg-light-info mx-auto mb-4" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                <i class="fas fa-file-signature fa-2x text-info"></i>
+            </div>
+            <h5 class="card-title fw-bold text-dark mb-2">Contract Farming</h5>
+            <p class="card-text text-muted small mb-3">Set up pre-harvest agreements with cooperatives.</p>
+            <a href="{{ url_for('contract_farming') }}" class="btn btn-outline-success btn-sm w-100">Manage Contracts</a>
+        </div>
+    </div>
+
+    <!-- Organic Marketplace -->
+    <div class="premium-feature-card feature-card">
+        <div class="card-body p-4 bg-white text-center" style="border: 1px solid rgba(0,0,0,0.05); border-radius: 12px;">
+            <div class="feature-icon bg-light-warning mx-auto mb-4" style="width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; border-radius: 50%;">
+                <i class="fas fa-leaf fa-2x text-warning"></i>
+            </div>
+            <h5 class="card-title fw-bold text-dark mb-2">Organic Marketplace</h5>
+            <p class="card-text text-muted small mb-3">Source certified organic fruits and vegetables directly.</p>
+            <a href="{{ url_for('organic_marketplace') }}" class="btn btn-outline-success btn-sm w-100">Open Marketplace</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

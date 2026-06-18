@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% extends "dashboards/base_dashboard.html" %}
 
 {% block title %}AgriSuper - Premium Agriculture Ecosystem{% endblock %}
 
-{% block extra_css %}
+{% block custom_css %}
 <link href="{{ url_for('static', filename='css/dashboard-modern.css') }}" rel="stylesheet">
 <style>
     /* Inline override styles to match Ecoland premium branding */
@@ -50,7 +50,7 @@
 </style>
 {% endblock %}
 
-{% block content %}
+{% block dashboard_content %}
 <div class="container-fluid py-4 px-md-5">
     <!-- --- ECOLAND HERO SECTION --- -->
     <div class="ecoland-hero animate-fade-in-scale">
@@ -208,7 +208,7 @@
                         </p>
                     </div>
                     <div class="card-footer">
-                        <a href="{{ url_for('yield_prediction_page') }}" class="btn btn-premium-link">
+                        <a href="{{ url_for('yield_prediction') }}" class="btn btn-premium-link">
                             Open Feature <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>
@@ -250,7 +250,7 @@
                         </p>
                     </div>
                     <div class="card-footer">
-                        <a href="{{ url_for('pest_alerts_page') }}" class="btn btn-premium-link">
+                        <a href="{{ url_for('pest_alerts') }}" class="btn btn-premium-link">
                             Open Feature <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>
@@ -271,7 +271,7 @@
                         </p>
                     </div>
                     <div class="card-footer">
-                        <a href="{{ url_for('mentorship_page') }}" class="btn btn-premium-link">
+                        <a href="{{ url_for('mentorship') }}" class="btn btn-premium-link">
                             Open Feature <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>
@@ -292,7 +292,7 @@
                         </p>
                     </div>
                     <div class="card-footer">
-                        <a href="{{ url_for('equipment_rental_page') }}" class="btn btn-premium-link">
+                        <a href="{{ url_for('equipment_rental') }}" class="btn btn-premium-link">
                             Open Feature <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>
@@ -313,7 +313,7 @@
                         </p>
                     </div>
                     <div class="card-footer">
-                        <a href="{{ url_for('organic_marketplace_page') }}" class="btn btn-premium-link">
+                        <a href="{{ url_for('organic_marketplace') }}" class="btn btn-premium-link">
                             Open Feature <i class="fas fa-arrow-right ms-1"></i>
                         </a>
                     </div>

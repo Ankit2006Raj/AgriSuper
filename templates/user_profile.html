@@ -1,8 +1,8 @@
-{% extends "base.html" %}
+{% extends "dashboards/base_dashboard.html" %}
 
 {% block title %}User Profile - AgriSuper{% endblock %}
 
-{% block content %}
+{% block dashboard_content %}
 <div class="container py-5">
     <div class="row">
         <!-- Profile Sidebar -->
@@ -12,40 +12,76 @@
                     <div class="profile-image mb-3">
                         <img src="{{ user.profile_image or url_for('static', filename='img/default-profile.png') }}" 
                              alt="Profile picture of {{ user.full_name }}" 
-                             class="rounded-circle img-fluid profile-picture">
+                             class="rounded-circle img-fluid profile-picture shadow-sm border border-light border-3">
                     </div>
-                    <h5 class="fw-bold mb-1">{{ user.full_name }}</h5>
-                    <p class="text-muted small mb-3">Member since {{ user.joined_date.strftime('%B %Y') }}</p>
+                    <h5 class="fw-bold mb-1">{{ user.full_name or user.first_name ~ ' ' ~ user.last_name }}</h5>
+                    <span class="badge bg-gold text-dark mb-2 text-uppercase">{{ user.role }}</span>
+                    <p class="text-muted small mb-3">Member since {{ user.created_at.strftime('%B %Y') }}</p>
                     <div class="d-grid gap-2">
-                        <button class="btn btn-sm btn-outline-success" aria-label="Edit your profile information">
+                        <button class="btn btn-sm btn-outline-success" onclick="$('#settings-tab').tab('show');">
                             <i class="fas fa-edit" aria-hidden="true"></i> Edit Profile
                         </button>
                     </div>
                 </div>
             </div>
             
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-light">
-                    <h6 class="mb-0 fw-bold">Account Summary</h6>
+            <div class="card shadow-sm mb-4 border-0">
+                <div class="card-header bg-forest text-white">
+                    <h6 class="mb-0 fw-bold"><i class="fas fa-clipboard-list me-2"></i>Account Summary</h6>
                 </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
-                            <span>Subscription</span>
+                <div class="card-body bg-light">
+                    <ul class="list-group list-group-flush bg-transparent">
+                        <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                            <span class="text-muted">Subscription</span>
                             <span class="badge bg-success rounded-pill">Premium</span>
                         </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
-                            <span>Wallet Balance</span>
-                            <span class="fw-bold">₹15,420</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
-                            <span>Active Contracts</span>
-                            <span class="fw-bold">3</span>
-                        </li>
-                        <li class="list-group-item d-flex justify-content-between align-items-center px-0 py-2 border-0">
-                            <span>Pending Orders</span>
-                            <span class="fw-bold">2</span>
-                        </li>
+                        
+                        {% if user.role == 'farmer' %}
+                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                                <span class="text-muted">Wallet Balance</span>
+                                <span class="fw-bold text-dark">₹15,420</span>
+                            </li>
+                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                                <span class="text-muted">Active Contracts</span>
+                                <span class="fw-bold text-dark">3</span>
+                            </li>
+                        {% elif user.role == 'buyer' %}
+                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                                <span class="text-muted">Spend Limit</span>
+                                <span class="fw-bold text-dark">₹5,00,000</span>
+                            </li>
+                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                                <span class="text-muted">Active Bids</span>
+                                <span class="fw-bold text-dark">8</span>
+                            </li>
+                        {% elif user.role == 'supplier' %}
+                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                                <span class="text-muted">Seller Rating</span>
+                                <span class="fw-bold text-dark"><i class="fas fa-star text-warning me-1"></i> 4.9</span>
+                            </li>
+                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                                <span class="text-muted">Active Listings</span>
+                                <span class="fw-bold text-dark">24</span>
+                            </li>
+                        {% elif user.role == 'expert' %}
+                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                                <span class="text-muted">Mentorship Rating</span>
+                                <span class="fw-bold text-dark"><i class="fas fa-star text-warning me-1"></i> 5.0</span>
+                            </li>
+                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                                <span class="text-muted">Active Mentees</span>
+                                <span class="fw-bold text-dark">12</span>
+                            </li>
+                        {% elif user.role == 'admin' %}
+                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                                <span class="text-muted">System Level</span>
+                                <span class="badge bg-danger rounded-pill">Super Admin</span>
+                            </li>
+                            <li class="list-group-item bg-transparent d-flex justify-content-between align-items-center px-0 py-2 border-0">
+                                <span class="text-muted">Uptime</span>
+                                <span class="fw-bold text-dark">99.9%</span>
+                            </li>
+                        {% endif %}
                     </ul>
                 </div>
             </div>
@@ -55,36 +91,140 @@
         <div class="col-lg-9">
             <!-- Profile Stats -->
             <div class="row g-3 mb-4">
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm border-0">
-                        <div class="card-body">
-                            <h6 class="text-muted small mb-2">Total Sales</h6>
-                            <h4 class="fw-bold mb-0">₹245,800</h4>
+                {% if user.role == 'farmer' %}
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-success">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Total Sales</h6>
+                                <h4 class="fw-bold mb-0 text-forest">₹245,800</h4>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm border-0">
-                        <div class="card-body">
-                            <h6 class="text-muted small mb-2">Total Crops</h6>
-                            <h4 class="fw-bold mb-0">12</h4>
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-warning">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Total Crops</h6>
+                                <h4 class="fw-bold mb-0 text-dark">12</h4>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="card h-100 shadow-sm border-0">
-                        <div class="card-body">
-                            <h6 class="text-muted small mb-2">Land Area</h6>
-                            <h4 class="fw-bold mb-0">8.5 Acres</h4>
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-info">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Land Area</h6>
+                                <h4 class="fw-bold mb-0 text-dark">{{ user.farm_size or '8.5' }} Acres</h4>
+                            </div>
                         </div>
                     </div>
-                </div>
+                {% elif user.role == 'buyer' %}
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-success">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Total Purchases</h6>
+                                <h4 class="fw-bold mb-0 text-forest">₹12.5M</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-warning">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Active Bids</h6>
+                                <h4 class="fw-bold mb-0 text-dark">8</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-info">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Fulfilled Orders</h6>
+                                <h4 class="fw-bold mb-0 text-dark">342</h4>
+                            </div>
+                        </div>
+                    </div>
+                {% elif user.role == 'supplier' %}
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-success">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Total Revenue</h6>
+                                <h4 class="fw-bold mb-0 text-forest">₹4.2M</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-warning">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Equipment Rented</h6>
+                                <h4 class="fw-bold mb-0 text-dark">15</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-info">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Products Sold</h6>
+                                <h4 class="fw-bold mb-0 text-dark">1.2K</h4>
+                            </div>
+                        </div>
+                    </div>
+                {% elif user.role == 'expert' %}
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-success">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Answers Posted</h6>
+                                <h4 class="fw-bold mb-0 text-forest">450</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-warning">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Sessions Hosted</h6>
+                                <h4 class="fw-bold mb-0 text-dark">32</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-info">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Accuracy Rating</h6>
+                                <h4 class="fw-bold mb-0 text-dark">98%</h4>
+                            </div>
+                        </div>
+                    </div>
+                {% elif user.role == 'admin' %}
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-success">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Total Users</h6>
+                                <h4 class="fw-bold mb-0 text-forest">15.2K</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-danger">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Pending Reports</h6>
+                                <h4 class="fw-bold mb-0 text-dark">2</h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card h-100 shadow-sm border-0 bg-light-info">
+                            <div class="card-body">
+                                <h6 class="text-muted small mb-2 text-uppercase fw-bold">Support Tickets</h6>
+                                <h4 class="fw-bold mb-0 text-dark">45</h4>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                <!-- Shared Rating Card -->
                 <div class="col-md-3">
-                    <div class="card h-100 shadow-sm border-0">
+                    <div class="card h-100 shadow-sm border-0 bg-light">
                         <div class="card-body">
-                            <h6 class="text-muted small mb-2">Rating</h6>
+                            <h6 class="text-muted small mb-2 text-uppercase fw-bold">Platform Rating</h6>
                             <h4 class="fw-bold mb-0">
-                                <i class="fas fa-star text-warning"></i> 4.8
+                                <i class="fas fa-star text-gold"></i> 4.8
                             </h4>
                         </div>
                     </div>
@@ -92,470 +232,179 @@
             </div>
             
             <!-- Tabs Navigation -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+            <div class="card shadow-sm mb-4 border-0">
+                <div class="card-header bg-white pt-3 pb-0 border-bottom-0">
+                    <ul class="nav nav-tabs border-bottom-0" id="profileTabs" role="tablist">
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab" aria-controls="dashboard" aria-selected="true">
-                                <i class="fas fa-home me-2" aria-hidden="true"></i>Dashboard
+                            <button class="nav-link active text-dark fw-bold border-0 border-bottom border-3 border-success" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard" type="button" role="tab" aria-selected="true">
+                                <i class="fas fa-chart-pie me-2"></i>Overview
                             </button>
                         </li>
+                        
+                        <!-- Role-Specific Tabs -->
+                        {% if user.role == 'farmer' %}
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="crops-tab" data-bs-toggle="tab" data-bs-target="#crops" type="button" role="tab" aria-controls="crops" aria-selected="false">
-                                <i class="fas fa-seedling me-2" aria-hidden="true"></i>My Crops
+                            <button class="nav-link text-muted border-0" id="crops-tab" data-bs-toggle="tab" data-bs-target="#crops" type="button" role="tab" aria-selected="false">
+                                <i class="fas fa-seedling me-2"></i>My Crops
                             </button>
                         </li>
+                        {% elif user.role == 'buyer' %}
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="transactions-tab" data-bs-toggle="tab" data-bs-target="#transactions" type="button" role="tab" aria-controls="transactions" aria-selected="false">
-                                <i class="fas fa-exchange-alt me-2" aria-hidden="true"></i>Transactions
+                            <button class="nav-link text-muted border-0" id="bids-tab" data-bs-toggle="tab" data-bs-target="#bids" type="button" role="tab" aria-selected="false">
+                                <i class="fas fa-gavel me-2"></i>My Bids
                             </button>
                         </li>
+                        {% elif user.role == 'supplier' %}
                         <li class="nav-item" role="presentation">
-                            <button class="nav-link" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-controls="settings" aria-selected="false">
-                                <i class="fas fa-cog me-2" aria-hidden="true"></i>Settings
+                            <button class="nav-link text-muted border-0" id="inventory-tab" data-bs-toggle="tab" data-bs-target="#inventory" type="button" role="tab" aria-selected="false">
+                                <i class="fas fa-boxes me-2"></i>Inventory
+                            </button>
+                        </li>
+                        {% elif user.role == 'expert' %}
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link text-muted border-0" id="mentees-tab" data-bs-toggle="tab" data-bs-target="#mentees" type="button" role="tab" aria-selected="false">
+                                <i class="fas fa-users me-2"></i>Mentees
+                            </button>
+                        </li>
+                        {% endif %}
+                        
+                        <li class="nav-item" role="presentation">
+                            <button class="nav-link text-muted border-0" id="settings-tab" data-bs-toggle="tab" data-bs-target="#settings" type="button" role="tab" aria-selected="false">
+                                <i class="fas fa-cog me-2"></i>Settings
                             </button>
                         </li>
                     </ul>
-                    
-                    <div class="tab-content pt-4" id="profileTabsContent">
-                        <!-- Dashboard Tab -->
+                </div>
+                
+                <div class="card-body bg-white border-top border-light">
+                    <div class="tab-content pt-2" id="profileTabsContent">
+                        
+                        <!-- Overview Tab -->
                         <div class="tab-pane fade show active" id="dashboard" role="tabpanel">
-                            <h5 class="fw-bold mb-4">Your Dashboard</h5>
-                            
-                            <!-- Recent Activity -->
-                            <div class="card mb-4">
-                                <div class="card-header bg-light">
-                                    <h6 class="mb-0 fw-bold">Recent Activity</h6>
-                                </div>
-                                <div class="card-body p-0">
-                                    <div class="list-group list-group-flush">
-                                        <div class="list-group-item py-3">
-                                            <div class="d-flex w-100 justify-content-between">
-                                                <h6 class="mb-1">Wheat price alert triggered</h6>
-                                                <small class="text-muted">3 hours ago</small>
-                                            </div>
-                                            <p class="mb-1 text-muted small">Wheat prices have increased by 5% in your region</p>
-                                        </div>
-                                        <div class="list-group-item py-3">
-                                            <div class="d-flex w-100 justify-content-between">
-                                                <h6 class="mb-1">New contract offer received</h6>
-                                                <small class="text-muted">Yesterday</small>
-                                            </div>
-                                            <p class="mb-1 text-muted small">AgriCorp has sent you a contract offer for Rice</p>
-                                        </div>
-                                        <div class="list-group-item py-3">
-                                            <div class="d-flex w-100 justify-content-between">
-                                                <h6 class="mb-1">Payment received</h6>
-                                                <small class="text-muted">2 days ago</small>
-                                            </div>
-                                            <p class="mb-1 text-muted small">Payment of ₹24,500 received for Potato delivery</p>
-                                        </div>
+                            <h5 class="fw-bold mb-4 text-forest">Recent Activity</h5>
+                            <div class="list-group list-group-flush">
+                                <div class="list-group-item px-0 py-3 border-light">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1 fw-bold text-dark"><i class="fas fa-bell text-gold me-2"></i>Account Verification Successful</h6>
+                                        <small class="text-muted">3 days ago</small>
                                     </div>
+                                    <p class="mb-1 text-muted small ms-4">Your AgriSuper profile and phone number were verified.</p>
                                 </div>
-                            </div>
-                            
-                            <!-- Weather Forecast -->
-                            <div class="card mb-4">
-                                <div class="card-header bg-light">
-                                    <h6 class="mb-0 fw-bold">Weather Forecast</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row align-items-center">
-                                        <div class="col-md-2 text-center">
-                                            <i class="fas fa-sun fa-3x text-warning mb-2"></i>
-                                            <h5 class="mb-0">32°C</h5>
-                                            <p class="small text-muted mb-0">Today</p>
-                                        </div>
-                                        <div class="col-md-2 text-center">
-                                            <i class="fas fa-cloud-sun fa-2x text-muted mb-2"></i>
-                                            <h6 class="mb-0">30°C</h6>
-                                            <p class="small text-muted mb-0">Tomorrow</p>
-                                        </div>
-                                        <div class="col-md-2 text-center">
-                                            <i class="fas fa-cloud fa-2x text-muted mb-2"></i>
-                                            <h6 class="mb-0">29°C</h6>
-                                            <p class="small text-muted mb-0">Wed</p>
-                                        </div>
-                                        <div class="col-md-2 text-center">
-                                            <i class="fas fa-cloud-rain fa-2x text-muted mb-2"></i>
-                                            <h6 class="mb-0">27°C</h6>
-                                            <p class="small text-muted mb-0">Thu</p>
-                                        </div>
-                                        <div class="col-md-2 text-center">
-                                            <i class="fas fa-cloud-showers-heavy fa-2x text-muted mb-2"></i>
-                                            <h6 class="mb-0">26°C</h6>
-                                            <p class="small text-muted mb-0">Fri</p>
-                                        </div>
-                                        <div class="col-md-2 text-center">
-                                            <i class="fas fa-sun fa-2x text-muted mb-2"></i>
-                                            <h6 class="mb-0">28°C</h6>
-                                            <p class="small text-muted mb-0">Sat</p>
-                                        </div>
+                                <div class="list-group-item px-0 py-3 border-light">
+                                    <div class="d-flex w-100 justify-content-between">
+                                        <h6 class="mb-1 fw-bold text-dark"><i class="fas fa-user-plus text-success me-2"></i>Joined AgriSuper Ecosystem</h6>
+                                        <small class="text-muted">Member since {{ user.created_at.strftime('%B %Y') }}</small>
                                     </div>
-                                </div>
-                            </div>
-                            
-                            <!-- Recommended Actions -->
-                            <div class="card">
-                                <div class="card-header bg-light">
-                                    <h6 class="mb-0 fw-bold">Recommended Actions</h6>
-                                </div>
-                                <div class="card-body p-0">
-                                    <div class="list-group list-group-flush">
-                                        <a href="#" class="list-group-item list-group-item-action py-3">
-                                            <div class="d-flex w-100 align-items-center">
-                                                <div class="flex-shrink-0">
-                                                    <i class="fas fa-seedling fa-lg text-success me-3"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <h6 class="mb-1">Time to sow Wheat</h6>
-                                                    <p class="mb-0 text-muted small">Optimal sowing period based on your location</p>
-                                                </div>
-                                                <div class="flex-shrink-0">
-                                                    <i class="fas fa-chevron-right text-muted"></i>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action py-3">
-                                            <div class="d-flex w-100 align-items-center">
-                                                <div class="flex-shrink-0">
-                                                    <i class="fas fa-bug fa-lg text-danger me-3"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <h6 class="mb-1">Pest alert for Rice crop</h6>
-                                                    <p class="mb-0 text-muted small">Preventive measures recommended</p>
-                                                </div>
-                                                <div class="flex-shrink-0">
-                                                    <i class="fas fa-chevron-right text-muted"></i>
-                                                </div>
-                                            </div>
-                                        </a>
-                                        <a href="#" class="list-group-item list-group-item-action py-3">
-                                            <div class="d-flex w-100 align-items-center">
-                                                <div class="flex-shrink-0">
-                                                    <i class="fas fa-chart-line fa-lg text-primary me-3"></i>
-                                                </div>
-                                                <div class="flex-grow-1">
-                                                    <h6 class="mb-1">Potato prices trending up</h6>
-                                                    <p class="mb-0 text-muted small">Good time to sell your harvest</p>
-                                                </div>
-                                                <div class="flex-shrink-0">
-                                                    <i class="fas fa-chevron-right text-muted"></i>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
+                                    <p class="mb-1 text-muted small ms-4">Welcome to India's Revolutionary Digital Agriculture Platform.</p>
                                 </div>
                             </div>
                         </div>
                         
-                        <!-- Crops Tab -->
+                        <!-- Dynamic Role Tabs (Placeholders for UI Demo) -->
+                        {% if user.role == 'farmer' %}
                         <div class="tab-pane fade" id="crops" role="tabpanel">
-                            <h5 class="fw-bold mb-4">My Crops</h5>
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <caption class="visually-hidden">List of your crops and their details</caption>
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th scope="col">Crop</th>
-                                            <th scope="col">Area</th>
-                                            <th scope="col">Sowing Date</th>
-                                            <th scope="col">Expected Harvest</th>
-                                            <th scope="col">Status</th>
-                                            <th scope="col">Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="crop-icon bg-success-light rounded-circle me-2">
-                                                        <i class="fas fa-wheat-alt" aria-hidden="true"></i>
-                                                    </div>
-                                                    <div>
-                                                        <h6 class="mb-0">Wheat</h6>
-                                                        <small class="text-muted">HD-2967</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>3.5 Acres</td>
-                                            <td>Nov 15, 2023</td>
-                                            <td>Apr 10, 2024</td>
-                                            <td><span class="badge bg-success" role="status">Growing</span></td>
-                                            <td>
-                                                <div class="btn-group btn-group-sm" role="group" aria-label="Actions for Wheat crop">
-                                                    <button type="button" class="btn btn-outline-primary" aria-label="View Wheat crop details">
-                                                        <i class="fas fa-eye me-1" aria-hidden="true"></i>View
-                                                    </button>
-                                                    <button type="button" class="btn btn-outline-secondary" aria-label="Update Wheat crop details">
-                                                        <i class="fas fa-edit me-1" aria-hidden="true"></i>Update
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="crop-icon bg-warning-light rounded-circle me-2">
-                                                        <i class="fas fa-seedling" aria-hidden="true"></i>
-                                                    </div>
-                                                    <div>
-                                                        <h6 class="mb-0">Rice</h6>
-                                                        <small class="text-muted">Basmati-1121</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>2.5 Acres</td>
-                                            <td>Jun 20, 2023</td>
-                                            <td>Oct 25, 2023</td>
-                                            <td><span class="badge bg-info" role="status">Harvested</span></td>
-                                            <td>
-                                                <div class="btn-group btn-group-sm" role="group" aria-label="Actions for Rice crop">
-                                                    <button type="button" class="btn btn-outline-primary" aria-label="View Rice crop details">
-                                                        <i class="fas fa-eye me-1" aria-hidden="true"></i>View
-                                                    </button>
-                                                    <button type="button" class="btn btn-outline-secondary" aria-label="Update Rice crop details">
-                                                        <i class="fas fa-edit me-1" aria-hidden="true"></i>Update
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    <div class="crop-icon bg-danger-light rounded-circle me-2">
-                                                        <i class="fas fa-carrot" aria-hidden="true"></i>
-                                                    </div>
-                                                    <div>
-                                                        <h6 class="mb-0">Potato</h6>
-                                                        <small class="text-muted">Kufri Jyoti</small>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td>1.5 Acres</td>
-                                            <td>Oct 5, 2023</td>
-                                            <td>Jan 15, 2024</td>
-                                            <td><span class="badge bg-warning" role="status">Ready for Harvest</span></td>
-                                            <td>
-                                                <div class="btn-group btn-group-sm" role="group" aria-label="Actions for Potato crop">
-                                                    <button type="button" class="btn btn-outline-primary" aria-label="View Potato crop details">
-                                                        <i class="fas fa-eye me-1" aria-hidden="true"></i>View
-                                                    </button>
-                                                    <button type="button" class="btn btn-outline-secondary" aria-label="Update Potato crop details">
-                                                        <i class="fas fa-edit me-1" aria-hidden="true"></i>Update
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                            <div class="alert alert-success bg-light-success border-0 text-success">
+                                <i class="fas fa-info-circle me-2"></i> Head over to your <strong>Crop Management Dashboard</strong> to add and track your seasonal crops.
                             </div>
                         </div>
-                        
-                        <!-- Transactions Tab -->
-                        <div class="tab-pane fade" id="transactions" role="tabpanel">
-                            <h5 class="fw-bold mb-4">Transaction History</h5>
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <caption class="visually-hidden">List of your recent transactions</caption>
-                                    <thead class="table-light">
-                                        <tr>
-                                            <th scope="col">Date</th>
-                                            <th scope="col">Transaction ID</th>
-                                            <th scope="col">Description</th>
-                                            <th scope="col">Amount</th>
-                                            <th scope="col">Status</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td>Mar 15, 2024</td>
-                                            <td><span class="text-muted">#TRX-8765432</span></td>
-                                            <td>Payment for Potato delivery</td>
-                                            <td class="text-success">+₹24,500</td>
-                                            <td><span class="badge bg-success">Completed</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Mar 10, 2024</td>
-                                            <td><span class="text-muted">#TRX-8765431</span></td>
-                                            <td>Purchase of Fertilizers</td>
-                                            <td class="text-danger">-₹8,750</td>
-                                            <td><span class="badge bg-success">Completed</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Feb 28, 2024</td>
-                                            <td><span class="text-muted">#TRX-8765430</span></td>
-                                            <td>Equipment Rental Payment</td>
-                                            <td class="text-danger">-₹3,200</td>
-                                            <td><span class="badge bg-success">Completed</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Feb 15, 2024</td>
-                                            <td><span class="text-muted">#TRX-8765429</span></td>
-                                            <td>Advance for Wheat Contract</td>
-                                            <td class="text-success">+₹15,000</td>
-                                            <td><span class="badge bg-success">Completed</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>Feb 10, 2024</td>
-                                            <td><span class="text-muted">#TRX-8765428</span></td>
-                                            <td>Subscription Renewal</td>
-                                            <td class="text-danger">-₹1,999</td>
-                                            <td><span class="badge bg-success">Completed</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        {% elif user.role == 'buyer' %}
+                        <div class="tab-pane fade" id="bids" role="tabpanel">
+                            <div class="alert alert-warning bg-light-warning border-0 text-dark">
+                                <i class="fas fa-gavel me-2"></i> You have no active bids. Head to the <strong>Bulk Deals Hub</strong> to start sourcing produce.
                             </div>
                         </div>
+                        {% elif user.role == 'supplier' %}
+                        <div class="tab-pane fade" id="inventory" role="tabpanel">
+                            <div class="alert alert-info bg-light-info border-0 text-dark">
+                                <i class="fas fa-boxes me-2"></i> Your inventory is empty. Add fertilizers or equipment to start selling.
+                            </div>
+                        </div>
+                        {% elif user.role == 'expert' %}
+                        <div class="tab-pane fade" id="mentees" role="tabpanel">
+                            <div class="alert alert-success bg-light-success border-0 text-success">
+                                <i class="fas fa-users me-2"></i> You currently have 12 active mentees. Check the <strong>Mentorship</strong> tab to review their latest questions.
+                            </div>
+                        </div>
+                        {% endif %}
                         
                         <!-- Settings Tab -->
                         <div class="tab-pane fade" id="settings" role="tabpanel">
-                            <h5 class="fw-bold mb-4">Account Settings</h5>
+                            <h5 class="fw-bold mb-4 text-forest">Profile Configuration</h5>
                             
                             <form method="POST" action="{{ url_for('update_profile') }}" id="profileForm">
-                                {{ form.csrf_token }}
-                                {% with messages = get_flashed_messages(with_categories=true) %}
-                                    {% if messages %}
-                                        {% for category, message in messages %}
-                                            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                                                {{ message }}
-                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                            </div>
-                                        {% endfor %}
-                                    {% endif %}
-                                {% endwith %}
-                                
-                                <!-- Personal Information -->
-                                <div class="card mb-4">
-                                    <div class="card-header bg-light">
-                                        <h6 class="mb-0 fw-bold">Personal Information</h6>
+                                <!-- Global Info -->
+                                <h6 class="fw-bold text-dark border-bottom pb-2 mb-3 mt-4">Personal Details</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Full Name</label>
+                                        <input type="text" name="full_name" class="form-control bg-light border-0" value="{{ user.full_name or user.first_name ~ ' ' ~ user.last_name }}" required>
                                     </div>
-                                    <div class="card-body">
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <label for="full_name" class="form-label">Full Name</label>
-                                                <input type="text" 
-                                                       id="full_name" 
-                                                       name="full_name" 
-                                                       class="form-control" 
-                                                       value="{{ user.full_name }}"
-                                                       placeholder="Enter your full name"
-                                                       title="Your full name"
-                                                       required>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="phone" class="form-label">Phone Number</label>
-                                                <input type="tel" 
-                                                       id="phone" 
-                                                       name="phone" 
-                                                       class="form-control" 
-                                                       value="{{ user.phone }}"
-                                                       placeholder="Enter your phone number"
-                                                       title="Your phone number"
-                                                       pattern="[0-9+\s-]{10,}"
-                                                       required>
-                                            <div class="col-md-6">
-                                                <label for="email" class="form-label">Email Address</label>
-                                                <input type="email" 
-                                                       id="email" 
-                                                       name="email" 
-                                                       class="form-control" 
-                                                       value="{{ user.email }}"
-                                                       placeholder="Enter your email address"
-                                                       title="Your email address"
-                                                       required>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="dob" class="form-label">Date of Birth</label>
-                                                <input type="date" 
-                                                       id="dob" 
-                                                       name="dob" 
-                                                       class="form-control" 
-                                                       value="{{ user.dob.strftime('%Y-%m-%d') }}"
-                                                       title="Your date of birth"
-                                                       required>
-                                            </div>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Phone Number</label>
+                                        <input type="text" name="phone" class="form-control bg-light border-0" value="{{ user.phone }}" required>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Email Address</label>
+                                        <input type="email" name="email" class="form-control bg-light border-0" value="{{ user.email }}" required>
                                     </div>
                                 </div>
                                 
-                                <!-- Farm Details -->
-                                <div class="card mb-4">
-                                    <div class="card-header bg-light">
-                                        <h6 class="mb-0 fw-bold">Farm Details</h6>
+                                <!-- Role Specific Fields -->
+                                {% if user.role == 'farmer' %}
+                                <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">Farm Configuration</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Farm Name</label>
+                                        <input type="text" name="farm_name" class="form-control bg-light border-0" value="{{ user.farm_name or '' }}" placeholder="e.g. Green Acres">
                                     </div>
-                                    <div class="card-body">
-                                        <div class="row g-3">
-                                            <div class="col-md-6">
-                                                <label for="farm_name" class="form-label">Farm Name</label>
-                                                <input type="text" 
-                                                       id="farm_name" 
-                                                       name="farm_name" 
-                                                       class="form-control" 
-                                                       value="{{ user.farm_name }}"
-                                                       placeholder="Enter your farm name"
-                                                       title="Name of your farm"
-                                                       required>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label for="land_area" class="form-label">Total Land Area (Acres)</label>
-                                                <input type="number" 
-                                                       id="land_area" 
-                                                       name="land_area" 
-                                                       class="form-control" 
-                                                       value="{{ user.land_area }}"
-                                                       placeholder="Enter total land area in acres"
-                                                       title="Total land area in acres"
-                                                       step="0.1"
-                                                       min="0"
-                                                       required>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label for="farm_address" class="form-label">Farm Address</label>
-                                                <textarea id="farm_address" 
-                                                          name="farm_address" 
-                                                          class="form-control" 
-                                                          rows="3"
-                                                          placeholder="Enter your farm's complete address"
-                                                          title="Complete address of your farm"
-                                                          required>{{ user.farm_address }}</textarea>
-                                            </div>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Farm Size (Acres)</label>
+                                        <input type="number" step="0.1" name="farm_size" class="form-control bg-light border-0" value="{{ user.farm_size or '' }}" placeholder="e.g. 5.5">
                                     </div>
                                 </div>
                                 
-                                <!-- Notification Settings -->
-                                <div class="card mb-4">
-                                    <div class="card-header bg-light">
-                                        <h6 class="mb-0 fw-bold">Notification Settings</h6>
+                                {% elif user.role == 'buyer' %}
+                                <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">Company Details</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Company / Trade Name</label>
+                                        <input type="text" name="company_name" class="form-control bg-light border-0" value="{{ user.company_name or '' }}" placeholder="e.g. Fresh Foods Ltd">
                                     </div>
-                                    <div class="card-body">
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" id="priceAlerts" checked>
-                                            <label class="form-check-label" for="priceAlerts">Price Alerts</label>
-                                            <div class="text-muted small">Receive notifications when crop prices change significantly</div>
-                                        </div>
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" id="weatherAlerts" checked>
-                                            <label class="form-check-label" for="weatherAlerts">Weather Alerts</label>
-                                            <div class="text-muted small">Receive notifications about weather changes and forecasts</div>
-                                        </div>
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" id="pestAlerts" checked>
-                                            <label class="form-check-label" for="pestAlerts">Pest & Disease Alerts</label>
-                                            <div class="text-muted small">Receive notifications about potential pest and disease outbreaks</div>
-                                        </div>
-                                        <div class="form-check form-switch mb-3">
-                                            <input class="form-check-input" type="checkbox" id="marketAlerts" checked>
-                                            <label class="form-check-label" for="marketAlerts">Market Opportunities</label>
-                                            <div class="text-muted small">Receive notifications about new market opportunities and deals</div>
-                                        </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">GSTIN Number</label>
+                                        <input type="text" name="gstin" class="form-control bg-light border-0" value="{{ user.gstin or '' }}" placeholder="22AAAAA0000A1Z5">
                                     </div>
                                 </div>
                                 
-                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                                    <button type="button" class="btn btn-outline-secondary me-md-2">Cancel</button>
-                                    <button type="submit" class="btn btn-success">Save Changes</button>
+                                {% elif user.role == 'supplier' %}
+                                <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">Supplier Details</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Business Name</label>
+                                        <input type="text" name="business_name" class="form-control bg-light border-0" value="{{ user.business_name or '' }}" placeholder="e.g. Agro Equipment Hub">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Warehouse Address</label>
+                                        <input type="text" name="warehouse_address" class="form-control bg-light border-0" value="{{ user.warehouse_address or '' }}">
+                                    </div>
+                                </div>
+                                
+                                {% elif user.role == 'expert' %}
+                                <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">Expert Credentials</h6>
+                                <div class="row g-3 mb-4">
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Specialization</label>
+                                        <input type="text" name="specialization" class="form-control bg-light border-0" value="{{ user.specialization or '' }}" placeholder="e.g. Organic Farming, Soil Science">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted small fw-bold text-uppercase">Qualifications</label>
+                                        <input type="text" name="qualifications" class="form-control bg-light border-0" value="{{ user.qualifications or '' }}" placeholder="e.g. Ph.D. Agronomy, ICAR Certified">
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5">
+                                    <button type="submit" class="btn btn-gold text-dark px-4 py-2 fw-bold text-uppercase shadow-sm">Save Changes</button>
                                 </div>
                             </form>
                         </div>
@@ -567,32 +416,28 @@
 </div>
 {% endblock %}
 
-{% block extra_css %}
+{% block custom_css %}
 <style>
     .profile-picture {
-        width: 120px;
-        height: 120px;
+        width: 140px;
+        height: 140px;
         object-fit: cover;
     }
-    
-    .crop-icon {
-        width: 32px;
-        height: 32px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .bg-light-success { background-color: rgba(25, 135, 84, 0.05) !important; }
+    .bg-light-warning { background-color: rgba(255, 193, 7, 0.05) !important; }
+    .bg-light-info { background-color: rgba(13, 202, 240, 0.05) !important; }
+    .bg-light-danger { background-color: rgba(220, 53, 69, 0.05) !important; }
+    .nav-tabs .nav-link {
+        color: #6c757d;
+        padding: 1rem 1.5rem;
     }
-    
-    .crop-icon.bg-success-light {
-        background-color: rgba(25, 135, 84, 0.1);
+    .nav-tabs .nav-link.active {
+        color: #0e3829 !important;
+        border-color: #198754 !important;
     }
-    
-    .crop-icon.bg-warning-light {
-        background-color: rgba(255, 193, 7, 0.1);
-    }
-    
-    .crop-icon.bg-danger-light {
-        background-color: rgba(220, 53, 69, 0.1);
+    .nav-tabs .nav-link:hover:not(.active) {
+        border-color: transparent !important;
+        color: #198754;
     }
 </style>
 {% endblock %}
@@ -600,53 +445,32 @@
 {% block extra_js %}
 <script>
     $(document).ready(function() {
-        // Initialize profile tabs
-        var triggerTabList = [].slice.call(document.querySelectorAll('#profileTabs button'))
-        triggerTabList.forEach(function (triggerEl) {
-            var tabTrigger = new bootstrap.Tab(triggerEl)
-            triggerEl.addEventListener('click', function (event) {
-                event.preventDefault()
-                tabTrigger.show()
-            })
-        })
-        
-        // Handle form submission
+        // Tab switching logic for custom styling
+        $('.nav-tabs .nav-link').on('click', function() {
+            $('.nav-tabs .nav-link').removeClass('fw-bold border-bottom border-3 border-success text-dark');
+            $(this).addClass('fw-bold border-bottom border-3 border-success text-dark');
+        });
+
+        // Form submission via AJAX
         $('#profileForm').on('submit', function(e) {
             e.preventDefault();
+            const formBtn = $(this).find('button[type="submit"]');
+            formBtn.html('<i class="fas fa-spinner fa-spin"></i> Saving...');
             
-            // Get form data
-            var formData = new FormData(this);
-            
-            // Submit form using fetch
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'X-CSRFToken': document.querySelector('input[name="csrf_token"]').value
+            $.ajax({
+                url: $(this).attr('action'),
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function(response) {
+                    formBtn.html('<i class="fas fa-check"></i> Saved!');
+                    setTimeout(() => formBtn.text('SAVE CHANGES'), 2000);
+                },
+                error: function() {
+                    formBtn.html('<i class="fas fa-times"></i> Error');
+                    setTimeout(() => formBtn.text('SAVE CHANGES'), 2000);
                 }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showAlert('success', 'Profile updated successfully');
-                } else {
-                    showAlert('danger', data.message || 'Error updating profile');
-                }
-            })
-            .catch(error => {
-                showAlert('danger', 'An error occurred while updating profile');
             });
         });
-        
-        function showAlert(type, message) {
-            var alertHtml = `
-                <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-                    ${message}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            `;
-            $('#profileForm').prepend(alertHtml);
-        }
     });
 </script>
 {% endblock %}

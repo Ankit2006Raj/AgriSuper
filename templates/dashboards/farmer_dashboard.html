@@ -1,0 +1,105 @@
+{% extends "dashboards/base_dashboard.html" %}
+
+{% block title %}Farmer Portal - AgriSuper{% endblock %}
+{% block role_name %}Farmer{% endblock %}
+{% block role_name_badge %}Farmer{% endblock %}
+{% block dashboard_title %}Farm Management Portal{% endblock %}
+{% block dashboard_title_mobile %}Farm Management Portal{% endblock %}
+{% block dashboard_subtitle %}Manage your crops, check mandi prices, and predict yields.{% endblock %}
+
+{% block sidebar_links %}
+<div class="nav-item">
+    <a href="{{ url_for('crop_management') }}" class="nav-link {% if request.endpoint == 'crop_management' %}active{% endif %}">
+        <i class="fas fa-seedling text-success"></i> Crop Management
+    </a>
+</div>
+<div class="nav-item">
+    <a href="{{ url_for('market_prices') }}" class="nav-link {% if request.endpoint == 'market_prices' %}active{% endif %}">
+        <i class="fas fa-chart-line text-info"></i> Mandi Prices
+    </a>
+</div>
+<div class="nav-item">
+    <a href="{{ url_for('soil_health') }}" class="nav-link {% if request.endpoint == 'soil_health' %}active{% endif %}">
+        <i class="fas fa-microscope text-warning"></i> Soil Advisory
+    </a>
+</div>
+<div class="nav-item">
+    <a href="{{ url_for('yield_prediction') }}" class="nav-link {% if request.endpoint == 'yield_prediction' %}active{% endif %}">
+        <i class="fas fa-robot text-primary"></i> AI Predictor
+    </a>
+</div>
+<div class="nav-item">
+    <a href="{{ url_for('weather_alerts') }}" class="nav-link {% if request.endpoint == 'weather_alerts' %}active{% endif %}">
+        <i class="fas fa-cloud-sun-rain text-secondary"></i> Weather Alerts
+    </a>
+</div>
+{% endblock %}
+
+{% block dashboard_content %}
+<div class="feature-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem;">
+    <!-- Crop Management -->
+    <div class="premium-feature-card feature-card">
+        <div class="premium-card-img-wrapper" style="height: 150px; position: relative; overflow: hidden; border-radius: 12px 12px 0 0;">
+            <img src="{{ url_for('static', filename='img/hero_farmer.png') }}" alt="Crop Management" style="width: 100%; height: 100%; object-fit: cover;">
+            <span class="premium-card-badge" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;">Management</span>
+        </div>
+        <div class="card-body p-4 bg-white" style="border: 1px solid rgba(0,0,0,0.05); border-top: none; border-radius: 0 0 12px 12px;">
+            <h5 class="card-title fw-bold text-dark mb-2">Crop Management</h5>
+            <p class="card-text text-muted small mb-3">Track your active crops, growth stages, and tasks.</p>
+            <a href="{{ url_for('crop_management') }}" class="btn btn-outline-success btn-sm w-100">Access Tool</a>
+        </div>
+    </div>
+
+    <!-- Mandi Tracker -->
+    <div class="premium-feature-card feature-card">
+        <div class="premium-card-img-wrapper" style="height: 150px; position: relative; overflow: hidden; border-radius: 12px 12px 0 0;">
+            <img src="{{ url_for('static', filename='img/blog_harvest.png') }}" alt="Mandi Prices" style="width: 100%; height: 100%; object-fit: cover;">
+            <span class="premium-card-badge" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;">Market</span>
+        </div>
+        <div class="card-body p-4 bg-white" style="border: 1px solid rgba(0,0,0,0.05); border-top: none; border-radius: 0 0 12px 12px;">
+            <h5 class="card-title fw-bold text-dark mb-2">Live Mandi Prices</h5>
+            <p class="card-text text-muted small mb-3">Check real-time APMC mandi prices before selling.</p>
+            <a href="{{ url_for('market_prices') }}" class="btn btn-outline-success btn-sm w-100">Access Tool</a>
+        </div>
+    </div>
+
+    <!-- Soil Health -->
+    <div class="premium-feature-card feature-card">
+        <div class="premium-card-img-wrapper" style="height: 150px; position: relative; overflow: hidden; border-radius: 12px 12px 0 0;">
+            <img src="{{ url_for('static', filename='img/soil_sprout.png') }}" alt="Soil Health" style="width: 100%; height: 100%; object-fit: cover;">
+            <span class="premium-card-badge" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;">Advisory</span>
+        </div>
+        <div class="card-body p-4 bg-white" style="border: 1px solid rgba(0,0,0,0.05); border-top: none; border-radius: 0 0 12px 12px;">
+            <h5 class="card-title fw-bold text-dark mb-2">Soil Health Analyzer</h5>
+            <p class="card-text text-muted small mb-3">Analyze soil reports and get NPK recommendations.</p>
+            <a href="{{ url_for('soil_health') }}" class="btn btn-outline-success btn-sm w-100">Access Tool</a>
+        </div>
+    </div>
+
+    <!-- Yield Predictor -->
+    <div class="premium-feature-card feature-card">
+        <div class="premium-card-img-wrapper" style="height: 150px; position: relative; overflow: hidden; border-radius: 12px 12px 0 0;">
+            <img src="{{ url_for('static', filename='img/about_farm.png') }}" alt="Yield Prediction" style="width: 100%; height: 100%; object-fit: cover;">
+            <span class="premium-card-badge" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;">AI Predictor</span>
+        </div>
+        <div class="card-body p-4 bg-white" style="border: 1px solid rgba(0,0,0,0.05); border-top: none; border-radius: 0 0 12px 12px;">
+            <h5 class="card-title fw-bold text-dark mb-2">AI Yield Predictor</h5>
+            <p class="card-text text-muted small mb-3">Forecast your production value based on parameters.</p>
+            <a href="{{ url_for('yield_prediction') }}" class="btn btn-outline-success btn-sm w-100">Access Tool</a>
+        </div>
+    </div>
+    
+    <!-- Weather & Pest Alerts -->
+    <div class="premium-feature-card feature-card">
+        <div class="premium-card-img-wrapper" style="height: 150px; position: relative; overflow: hidden; border-radius: 12px 12px 0 0;">
+            <img src="{{ url_for('static', filename='img/blog_tech.png') }}" alt="Alerts" style="width: 100%; height: 100%; object-fit: cover;">
+            <span class="premium-card-badge" style="position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: bold;">Alerts</span>
+        </div>
+        <div class="card-body p-4 bg-white" style="border: 1px solid rgba(0,0,0,0.05); border-top: none; border-radius: 0 0 12px 12px;">
+            <h5 class="card-title fw-bold text-dark mb-2">Weather & Pest Alerts</h5>
+            <p class="card-text text-muted small mb-3">Receive regional warnings to protect your crops.</p>
+            <a href="{{ url_for('weather_alerts') }}" class="btn btn-outline-success btn-sm w-100">Access Tool</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

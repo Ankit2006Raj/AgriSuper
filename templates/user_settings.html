@@ -1,12 +1,12 @@
-{% extends "base.html" %}
+{% extends "dashboards/base_dashboard.html" %}
 
 {% block title %}Account Settings - AgriSuper{% endblock %}
 
-{% block extra_css %}
+{% block custom_css %}
 <link href="{{ url_for('static', filename='css/settings.css') }}" rel="stylesheet">
 {% endblock %}
 
-{% block content %}
+{% block dashboard_content %}
 <div class="container py-5">
     <div class="row">
         <!-- Sidebar -->

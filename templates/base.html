@@ -1,22 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>{% block title %}AgriSuper - Advanced Agriculture Platform{% endblock %}</title>
-    
+
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
     <!-- Custom CSS -->
     <style>
         :root {
@@ -49,13 +51,53 @@
         /* Navbar Styles - Modern Glassmorphism */
         .navbar {
             background: rgba(244, 242, 235, 0.85) !important;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
             box-shadow: 0 4px 15px -3px rgba(14, 56, 41, 0.05);
             border-bottom: 1px solid rgba(255, 255, 255, 0.4);
             transition: all 0.3s ease;
             padding: 1rem 0;
         }
+
+        .navbar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: -1;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            pointer-events: none;
+        }
+
+        /* Mobile Floating Menu */
+        @media (max-width: 991.98px) {
+            .mobile-menu-custom {
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(10px);
+                border-radius: 16px;
+                padding: 1.5rem;
+                box-shadow: 0 15px 40px rgba(14, 56, 41, 0.15);
+                margin-top: 0.5rem;
+                position: absolute;
+                top: 100%;
+                left: 1rem;
+                right: 1rem;
+                z-index: 1050;
+                border: 1px solid rgba(14, 56, 41, 0.05);
+            }
+
+            .mobile-menu-custom .nav-link {
+                padding: 0.8rem 1rem !important;
+                border-bottom: 1px solid rgba(0, 0, 0, 0.03);
+                border-radius: 8px;
+            }
+
+            .mobile-menu-custom .nav-link:hover {
+                background: rgba(14, 56, 41, 0.03);
+            }
+        }
+
 
         .navbar.scrolled {
             background: rgba(244, 242, 235, 0.95) !important;
@@ -84,8 +126,15 @@
         }
 
         @keyframes rotate {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(10deg); }
+
+            0%,
+            100% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(10deg);
+            }
         }
 
         .nav-link {
@@ -110,7 +159,8 @@
             transition: width 0.3s ease;
         }
 
-        .nav-link:hover, .nav-link.active {
+        .nav-link:hover,
+        .nav-link.active {
             color: var(--primary-color) !important;
             background: var(--mint-green);
         }
@@ -156,7 +206,7 @@
         .hero-section {
             background: var(--gradient-primary);
             border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(14,56,41,0.15);
+            box-shadow: 0 10px 30px rgba(14, 56, 41, 0.15);
         }
 
         /* Feature Cards */
@@ -170,7 +220,7 @@
 
         .feature-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 15px 35px rgba(14,56,41,0.08);
+            box-shadow: 0 15px 35px rgba(14, 56, 41, 0.08);
         }
 
         .feature-icon {
@@ -305,24 +355,30 @@
             position: relative;
             border-top: 6px solid var(--accent-gold, #c69c59);
         }
-        .premium-footer h4, .premium-footer h5 {
+
+        .premium-footer h4,
+        .premium-footer h5 {
             font-weight: 700;
             color: #ffffff;
             margin-bottom: 25px;
         }
+
         .premium-footer a {
             color: rgba(255, 255, 255, 0.7);
             text-decoration: none;
             transition: all 0.3s ease;
         }
+
         .premium-footer a:hover {
             color: var(--accent-gold, #c69c59);
             padding-left: 5px;
         }
+
         .footer-social-links {
             display: flex;
             gap: 15px;
         }
+
         .footer-social-btn {
             width: 40px;
             height: 40px;
@@ -334,20 +390,24 @@
             justify-content: center;
             transition: all 0.3s ease;
         }
+
         .footer-social-btn:hover {
             background-color: var(--accent-gold, #c69c59);
             color: #ffffff;
             transform: translateY(-3px);
         }
+
         .footer-contact-item {
             display: flex;
             gap: 15px;
             margin-bottom: 15px;
         }
+
         .footer-contact-icon {
             color: var(--accent-gold, #c69c59);
             font-size: 1.1rem;
         }
+
         .premium-footer-bottom {
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             padding-top: 30px;
@@ -356,131 +416,205 @@
             color: rgba(255, 255, 255, 0.6);
         }
     </style>
-    
+
     {% block extra_css %}{% endblock %}
 </head>
+
 <body>
 
 
+    {% block global_navbar %}
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg sticky-top navbar-landing">
         <div class="container-fluid px-5">
             <a class="navbar-brand" href="/">
                 <i class="fas fa-seedling"></i> Agri<span>Super</span>
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false"
+                aria-label="Toggle navigation" style="background: rgba(14, 56, 41, 0.05);">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto align-items-center mb-0">
+            <div class="collapse navbar-collapse mobile-menu-custom" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-lg-center mb-0">
                     <li class="nav-item">
                         <a class="nav-link {% if request.path == '/' %}active{% endif %}" href="/">
                             <i class="fas fa-home"></i> Home
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/categorized-dashboard' %}active{% endif %}" href="{{ url_for('categorized_dashboard') }}">
+                        <a class="nav-link {% if request.path == '/categorized-dashboard' %}active{% endif %}"
+                            href="{{ url_for('categorized_dashboard') }}">
                             <i class="fas fa-th-large"></i> All Features
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {% if request.path in ['/yield-prediction', '/crop-rotation', '/pest-alerts', '/profit-analyzer', '/pricing-engine'] %}active{% endif %}" href="#" id="aiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle {% if request.path in ['/yield-prediction', '/crop-rotation', '/pest-alerts', '/profit-analyzer', '/pricing-engine'] %}active{% endif %}"
+                            href="#" id="aiDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="fas fa-robot" style="color: var(--accent-gold);"></i> AI Advisors
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-3" style="min-width: 340px;">
-                            <li class="dropdown-header text-uppercase fw-bold mb-2 text-start" style="font-size: 0.75rem; letter-spacing: 0.5px; color: var(--primary-color); padding-left: 0.5rem;"><i class="fas fa-brain me-1" style="color: var(--accent-gold);"></i> AI & Machine Learning</li>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4 p-3"
+                            style="min-width: 340px;">
+                            <li class="dropdown-header text-uppercase fw-bold mb-2 text-start"
+                                style="font-size: 0.75rem; letter-spacing: 0.5px; color: var(--primary-color); padding-left: 0.5rem;">
+                                <i class="fas fa-brain me-1" style="color: var(--accent-gold);"></i> AI & Machine
+                                Learning</li>
                             <li>
-                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start" href="{{ url_for('yield_prediction_page') }}">
-                                    <i class="fas fa-seedling text-success mt-1" style="font-size: 1.1rem; width: 20px;"></i>
+                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start"
+                                    href="{{ url_for('yield_prediction') }}">
+                                    <i class="fas fa-seedling text-success mt-1"
+                                        style="font-size: 1.1rem; width: 20px;"></i>
                                     <div>
-                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">Yield Prediction</div>
-                                        <div class="text-muted" style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Predict harvest quantities based on soil & weather parameters.</div>
+                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">
+                                            Yield Prediction</div>
+                                        <div class="text-muted"
+                                            style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Predict
+                                            harvest quantities based on soil & weather parameters.</div>
                                     </div>
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start" href="{{ url_for('crop_rotation_page') }}">
-                                    <i class="fas fa-sync text-primary mt-1" style="font-size: 1.1rem; width: 20px;"></i>
+                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start"
+                                    href="{{ url_for('crop_rotation') }}">
+                                    <i class="fas fa-sync text-primary mt-1"
+                                        style="font-size: 1.1rem; width: 20px;"></i>
                                     <div>
-                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">Crop Rotation Advisor</div>
-                                        <div class="text-muted" style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Optimize soil health and nitrogen fixation sequences.</div>
+                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">
+                                            Crop Rotation Advisor</div>
+                                        <div class="text-muted"
+                                            style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Optimize
+                                            soil health and nitrogen fixation sequences.</div>
                                     </div>
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start" href="{{ url_for('pest_alerts_page') }}">
+                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start"
+                                    href="{{ url_for('pest_alerts') }}">
                                     <i class="fas fa-bug text-danger mt-1" style="font-size: 1.1rem; width: 20px;"></i>
                                     <div>
-                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">Leaf-Disease Diagnosis</div>
-                                        <div class="text-muted" style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Identify leaf diseases & check local pest outbreaks early.</div>
+                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">
+                                            Leaf-Disease Diagnosis</div>
+                                        <div class="text-muted"
+                                            style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Identify
+                                            leaf diseases & check local pest outbreaks early.</div>
                                     </div>
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start" href="{{ url_for('profit_analyzer_page') }}">
-                                    <i class="fas fa-calculator text-warning mt-1" style="font-size: 1.1rem; width: 20px;"></i>
+                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start"
+                                    href="{{ url_for('profit_analyzer') }}">
+                                    <i class="fas fa-calculator text-warning mt-1"
+                                        style="font-size: 1.1rem; width: 20px;"></i>
                                     <div>
-                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">Profit Analyzer</div>
-                                        <div class="text-muted" style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Calculate ROI, seed, fertilizer, and operational costs.</div>
+                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">
+                                            Profit Analyzer</div>
+                                        <div class="text-muted"
+                                            style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Calculate
+                                            ROI, seed, fertilizer, and operational costs.</div>
                                     </div>
                                 </a>
                             </li>
                             <li>
-                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start" href="{{ url_for('pricing_engine_page') }}">
-                                    <i class="fas fa-chart-line text-success mt-1" style="font-size: 1.1rem; width: 20px;"></i>
+                                <a class="dropdown-item d-flex align-items-start gap-2 py-2 rounded-3 text-start"
+                                    href="{{ url_for('pricing_engine') }}">
+                                    <i class="fas fa-chart-line text-success mt-1"
+                                        style="font-size: 1.1rem; width: 20px;"></i>
                                     <div>
-                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">Price Trend Classifier</div>
-                                        <div class="text-muted" style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Analyze price forecasting & bullish/bearish mandi trends.</div>
+                                        <div class="fw-bold" style="font-size: 0.88rem; color: var(--primary-color);">
+                                            Price Trend Classifier</div>
+                                        <div class="text-muted"
+                                            style="font-size: 0.75rem; white-space: normal; line-height: 1.3;">Analyze
+                                            price forecasting & bullish/bearish mandi trends.</div>
                                     </div>
                                 </a>
                             </li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/market-prices' %}active{% endif %}" href="{{ url_for('market_prices') }}">
+                        <a class="nav-link {% if request.path == '/market-prices' %}active{% endif %}"
+                            href="{{ url_for('market_prices') }}">
                             <i class="fas fa-chart-line"></i> Mandi Prices
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/weather-alerts' %}active{% endif %}" href="{{ url_for('weather_alerts') }}">
+                        <a class="nav-link {% if request.path == '/weather-alerts' %}active{% endif %}"
+                            href="{{ url_for('weather_alerts') }}">
                             <i class="fas fa-cloud-sun"></i> Weather
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link {% if request.path == '/community-forum' %}active{% endif %}" href="{{ url_for('community_forum') }}">
+                        <a class="nav-link {% if request.path == '/community-forum' %}active{% endif %}"
+                            href="{{ url_for('community_forum') }}">
                             <i class="fas fa-users"></i> Forum
                         </a>
                     </li>
+                    {% if session.get('user_id') %}
+                    <!-- Logged-in User Menu -->
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="fas fa-user-circle"></i> Account
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-user-circle"></i> {{ session.get('username', 'Account') }}
                         </a>
                         <ul class="dropdown-menu dropdown-menu-end">
-                            <li><a class="dropdown-item" href="{{ url_for('login') }}"><i class="fas fa-sign-in-alt me-2 text-forest"></i> Login</a></li>
-                            <li><a class="dropdown-item" href="{{ url_for('login') }}"><i class="fas fa-user-plus me-2 text-forest"></i> Register</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2 text-forest"></i> Settings</a></li>
-                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2 text-forest"></i> Logout</a></li>
+                            <li>
+                                <div class="dropdown-item-text px-3 py-2">
+                                    <div class="fw-bold" style="color: var(--primary-color);">{{ session.get('username',
+                                        'User') }}</div>
+                                    <small class="text-muted text-capitalize">{{ session.get('role', 'member')
+                                        }}</small>
+                                </div>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item" href="{{ url_for('dashboard') }}"><i
+                                        class="fas fa-tachometer-alt me-2" style="color: var(--primary-color);"></i>
+                                    Dashboard</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('user_profile') }}"><i
+                                        class="fas fa-user me-2" style="color: var(--primary-color);"></i> My
+                                    Profile</a></li>
+                            <li><a class="dropdown-item" href="{{ url_for('user_settings') }}"><i
+                                        class="fas fa-cog me-2" style="color: var(--primary-color);"></i> Settings</a>
+                            </li>
+                            <li>
+                                <hr class="dropdown-divider">
+                            </li>
+                            <li><a class="dropdown-item text-danger" href="{{ url_for('logout') }}"><i
+                                        class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
                         </ul>
                     </li>
-
+                    {% else %}
+                    <!-- Guest Menu -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">
+                            <i class="fas fa-sign-in-alt"></i> Login
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="btn btn-success btn-sm ms-2 px-3 py-2" href="{{ url_for('register') }}"
+                            style="border-radius: 2rem; font-weight: 600;">
+                            <i class="fas fa-user-plus me-1"></i> Register
+                        </a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
     </nav>
+    {% endblock global_navbar %}
 
     <!-- Flash Messages -->
     {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="container mt-3">
-                {% for category, message in messages %}
-                    <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                        {{ message }}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+    {% if messages %}
+    <div class="container mt-3">
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
     {% endwith %}
 
     <!-- Main Content -->
@@ -495,23 +629,26 @@
                 <div class="col-md-4 mb-5 mb-lg-0 text-start">
                     <h4 class="mb-4"><i class="fas fa-seedling text-gold"></i> Agri<span>Super</span></h4>
                     <p class="pe-md-4 mb-4" style="color: rgba(255, 255, 255, 0.7); font-size: 0.95rem;">
-                        Indian Agriculture's Revolutionary Digital Platform. Empowering 1 million+ farmers with AI-driven yield predictions, real-time mandi prices, logistics, and cashless financial services.
+                        Indian Agriculture's Revolutionary Digital Platform. Empowering 1 million+ farmers with
+                        AI-driven yield predictions, real-time mandi prices, logistics, and cashless financial services.
                     </p>
                     <div class="footer-social-links">
-                        <a href="#" class="footer-social-btn" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="footer-social-btn" aria-label="Facebook"><i
+                                class="fab fa-facebook-f"></i></a>
                         <a href="#" class="footer-social-btn" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="footer-social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="footer-social-btn" aria-label="Instagram"><i
+                                class="fab fa-instagram"></i></a>
                         <a href="#" class="footer-social-btn" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 <div class="col-md-2 mb-4 mb-lg-0 text-start">
                     <h5 class="mb-4 text-white">Our Services</h5>
                     <ul class="list-unstyled">
-                        <li class="mb-2"><a href="{{ url_for('pricing_engine_page') }}">Dynamic Pricing</a></li>
-                        <li class="mb-2"><a href="{{ url_for('yield_prediction_page') }}">Yield Predictor</a></li>
-                        <li class="mb-2"><a href="{{ url_for('sowing_calendar_page') }}">Sowing Calendar</a></li>
-                        <li class="mb-2"><a href="{{ url_for('crop_insurance_page') }}">Crop Insurance</a></li>
-                        <li class="mb-2"><a href="{{ url_for('shared_logistics_page') }}">Shared Logistics</a></li>
+                        <li class="mb-2"><a href="{{ url_for('pricing_engine') }}">Dynamic Pricing</a></li>
+                        <li class="mb-2"><a href="{{ url_for('yield_prediction') }}">Yield Predictor</a></li>
+                        <li class="mb-2"><a href="{{ url_for('sowing_calendar') }}">Sowing Calendar</a></li>
+                        <li class="mb-2"><a href="{{ url_for('crop_insurance') }}">Crop Insurance</a></li>
+                        <li class="mb-2"><a href="{{ url_for('shared_logistics') }}">Shared Logistics</a></li>
                     </ul>
                 </div>
                 <div class="col-md-2 mb-4 mb-lg-0 text-start">
@@ -529,21 +666,24 @@
                     <div class="footer-contact-item">
                         <div class="footer-contact-icon"><i class="fas fa-phone-alt"></i></div>
                         <div>
-                            <p class="mb-0" style="color: rgba(255, 255, 255, 0.5); font-size: 0.85rem;">Toll-Free Farmer Helpline (24/7)</p>
+                            <p class="mb-0" style="color: rgba(255, 255, 255, 0.5); font-size: 0.85rem;">Toll-Free
+                                Farmer Helpline (24/7)</p>
                             <strong>1800-180-1551</strong>
                         </div>
                     </div>
                     <div class="footer-contact-item mt-3">
                         <div class="footer-contact-icon"><i class="fas fa-envelope"></i></div>
                         <div>
-                            <p class="mb-0" style="color: rgba(255, 255, 255, 0.5); font-size: 0.85rem;">Email Address</p>
+                            <p class="mb-0" style="color: rgba(255, 255, 255, 0.5); font-size: 0.85rem;">Email Address
+                            </p>
                             <strong>support@agrisuper.com</strong>
                         </div>
                     </div>
                     <div class="footer-contact-item mt-3">
                         <div class="footer-contact-icon"><i class="fas fa-map-marker-alt"></i></div>
                         <div>
-                            <p class="mb-0" style="color: rgba(255, 255, 255, 0.5); font-size: 0.85rem;">Headquarters</p>
+                            <p class="mb-0" style="color: rgba(255, 255, 255, 0.5); font-size: 0.85rem;">Headquarters
+                            </p>
                             <strong>Krishi Bhawan, Rajpath, New Delhi, India</strong>
                         </div>
                     </div>
@@ -552,7 +692,8 @@
             <div class="premium-footer-bottom">
                 <div class="row align-items-center">
                     <div class="col-md-8 text-center text-md-start mb-3 mb-md-0">
-                        <p class="mb-0">&copy; 2026 AgriSuper Ecosystem. All rights reserved. Powered by AI-ML Analytics.</p>
+                        <p class="mb-0">&copy; 2026 AgriSuper Ecosystem. All rights reserved. Powered by AI-ML
+                            Analytics.</p>
                     </div>
                     <div class="col-md-4 text-center text-md-end">
                         <div class="d-inline-flex gap-3">
@@ -569,10 +710,10 @@
     <!-- Bootstrap JS and Popper -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- jQuery (optional, for legacy support) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    
+
     <!-- Custom JavaScript -->
     <script>
         // ========================================
@@ -580,35 +721,35 @@
         // ========================================
         const navbar = document.querySelector('.navbar');
         let lastScroll = 0;
-        
+
         window.addEventListener('scroll', () => {
             const currentScroll = window.pageYOffset;
-            
+
             if (currentScroll > 50) {
                 navbar.classList.add('scrolled');
             } else {
                 navbar.classList.remove('scrolled');
             }
-            
+
             // Hide navbar on scroll down, show on scroll up
             if (currentScroll > lastScroll && currentScroll > 300) {
                 navbar.style.transform = 'translateY(-100%)';
             } else {
                 navbar.style.transform = 'translateY(0)';
             }
-            
+
             lastScroll = currentScroll;
         });
-        
+
         // ========================================
         // ENHANCED ALERTS WITH SLIDE IN
         // ========================================
-        setTimeout(function() {
+        setTimeout(function () {
             const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(function(alert, index) {
+            alerts.forEach(function (alert, index) {
                 // Slide in animation
                 alert.style.animation = `slideInRight 0.5s ease ${index * 0.1}s forwards`;
-                
+
                 // Auto-hide after 5 seconds
                 setTimeout(() => {
                     alert.style.animation = 'slideOutRight 0.5s ease forwards';
@@ -619,7 +760,7 @@
                 }, 5000 + (index * 100));
             });
         }, 100);
-        
+
         // Alert animation keyframes
         const alertStyles = document.createElement('style');
         alertStyles.textContent = `
@@ -682,19 +823,19 @@
         const popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
             return new bootstrap.Popover(popoverTriggerEl);
         });
-        
+
         // ========================================
         // PAGE LOAD ANIMATION
         // ========================================
         window.addEventListener('load', () => {
             document.body.style.opacity = '0';
             document.body.style.transition = 'opacity 0.3s ease';
-            
+
             requestAnimationFrame(() => {
                 document.body.style.opacity = '1';
             });
         });
-        
+
         // ========================================
         // PERFORMANCE: LAZY LOAD IMAGES
         // ========================================
@@ -711,12 +852,12 @@
                     }
                 });
             });
-            
+
             document.querySelectorAll('img[data-src]').forEach(img => {
                 imageObserver.observe(img);
             });
         }
-        
+
         // ========================================
         // ACCESSIBILITY: SKIP TO MAIN CONTENT
         // ========================================
@@ -736,17 +877,17 @@
             z-index: 9999;
             transition: top 0.3s;
         `;
-        
+
         skipLink.addEventListener('focus', () => {
             skipLink.style.top = '0';
         });
-        
+
         skipLink.addEventListener('blur', () => {
             skipLink.style.top = '-40px';
         });
-        
+
         document.body.insertBefore(skipLink, document.body.firstChild);
-        
+
         // ========================================
         // THEME DETECTION (Future enhancement)
         // ========================================
@@ -754,7 +895,8 @@
             console.log('Dark mode preferred - future enhancement');
         }
     </script>
-    
+
     {% block extra_js %}{% endblock %}
 </body>
+
 </html>
